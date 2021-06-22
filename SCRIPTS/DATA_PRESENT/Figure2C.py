@@ -13,7 +13,6 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 import helpers.chem_info as info_params
-from helpers import load_series
 from helpers.loading_helper import get_carbon_inputs
 
 data_folder = repository_dir/'DATA'
