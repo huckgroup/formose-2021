@@ -40,7 +40,6 @@ x_name = '[formaldehyde]/ mM'
 x_factor = 1000
 y_factor = 1000
 
-
 data_keys = series_seqs.loc[series_sel]
 data_set_selections = list(data_keys.dropna())
 
