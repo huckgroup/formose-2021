@@ -12,13 +12,11 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from NorthNet.file_loads import data_loads, info_loads
-
 from helpers import chem_info as info_params
 from helpers import pathway_helpers as path_hlp
+from helpers.loading_helper import get_carbon_inputs
 from helpers.network_load_helper import load_network_from_reaction_list
 from helpers.network_load_helper import load_reaction_list,convert_to_networkx
-from helpers.loading_helper import get_carbon_inputs
 
 header = [x+'/ M' for x in info_params.smiles_to_names]
 
