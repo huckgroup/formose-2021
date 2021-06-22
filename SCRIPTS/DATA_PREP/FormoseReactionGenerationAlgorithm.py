@@ -1,14 +1,28 @@
 import os
+import sys
 import pickle
 from rdkit import Chem
 from pathlib import Path
 
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
+
 from NorthNet import Classes
-from NorthNet import info_params
 from NorthNet import file_in_out as f_io
 from NorthNet import network_generation as n_gen
 
+from helpers import chem_info as info_params
+
 '''Get reaction components'''
+# there may be an error like:
+# 'mapped atoms in the reactants were not mapped in the products.
+# unmapped numbers are: 5'
+# the error is attributable to the Cannizzaro reaction SMARTS, in which
+# O:5 is not mapped to the products
 reactions = {}
 for r in info_params.reaction_SMARTS:
     SMARTS = info_params.reaction_SMARTS[r]
@@ -98,7 +112,7 @@ while x < iterations:
             prot_rules = [reactions[p] for p in protonation_rules]
             )
 
-    '''Removing compounds above a C6'''
+    '''Removing compounds > C6'''
     # In effect, this is equivalent to setting all chain-growing reaction
     # rules to not occur for C6 compounds
     # i.e. [$(C(O)=CO)!$(C(O)=C(O)C(O)C(O)C(O)CO)], etc.
@@ -108,20 +122,10 @@ while x < iterations:
 
     x+=1
 
-remove_compounds = [c for c in t_net.NetworkCompounds
-        if len(count_carbons(t_net.NetworkCompounds[c].Mol)) > 6]
-t_net.remove_compounds(remove_compounds)
-
 '''Saving the results'''
-with open('information_sources/FullFormoseReaction.txt', 'w') as f:
+with open(repository_dir/'FORMOSE_REACTION/FullFormoseReaction.txt', 'w') as f:
     for r in t_net.NetworkReactions:
         f.write('{}\n'.format(r))
 
-with open('information_sources/FormoseReactionNetwork.pickle','wb') as f:
+with open(repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle','wb') as f:
     pickle.dump(t_net, f)
-
-print('compounds',len(t_net.NetworkCompounds))
-print('reactions',len(t_net.NetworkReactions))
-print()
-for c in t_net.NetworkCompounds:
-    print(c, len(t_net.NetworkCompounds[c].In)+len(t_net.NetworkCompounds[c].Out))
