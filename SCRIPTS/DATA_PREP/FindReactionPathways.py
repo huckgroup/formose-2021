@@ -1,3 +1,4 @@
+import sys
 import numpy as np
 import networkx as nx
 from rdkit import Chem
@@ -15,7 +16,6 @@ from NorthNet.file_loads import data_loads, info_loads
 
 from helpers import chem_info as info_params
 from helpers import pathway_helpers as path_hlp
-from helpers.loading_helper import carbon_inputs
 from helpers.network_load_helper import load_network_from_reaction_list
 from helpers.network_load_helper import load_reaction_list,convert_to_networkx
 
@@ -28,9 +28,9 @@ header = [x+'/ M' for x in info_params.smiles_to_names]
 exp_info = info_loads.import_Experiment_information(
 						exp_info_dir/"Experiment_parameters.csv")
 experiment_averages = data_loads.load_exp_compound_file(
-								determined_params_dir'AverageData.csv', header)
+								determined_params_dir/'AverageData.csv', header)
 experiment_amplitudes = data_loads.load_exp_compound_file(
-							determined_params_dir'AmplitudeData.csv', header)
+							determined_params_dir/'AmplitudeData.csv', header)
 
 modifications = {x:[] for x in experiment_averages}
 carbon_inputs = {x:[] for x in experiment_averages}
