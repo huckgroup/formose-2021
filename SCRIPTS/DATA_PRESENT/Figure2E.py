@@ -1,42 +1,71 @@
+import sys
 import numpy as np
+import pandas as pd
 from pathlib import Path
+import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-from NorthNet import info_params
 
-import __init__
-from helpers import load_series
-from helpers.loading_helper import data
-from helpers.loading_helper import header
-from helpers.loading_helper import exp_info
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 
-base_directory = Path('/Users/williamrobinson/Documents/Nijmegen')
-# base_directory = Path(r'C:\Users\willi\Documents')
+import helpers.chem_info as info_params
+from helpers.loading_helper import get_carbon_inputs
 
-with open('information_sources/compound_numbering.txt', 'r') as f:
-    lines = f.readlines()
+data_folder = repository_dir/'DATA'
+derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
+plot_folder = repository_dir/'PLOTS'
+report_directory = data_folder/'DATA_REPORTS'
+exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 
-compound_numbering = {l.split(',')[0]:int(l.split(',')[1].strip('\n')) for l in lines}
+exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 
-fname = base_directory/'safestore_DEP/Series_info.csv'
-series_dict = load_series.load_series_sequences(fname)
+series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
 
+compound_numbering = info_params.compound_numbering
+
+figname = 'Figure2E'
 series_sel = 'Ca_OH_grid_series'
 condition_sel_x = '[NaOH]/ M'
 condition_sel_y = '[CaCl2]/ M'
-
-idx = [[*exp_info].index(x) for x in series_dict[series_sel]]
-
-series_stack = np.zeros((len(idx),len(data[0])))
-
-for x in range(0,len(idx)):
-    series_stack[x] = data[idx[x]]
-
 factor = 1000
-series_x_values = [factor*exp_info[x].parameters[condition_sel_x]
-                        for x in series_dict[series_sel]]
 
-series_y_values = [factor*exp_info[x].parameters[condition_sel_y]
-                        for x in series_dict[series_sel]]
+data_keys = series_seqs.loc[series_sel]
+data_set_selections = list(data_keys.dropna())
+
+average_data = pd.read_csv(derived_parameters_dir/'AverageData.csv', index_col = 0)
+# remove empty columns
+average_data = average_data.dropna(axis = 1)
+
+carbon_inputs = get_carbon_inputs(exp_info, average_data.columns)
+
+# remove reactants
+for c in carbon_inputs:
+    for x in carbon_inputs[c]:
+        if x in average_data.columns:
+            average_data.loc[c,x] = 0.0
+
+exclusions = ['O=CCO/ M','O=C[C@H]C(O)CO/ M']
+for x in exclusions:
+    average_data.loc[:,x] = 0.0
+
+sel = average_data.loc[data_set_selections]
+# remove columns containing only zeros
+sel = sel.loc[:, (sel != 0).any(axis=0)]
+
+series_x_values = [factor*exp_info.loc[x,condition_sel_x]
+                        for x in data_set_selections]
+
+series_y_values = [factor*exp_info.loc[x,condition_sel_y]
+                        for x in data_set_selections]
+
+compounds = [x.split('/')[0] for x in sel.columns]
+compound_clrs  = [info_params.colour_assignments[x] for x in compounds]
+
+series_stack = sel.to_numpy()
 
 subplot_width = 8
 subplot_height = 8
@@ -50,8 +79,7 @@ for x in range(0,len(series_stack)):
     axin = ax.inset_axes([L,B,W,H], transform=ax.transData)
 
     axin.pie(series_stack[x]/series_stack[x].max(),
-             colors = [info_params.colour_assignments[x.split('/')[0]]
-             for x in header],
+             colors = compound_clrs,
              radius = 1.9,
              # labels = [compound_numbering[x.split('/')[0]] for x in
              #        header]
@@ -65,5 +93,5 @@ ax.set_xlim(xlim[0]-subplot_width/2, xlim[1]+subplot_width/2)
 ax.set_xlabel('[NaOH]/ mM')
 ax.set_ylabel('[CaCl$_2$]/ mM')
 
-plt.savefig('plots_for_paper/Ca_OH_grid.png', dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 plt.close()
