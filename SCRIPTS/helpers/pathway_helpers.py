@@ -15,3 +15,16 @@ def shortest_path_between_compounds(G, source, target):
         return edge_list
     else:
         return False
+
+def reactants_product_edges(reaction):
+    reactants = reaction.split('>>')[0].split('.')
+    products = reaction.split('>>')[1].split('.')
+
+    edges = []
+    for r in reactants:
+        edges.append((r,reaction))
+    for p in products:
+        edges.append((reaction,p))
+
+    # G.add_edges_from([(0, 1), (1, 2)])
+    return edges
