@@ -41,6 +41,6 @@ Contains a set of reaction SMARTS strings used to generate the formose reaction 
 
 Lists of reactions for each modulated experiment in as reaction SMILES strings. Files are named according to experiment code.
 
-## SCRIPTS
+### SCRIPTS
 
 Python scripts used to analyse and plot the data.
