@@ -1,39 +1,50 @@
 import os
+import sys
 import pickle
+import numpy as np
+import pandas as pd
 from pathlib import Path
+import matplotlib.cm as cm
+import matplotlib.pyplot as plt
 
-from NorthNet import Classes
-from NorthNet import info_params
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 
-import __init__
+import helpers.chem_info as info_params
+from helpers.network_plotting import plot_network
 from helpers.network_load_helper import load_reaction_list
 from helpers.network_load_helper import convert_to_networkx
-from helpers.network_plotting import plot_network
 
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib import cm
-from helpers import load_series
+figname = 'Figure3X'
+data_folder = repository_dir/'DATA'
+derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
+plot_folder = repository_dir/'PLOTS'
+report_directory = data_folder/'DATA_REPORTS'
+exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 
-base_directory = Path('/Users/williamrobinson/Documents/Nijmegen')
-# base_directory = Path(r'C:\Users\willi\Documents')
-fname = base_directory/'safestore_DEP/Series_info.csv'
-series_dict = load_series.load_series_sequences(fname)
+exp_info = pd.read_csv(exp_info_dir, index_col = 0)
+series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
 
 '''Import clusters for ordering the data sets'''
 clusters = {}
-with open('information_sources/clusters.txt', 'r') as f:
+with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
 	for c,line in enumerate(f):
 		ins = line.strip('\n').split(',')
 		clusters[c] = ins[1:]
 
-with open('information_sources/FormoseReactionNetwork.pickle', 'rb') as f:
+with open(repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle', 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
-directory = Path('information_sources/network_lists')
+directory = Path(repository_dir/'REACTION_LISTS')
 loaded_reactions = {}
 for file in os.listdir(directory):
 	loaded_reactions[file.split('_')[0]] = []
+	if not file.endswith('txt'):
+		continue
 	with open(directory/file, 'r') as f:
 		for line in f:
 			ins = line.strip('\n')
@@ -104,4 +115,4 @@ cbar.set_label('Fractional expression', rotation=270, labelpad = 10)
 cbar.ax.tick_params(labelsize= 6)
 # ax.set_aspect('equal')
 fig.tight_layout()
-plt.savefig('plots_for_paper/reaction_expression_heatmap.png', dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
