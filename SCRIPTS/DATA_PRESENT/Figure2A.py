@@ -13,7 +13,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 import helpers.chem_info as info_params
-from helpers.loading_helper import get_carbon_inputs
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
@@ -35,7 +34,6 @@ plot_stack = sel.to_numpy()
 
 comp_ax = [x.split('/')[0] for x in sel.columns]
 comp_clrs  = [info_params.colour_assignments[x] for x in comp_ax]
-comp_clrs = [info_params.colour_assignments[x] for x in comp_ax]
 comp_numbers = [info_params.compound_numbering[x] for x in comp_ax]
 
 # define plot parameters
