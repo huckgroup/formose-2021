@@ -20,7 +20,7 @@ Formaldehyde, hydroxide and water are ignored as nodes in pathways searches (CaC
 ## 4. Connect inputs (reactants) to products
 Find the shortest pathways from the carbon input to the compound with the highest amplitude .
 
-## 5. [Version 2] Connect products to each other.
+## 5. Connect products to each other.
 
 iterate down the amplitude list, find shortest pathways to every compound downstream
 of the node.
