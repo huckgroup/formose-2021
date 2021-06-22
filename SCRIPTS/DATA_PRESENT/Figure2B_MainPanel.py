@@ -12,13 +12,12 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from NorthNet.calculations import calculations
 from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
 
 import helpers.chem_info as info_params
+from helpers.loading_helper import get_carbon_inputs
 from helpers.network_load_helper import load_from_edge_list
 from helpers.network_load_helper import load_coordinates_list
-from helpers.loading_helper import get_carbon_inputs
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
