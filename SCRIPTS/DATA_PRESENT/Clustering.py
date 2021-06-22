@@ -1,9 +1,8 @@
 import sys
-from pathlib import Path
 import numpy as np
 import pandas as pd
 import networkx as nx
-from networkx.drawing.nx_agraph import graphviz_layout
+from pathlib import Path
 import matplotlib.pyplot as plt
 
 # add the SCRIPTS directory to the system path
