@@ -1,0 +1,35 @@
+Dataset,FRN107A
+start_conditions
+reactor_volume/ uL,411.0,
+temperature/ oC,10.0,
+flow_profile_time/ s,0.0,4200.0,
+Residence time/ s,120.0,120.0,
+O=C(CO)CO/ M,0.4,
+[OH-]/ M,0.12,
+C=O/ M,0.8,
+O/ M,0.0,
+O=C(CO)CO_flow_rate/ µl/h,1541.25,1541.25,
+[OH-]_flow_rate/ µl/h,3082.5,3082.5,
+CaCl2_flow_rate/ µl/h,3082.5,3082.5,
+C=O_flow_rate/ µl/h,3082.5,3082.5,
+O_flow_rate/ µl/h,1541.25,1541.25,
+end_conditions
+start_analysis_details
+Calibrations_bounds_date,2019_12_02,
+Chromatography_method,HPLC,2019_03_13_GWS_1,
+Derivatisation_method,60% MeCN saturated DNPH; 0.5% 2 M HCl; 19.5%MeCN; 20% sample; 30 mins,
+end_analysis_details
+start_data
+sample number/ n,C=O/ M,O=C(CO)CO/ M,
+2.0,0.190147849,0.015246147,
+3.0,0.158516717,0.01278143,
+4.0,0.209388465,0.016928078,
+5.0,0.158971711,0.012680976,
+end_data
+start_errors
+sample number/ n,C=O/ M,O=C(CO)CO/ M,
+2.0,0.0,0.0,
+3.0,0.0,0.0,
+4.0,0.0,0.0,
+5.0,0.0,0.0,
+end_errors
