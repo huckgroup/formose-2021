@@ -31,7 +31,7 @@ Contains notes on the data analysis.
 
 ### PLOTS
 
-A container for plotting data (note: .png files will not be pushed to GitHub).
+A container for plotting data (note: .png files will not be pushed to GitHub). This should be empty.
 
 ### REACTION_INFO
 
