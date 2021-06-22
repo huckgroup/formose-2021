@@ -1,4 +1,3 @@
-import os
 import sys
 import pickle
 from rdkit import Chem
@@ -12,7 +11,6 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 from NorthNet import Classes
-from NorthNet import file_in_out as f_io
 from NorthNet import network_generation as n_gen
 
 from helpers import chem_info as info_params
