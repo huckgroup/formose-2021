@@ -34,6 +34,7 @@ compound_numbering = info_params.compound_numbering
 # x_factor = 1
 # y_factor = 1000
 
+figname = 'Figure2C'
 series_sel = 'Formaldehyde_2_series'
 condition_sel = '[C=O]/ M'
 x_name = '[formaldehyde]/ mM'
@@ -118,6 +119,6 @@ for c,t in enumerate(trace_labels):
 
 ax.set_xlabel(x_name)
 ax.set_ylabel('Concentration/ mM')
-plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(series_sel), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)
 
 plt.close()

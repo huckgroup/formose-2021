@@ -1,19 +1,31 @@
+import sys
 import numpy as np
+import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 
-from NorthNet import info_params
-from NorthNet.calculations import calculations
-from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 
-import __init__
-from helpers import load_series
-from helpers.loading_helper import exp_info, data, header, modified_averages
+import helpers.chem_info as info_params
+from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
 from helpers.network_load_helper import load_from_edge_list,load_coordinates_list
 
-edge_list = 'information_sources/dendrogram_edgelist.csv'
-coord_list = 'information_sources/dendrogram_coordinates.csv'
+data_folder = repository_dir/'DATA'
+derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
+plot_folder = repository_dir/'PLOTS'
+report_directory = data_folder/'DATA_REPORTS'
+exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
+
+exp_info = pd.read_csv(exp_info_dir, index_col = 0)
+
+edge_list = repository_dir/'RESOURCES/dendrogram_edgelist.csv'
+coord_list = repository_dir/'RESOURCES/dendrogram_coordinates.csv'
 G = load_from_edge_list(edge_list)
 pos = load_coordinates_list(coord_list)
 c_ops.set_network_coords(G,pos)
@@ -22,30 +34,20 @@ c_ops.rotate_network(G, -np.pi/2)
 lines = c_ops.get_network_lineplot(G)
 dots  = c_ops.get_network_scatter(G)
 
-base_directory = Path('/Users/williamrobinson/Documents/Nijmegen')
-# base_directory = Path(r'C:\Users\willi\Documents')
-
-fname = base_directory/'safestore_DEP/Series_info.csv'
-series_dict = load_series.load_series_sequences(fname)
-
+figname = 'Figure2D'
 series_sel = 'Formaldehyde_2_series'
 condition_sel = '[C=O]/ M'
 x_factor = 1000
 y_factor = 1000
 
-series_x_values = [x_factor*exp_info[x].parameters[condition_sel]
-                        for x in series_dict[series_sel]]
+series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
+data_keys = series_seqs.loc[series_sel]
+data_set_selections = list(data_keys.dropna())
 
-idx = [[*exp_info].index(x) for x in series_dict[series_sel]]
+series_x_values = [x_factor*exp_info.loc[x,condition_sel]
+                                            for x in data_set_selections]
 
-series_stack = np.zeros((len(idx),len(data[0])))
-
-for x in range(0,len(idx)):
-    series_stack[x] = data[idx[x]]
-
-series_progression = series_stack.T
-
-node_path = [(a,b) for a,b in zip(series_dict[series_sel],series_dict[series_sel][1:])]
+node_path = [(a,b) for a,b in zip(data_set_selections,data_set_selections[1:])]
 
 fig, ax = plt.subplots(figsize=(8.965/2.54,6.55/2.54))
 
@@ -75,5 +77,5 @@ ax.set_axis_off()
 ylm = ax.get_ylim()
 ax.set_ylim(ylm[1],ylm[0])
 fig.tight_layout()
-plt.savefig('plots_for_paper/{}_flight_path_panel.png'.format(series_sel), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 plt.close()
