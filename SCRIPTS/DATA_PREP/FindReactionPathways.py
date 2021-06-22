@@ -1,9 +1,9 @@
 import sys
 import numpy as np
+import pandas as pd
 import networkx as nx
 from rdkit import Chem
 from pathlib import Path
-import matplotlib.pyplot as plt
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -18,6 +18,9 @@ from helpers import chem_info as info_params
 from helpers import pathway_helpers as path_hlp
 from helpers.network_load_helper import load_network_from_reaction_list
 from helpers.network_load_helper import load_reaction_list,convert_to_networkx
+from helpers.loading_helper import get_carbon_inputs
+
+header = [x+'/ M' for x in info_params.smiles_to_names]
 
 # create Path objects for various information sources
 data_dir = repository_dir/'DATA'
@@ -26,27 +29,26 @@ determined_params_dir = data_dir/'DERIVED_PARAMETERS'
 exp_info_dir = repository_dir/'EXPERIMENT_INFO'
 network_file = repository_dir/'FORMOSE_REACTION/FullFormoseReaction.txt'
 
-# read in experiment information
-header = [x+'/ M' for x in info_params.smiles_to_names]
-exp_info = info_loads.import_Experiment_information(
-						exp_info_dir/"Experiment_parameters.csv")
-# read in data
-experiment_averages = data_loads.load_exp_compound_file(
-								determined_params_dir/'AverageData.csv', header)
-experiment_amplitudes = data_loads.load_exp_compound_file(
-							determined_params_dir/'AmplitudeData.csv', header)
+exp_info = pd.read_csv(exp_info_dir/'Experiment_parameters.csv', index_col = 0)
 
-# get the carbon inputs for each experiment
-carbon_inputs = {x:[] for x in experiment_averages}
-for v in experiment_averages:
-	for p in exp_info[v].parameters:
-		col_name = p
-		if 'temperature' in p:
-			continue
-		if 'C' in p and not 'Ca' in p and exp_info[v].parameters[p] > 0.0:
-			tag = p.split('/')[0][1:-1] + '/ M'
-			if tag in header:
-				carbon_inputs[v].append(p.split('/')[0][1:-1])
+experiment_names = list(exp_info.index)
+
+average_data = pd.read_csv(determined_params_dir/'AverageData.csv', index_col = 0)
+# remove empty columns
+average_data = average_data.dropna(axis = 1)
+
+amplitude_data = pd.read_csv(determined_params_dir/'AmplitudeData.csv', index_col = 0)
+# remove empty columns
+amplitude_data = amplitude_data.dropna(axis = 1)
+
+experiment_amplitudes = {i:amplitude_data.loc[i].to_numpy()
+												for i in amplitude_data.index}
+experiment_averages = {i:average_data.loc[i].to_numpy()
+												for i in average_data.index}
+
+carbon_inputs = get_carbon_inputs(exp_info, average_data.columns)
+for c in carbon_inputs:
+	carbon_inputs[c] = [x.strip('/ M') for x in carbon_inputs[c]]
 
 # Compounds below amplitude_filter will not be included in the search
 amplitude_filter = 0.0 # / M
