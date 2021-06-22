@@ -4,23 +4,33 @@ from rdkit import Chem
 from pathlib import Path
 import matplotlib.pyplot as plt
 
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
+
 from NorthNet.file_loads import data_loads, info_loads
-from NorthNet import info_params
 
-import __init__
-from helpers.network_load_helper import load_reaction_list,convert_to_networkx
-from helpers.network_load_helper import load_network_from_reaction_list
-from helpers.loading_helper import carbon_inputs
+from helpers import chem_info as info_params
 from helpers import pathway_helpers as path_hlp
+from helpers.loading_helper import carbon_inputs
+from helpers.network_load_helper import load_network_from_reaction_list
+from helpers.network_load_helper import load_reaction_list,convert_to_networkx
 
-# base_directory = Path(r'C:\Users\willi\Documents')
-base_directory = Path('/Users/williamrobinson/documents/nijmegen')
-report_directory = base_directory/'safestore_DEP'
+data_dir = repository_dir/'DATA'
+report_directory = data_dir/'DATA_REPORTS'
+determined_params_dir = data_dir/'DERIVED_PARAMETERS'
+exp_info_dir = repository_dir/'EXPERIMENT_INFO'
 
 header = [x+'/ M' for x in info_params.smiles_to_names]
-exp_info = info_loads.import_Experiment_information(report_directory/"Experiment_parameters.csv")
-experiment_averages = data_loads.load_exp_compound_file('information_sources/AverageData.csv', header)
-experiment_amplitudes = data_loads.load_exp_compound_file('information_sources/AmplitudeData.csv', header)
+exp_info = info_loads.import_Experiment_information(
+						exp_info_dir/"Experiment_parameters.csv")
+experiment_averages = data_loads.load_exp_compound_file(
+								determined_params_dir'AverageData.csv', header)
+experiment_amplitudes = data_loads.load_exp_compound_file(
+							determined_params_dir'AmplitudeData.csv', header)
 
 modifications = {x:[] for x in experiment_averages}
 carbon_inputs = {x:[] for x in experiment_averages}
@@ -43,7 +53,7 @@ amplitude_filter = 1e-5
 # considered within the scope of this study.
 enol_patt = Chem.MolFromSmarts('C=C')
 
-network_file = 'information_sources/FullFormoseReaction.txt'
+network_file = repository_dir/'FORMOSE_REACTION/FullFormoseReaction.txt'
 formose_reactions = load_reaction_list(network_file)
 formose_network = load_network_from_reaction_list(formose_reactions)
 
@@ -199,7 +209,7 @@ for n in network_results:
 		continue
 	else:
 		print(n, len(network_results[n].nodes), len(network_results[n].edges))
-		fname = 'plots_for_paper/network_plots/{}_network.png'.format(n)
+		fname = repository_dir/'PLOTS/network_plots/{}_network.png'.format(n)
 		if len(network_results[n].edges) == 0:
 			pass
 		else:
@@ -213,7 +223,7 @@ for n in network_results:
 		if '>>' in node:
 			output_list.append(node)
 
-	with open('information_sources/network_lists/{}_reaction_list.txt'.format(n), 'w') as f:
+	with open(repository_dir/'REACTION_LISTS/{}_reaction_list.txt'.format(n), 'w') as f:
 		for o in output_list:
 			f.write(o)
 			f.write('\n')
