@@ -1,3 +1,4 @@
+series_name,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34
 Ca_OH_grid_series,FRN103,FRN104A,FRN104B,FRN105A,FRN105B,FRN088A,FRN088B,FRN089B,,,,,,,,,,,,,,,,,,,,,,,,,,
 Example_CaOH_series,FRN103,FRN104A,FRN105A,FRN088B,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 DHA_erythrulose_series,FRN100A,FRN100B,FRN100C,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
@@ -21,4 +22,3 @@ Chemotype_network_examples,FRN104B,FRN103,FRN105A,FRN089A,,,,,,,,,,,,,,,,,,,,,,,
 SteadyStateCaOH2,FRN097A,FRN097B,FRN097C,FRN097D,FRN097E,FRN097F,FRN097G,FRN097H,FRN097I,FRN097J,FRN097K,FRN097L,FRN097M,FRN097N,FRN097O,FRN098A,FRN098B,FRN098C,FRN098D,FRN098E,FRN098F,FRN098G,FRN098H,FRN098I,FRN098J,,,,,,,,,
 DHA_series,FRN090A,FRN090B,FRN090C,FRN090D,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 Temperature_series,FRN107A,FRN107B,FRN089B,FRN107C,FRN107D,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
-,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
