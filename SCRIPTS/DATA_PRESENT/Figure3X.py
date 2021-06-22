@@ -14,6 +14,8 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
+from NorthNet import Classes
+
 import helpers.chem_info as info_params
 from helpers.network_plotting import plot_network
 from helpers.network_load_helper import load_reaction_list
@@ -27,6 +29,7 @@ derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
 report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
+reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
 # load in experiment information.
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
@@ -43,32 +46,35 @@ with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
 with open(repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle', 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
-directory = Path(repository_dir/'REACTION_LISTS')
-loaded_reactions = {}
-for file in os.listdir(directory):
-	loaded_reactions[file.split('_')[0]] = []
-	if not file.endswith('txt'):
-		continue
-	with open(directory/file, 'r') as f:
-		for line in f:
-			ins = line.strip('\n')
-			loaded_reactions[file.split('_')[0]].extend(ins.split(','))
+# load in the reaction lists determined for
+# modulated data sets.
+# use dictionary insertion ordering to
+# add network reactions into a
+networks = []
+for e in exp_info.index:
+	if exp_info.loc[e,'Modulated_component'] != 'None':
+		fname = '{}_reaction_list.txt'.format(e)
+		with open(reaction_list_directory/fname, 'r') as f:
+			for line in f:
+				ins = line.strip('\n').split(',')
+				rxns = [FormoseNetwork.NetworkReactions[r] for r in ins]
+				networks.append(Classes.Network(rxns, e, ''))
 
-reactions = {}
-for c in clusters:
-	for e in clusters[c]:
-		if e in loaded_reactions:
-			if len(loaded_reactions[e]) > 0:
-				reactions[e] = loaded_reactions[e]
-
-all_reactions = []
+print(networks)
+quit()
+# get a set of all of the reactions found
+# in the reaction pathways.
+all_pathway_reactions = []
 for r in reactions:
-	addition = list(set(reactions[r]))
-	all_reactions.extend(addition)
+	all_pathway_reactions.extend(reactions[r])
 
+# remove duplicates using a set operation
 all_reactions = list(set(all_reactions))
+# sort
 all_reactions.sort()
 
+# get a list of all of the reactions classes
+# present in the search framework
 full_set_reaction_classes = []
 for r in FormoseNetwork.NetworkReactions:
 	full_set_reaction_classes.append(FormoseNetwork.get_reaction_name(r))
@@ -85,9 +91,10 @@ for c,r in enumerate(reactions):
 	for c2,rc in enumerate(all_reaction_classes):
 		reaction_expression_stack[c,c2] = reaction_classes.count(rc)
 
+# remove columns consisting completely of zeros.
 remove_idx = np.argwhere(np.all(reaction_expression_stack[:,...] == 0, axis=0))
-
 reaction_expression_stack = np.delete(reaction_expression_stack, remove_idx, axis = 1)
+# edit the reaction c
 all_reaction_classes = [x for i,x in enumerate(all_reaction_classes) if i not in remove_idx]
 
 colours = np.array([])
