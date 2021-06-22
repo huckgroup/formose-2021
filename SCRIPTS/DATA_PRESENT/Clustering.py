@@ -52,10 +52,10 @@ amplitudes = amplitude_data.to_numpy()
 augmented_amplitude_matrix = np.hstack((data, amplitudes))
 # Calculate pairwise euclidean distances in the data
 augmented_amplitude_distances = pdist(augmented_amplitude_matrix, 'correlation')
+distances_squareform = squareform(augmented_amplitude_distances)
 # the linkage function should detect that a distance matrix is being passed to it.
 augmented_amplitude_linkages = linkage(augmented_amplitude_distances, method='average',
                                 metric='', optimal_ordering=False)
-distances_squareform = squareform(augmented_amplitude_distances)
 
 cut_level = 0.12
 cluster_labels = fcluster(augmented_amplitude_linkages,
