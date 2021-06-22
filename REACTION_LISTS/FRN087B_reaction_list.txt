@@ -31,6 +31,7 @@ O=C[C@@H](O)[C@H](O)CO.[OH-]>>OC=C(O)[C@H](O)CO.[OH-]
 O=C[C@H](O)CO.[OH-]>>OC=C(O)CO.[OH-]
 O=C(CO)[C@H](O)[C@H](O)[C@H](O)CO.[OH-]>>OCC(O)=C(O)[C@H](O)[C@H](O)CO.[OH-]
 O.OCC(O)=C(O)[C@H](O)[C@H](O)CO>>O.O=C([C@@H](O)CO)[C@H](O)[C@H](O)CO
+O.OC=CO>>O.O=CCO
 O.OCC(O)=C(O)[C@H](O)CO>>O.O=C(CO)[C@H](O)[C@H](O)CO
 O=C(CO)[C@H](O)[C@H](O)[C@H](O)CO>>O=C[C@H](O)CO.OC=C(O)CO
 O=C[C@H](O)[C@H](O)[C@H](O)[C@H](O)CO>>O=C[C@H](O)[C@H](O)CO.OC=CO
@@ -38,4 +39,5 @@ O=C([C@H](O)CO)[C@H](O)CO.[OH-]>>OCC(O)=C(O)[C@H](O)CO.[OH-]
 O=C([C@@H](O)CO)[C@H](O)[C@H](O)CO.[OH-]>>OCC(O)=C(O)[C@H](O)[C@H](O)CO.[OH-]
 O.OCC(O)=C(O)[C@H](O)[C@H](O)CO>>O.O=C(CO)[C@H](O)[C@H](O)[C@H](O)CO
 O=C([C@@H](O)CO)[C@H](O)[C@H](O)CO>>O=CCO.OC=C(O)[C@@H](O)CO
+O=C(CO)[C@](O)(CO)[C@H](O)CO>>O=CCO.OCC(O)=C(O)CO
 C=O.OC=C(O)CO>>O=CC(O)(CO)CO

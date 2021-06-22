@@ -51,3 +51,4 @@ O.OCC(O)=C(O)[C@H](O)CO>>O.O=C(CO)[C@H](O)[C@H](O)CO
 O.OC=C(O)[C@H](O)CO>>O.O=C[C@H](O)[C@H](O)CO
 C=O.OC=C(O)[C@H](O)CO>>O=C[C@@](O)(CO)[C@H](O)CO
 O=C[C@@](O)(CO)[C@H](O)[C@H](O)CO>>O=C[C@H](O)CO.OC=C(O)CO
+O=C([C@H](O)CO)[C@H](O)CO.[OH-]>>OCC(O)=C(O)[C@H](O)CO.[OH-]
