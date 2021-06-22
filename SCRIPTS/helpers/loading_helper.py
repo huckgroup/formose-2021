@@ -1,20 +1,21 @@
 import os
+import sys
 import copy
 import numpy as np
 from pathlib import Path
 
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
+
+import helpers.chem_info as info_params
+
 from NorthNet import Classes
-from NorthNet import info_params
 from NorthNet.file_loads import data_loads, info_loads
 from NorthNet.data_processing import dataset_operations as d_ops
-
-'''Loading data and defining parameters.'''
-base_directory = Path('/Users/williamrobinson/documents/nijmegen')
-#base_directory = Path(r'C:\Users\willi\Documents')
-directory = base_directory/'Dynamic_environment_project'
-plot_folder = directory/'Paper_plots'
-save_data_folder = directory/'DataAnalysis'
-save_data_folder_2 = directory/'DataAnalysisAllPoints'
 
 def load_data_files_from_folder(path):
 	loaded_reports = []
@@ -56,79 +57,21 @@ def load_all_data_sets(exp_info):
 
 	return data_sets
 
-# list of headers for the array columns
-prime_header = [x+'/ M' for x in info_params.smiles_to_names]
-# list of compound colours.
-clrs  = [info_params.colour_assignments[x] for x in info_params.smiles_to_names]
+def get_carbon_inputs(exp_info, compounds_from_data):
+	'''
+	exp_info: NorthNet ExperimentInformation
 
-report_directory = base_directory/'safestore_DEP'
-# import experiment information
-exp_info = info_loads.import_Experiment_information(report_directory/"Experiment_parameters.csv")
+	carbon_inputs: dict
+	'''
 
-# import data
-experiment_averages = data_loads.load_exp_compound_file('information_sources/AverageData.csv', prime_header)
-averages_errors = data_loads.load_exp_compound_file('information_sources/Average_errors.csv', prime_header)
-experiment_amplitudes = data_loads.load_exp_compound_file('information_sources/AmplitudeData.csv', prime_header)
-
-# find the carbon-containing reactants for each experiment
-# and remove them from the data.
-modifications = {x:[] for x in experiment_averages}
-carbon_inputs = {x:[] for x in experiment_averages}
-for v in exp_info:
-	for p in exp_info[v].parameters:
-		col_name = p
-		if 'temperature' in p:
-			continue
-		if 'C' in p and not 'Ca' in p and exp_info[v].parameters[p] > 0.0:
-			tag = p.split('/')[0][1:-1] + '/ M'
-			if tag in prime_header:
-				i = prime_header.index(tag)
-				modifications[v].append(i)
-				carbon_inputs[v].append(p.split('/')[0][1:-1])
-
-modified_averages = copy.deepcopy(experiment_averages)
-for m in modifications:
-	modified_averages[m][modifications[m]] = 0.0
-
-'''Removing columns containing zeros and reactants from analysis matrix.'''
-data = np.zeros((len(modified_averages), len(modified_averages[[*modified_averages][0]])))
-for c,v in enumerate(modified_averages):
-	data[c] = modified_averages[v]
-
-errors = np.zeros((len(modified_averages), len(modified_averages[[*modified_averages][0]])))
-for c,v in enumerate(modified_averages):
-	errors[c] = averages_errors[v]
-
-idx = np.argwhere(np.all(data[..., :] == 0, axis=0))
-idx = np.vstack((idx,prime_header.index('O=CCO/ M')))
-idx = np.vstack((idx,prime_header.index('O=C[C@H](O)CO/ M')))
-data = np.delete(data, idx, axis = 1)
-errors = np.delete(errors, idx, axis = 1)
-
-# truncate the header to match the data matrix.
-header = [h for i,h in enumerate(prime_header) if i not in idx]
-# truncate the compound colour list to match the data matrix.
-clrs = [info_params.colour_assignments[h.split('/')[0]] for h in header]
-# Create a list of colours for cluster labelling
-colourings = info_params.cluster_colour_map[:]
-colourings.extend(info_params.cluster_grayscale)
-
-'''Loading conditions.'''
-condition_names = [*exp_info['FRN071A'].parameters]
-conditions = np.zeros((len(exp_info), len(exp_info['FRN071A'].parameters)))
-for x,e in enumerate(exp_info):
-	for y,v in enumerate(exp_info[e].parameters):
-		if v != 'Reaction_entry':
-			conditions[x,y] = exp_info[e].parameters[v]
-
-# removing input species from amplitudes
-modified_amplitudes = copy.deepcopy(experiment_amplitudes)
-for m in modifications:
-	modified_amplitudes[m][modifications[m]] = 0.0
-
-amplitudes = np.zeros((len(modified_averages), len(modified_amplitudes[[*modified_averages][0]])))
-for c,v in enumerate(modified_amplitudes):
-	amplitudes[c] = modified_amplitudes[v]
-
-idx = np.argwhere(np.all(amplitudes[..., :] == 0, axis=0))
-amplitudes = np.delete(amplitudes, idx, axis = 1)
+	carbon_inputs = {x:[] for x in exp_info.index}
+	for v in exp_info.index:
+		for p in exp_info.columns:
+			col_name = p
+			if 'temperature' in p:
+				continue
+			if 'C' in p and not 'Ca' in p and exp_info.loc[v,p] > 0.0:
+				tag = p.split('/')[0][1:-1] + '/ M'
+				if tag in compounds_from_data:
+					carbon_inputs[v].append(tag)
+	return carbon_inputs
