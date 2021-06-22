@@ -80,3 +80,12 @@ with open(parent/'REACTION_INFO/reaction_SMARTS_templates.tsv', 'r') as f:
             reaction_class_colours[ins[0]] = ins[4]
             reaction_class_short_names[ins[0]] = ins[5]
             reaction_class_names[ins[0]] = ins[6]
+
+with open(parent/'COMPOUND_INFO/compound_numbering.txt', 'r') as f:
+    lines = f.readlines()
+
+lines = [l.strip('\n') for l in lines]
+compound_numbering = {}
+for l in lines:
+    SMILES_num = l.split(',')
+    compound_numbering[SMILES_num[0]]  = SMILES_num[1]
