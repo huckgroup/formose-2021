@@ -30,7 +30,7 @@ G = load_from_edge_list(edge_list)
 pos = load_coordinates_list(coord_list)
 c_ops.set_network_coords(G,pos)
 c_ops.normalise_network_coordinates(G)
-c_ops.rotate_network(G, -np.pi/2)
+# c_ops.rotate_network(G, -np.pi/2)
 lines = c_ops.get_network_lineplot(G)
 dots  = c_ops.get_network_scatter(G)
 
