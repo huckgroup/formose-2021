@@ -18,6 +18,7 @@ from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
 
 from helpers.network_load_helper import load_from_edge_list
 from helpers.network_load_helper import load_coordinates_list
+from helpers.loading_helper import get_carbon_inputs
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
@@ -27,6 +28,25 @@ exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 
+average_data = pd.read_csv(derived_parameters_dir/'AverageData.csv', index_col = 0)
+
+# remove empty columns
+average_data = average_data.dropna(axis = 1)
+# remove columns containing only zeros
+average_data = average_data.loc[:, (average_data != 0).any(axis=0)]
+
+carbon_inputs = get_carbon_inputs(exp_info, average_data.columns)
+
+# remove reactants
+for c in carbon_inputs:
+    for x in carbon_inputs[c]:
+        if x in average_data.columns:
+            average_data.loc[c,x] = 0.0
+
+average_sum = average_data.sum(axis = 1)
+
+compounds = [x.split('/')[0] for x in average_data.columns]
+compound_clrs  = [info_params.colour_assignments[x] for x in compounds]
 
 select_conditions = ['[C=O]/ M', '[CaCl2]/ M', '[NaOH]/ M','[O=C(CO)CO]/ M',
                     'residence_time/ s', 'temperature/ oC']
@@ -46,7 +66,7 @@ G = load_from_edge_list(edge_list)
 pos = load_coordinates_list(coord_list)
 c_ops.set_network_coords(G,pos)
 c_ops.normalise_network_coordinates(G)
-c_ops.rotate_network(G, -np.pi/4 - np.pi/6)
+# c_ops.rotate_network(G, -np.pi/4 - np.pi/6)
 lines = c_ops.get_network_lineplot(G)
 dots  = c_ops.get_network_scatter(G)
 
@@ -56,10 +76,10 @@ ax.plot(lines[0],lines[1],
        c = '#000000', linewidth = 2.5,
        zorder = 0)
 
-subplot_width = 0.06
-subplot_height = 0.06
+subplot_width = 0.05
+subplot_height = 0.05
 for n in G.nodes:
-    if n in exp_info:
+    if n in exp_info.index:
         xy = G.nodes[n]['pos']
         L = xy[0] - subplot_width/2
         B = xy[1] - subplot_height/2
@@ -67,9 +87,9 @@ for n in G.nodes:
         H = subplot_height
         axin = ax.inset_axes([L,B,W,H], transform=ax.transData)
 
-        axin.pie(modified_averages[n]/np.amax(modified_averages[n]),
-                 colors = [info_params.colour_assignments[x.split('/')[0]]
-                 for x in prime_header])
+        axin.pie(average_data.loc[n].to_numpy()/average_sum.loc[n],
+                 colors = compound_clrs)
+
 ylm = ax.get_ylim()
 ax.set_ylim(ylm[1],ylm[0])
 ax.set_position([0,0,1,1])
