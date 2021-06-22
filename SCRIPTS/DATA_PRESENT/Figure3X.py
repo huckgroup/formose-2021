@@ -19,23 +19,27 @@ from helpers.network_plotting import plot_network
 from helpers.network_load_helper import load_reaction_list
 from helpers.network_load_helper import convert_to_networkx
 
+# name for output files
 figname = 'Figure3X'
+# set paths to files
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
 report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 
+# load in experiment information.
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
 
-'''Import clusters for ordering the data sets'''
+# Import clusters for ordering the data sets
 clusters = {}
 with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
 	for c,line in enumerate(f):
 		ins = line.strip('\n').split(',')
 		clusters[c] = ins[1:]
 
+# loading in the formose reaction as a NorthNet Network Object
 with open(repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle', 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
