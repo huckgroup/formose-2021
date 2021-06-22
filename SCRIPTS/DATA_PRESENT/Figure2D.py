@@ -51,9 +51,6 @@ node_path = [(a,b) for a,b in zip(data_set_selections,data_set_selections[1:])]
 
 fig, ax = plt.subplots(figsize=(8.965/2.54,6.55/2.54))
 
-ax.set_xlabel('[Formaldehyde]/ mM')
-ax.set_ylabel('concentration/ mM')
-
 ax.plot(lines[0],lines[1], zorder = 0, c = '#000000')
 ax.scatter(dots[0],dots[1], zorder = 0, c = '#000000', s = 5)
 
