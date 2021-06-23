@@ -1,7 +1,7 @@
 # formose-2021
 Data and analysis for the formose paper (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
 
-Requires installation of NorthNet (ask W.E.R.), numpy, scipy, networkx
+Requires installation of NorthNet (ask W.E.R.), numpy, scipy, networkx, pandas
 
 ## Contents
 ### COMPOUND_INFO
