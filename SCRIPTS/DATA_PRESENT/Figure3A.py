@@ -17,7 +17,6 @@ repository_dir = Path(__file__).parents[2]
 from NorthNet import Classes
 
 import helpers.chem_info as info_params
-from helpers.network_plotting import plot_network
 from helpers.network_load_helper import load_reaction_list
 from helpers.network_load_helper import convert_to_networkx
 
@@ -33,15 +32,6 @@ reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
 # load in experiment information.
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
-series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv',
-						index_col = 0)
-
-# Import clusters for ordering the data sets
-clusters = {}
-with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
-	for c,line in enumerate(f):
-		ins = line.strip('\n').split(',')
-		clusters[c] = ins[1:]
 
 # loading in the formose reaction as a NorthNet Network Object
 formose_file = repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle'
@@ -107,15 +97,15 @@ for c,n in enumerate(networks):
 # it can be viewed as a measure on how the
 # environmental conditions have 'sculpted'
 # the observed pathways from the set
-# for c,r in enumerate(reaction_classes):
-# 	reaction_numbers[:,c] /= reaction_classes[r]
+for c,r in enumerate(class_names):
+	reaction_numbers[:,c] /= reaction_classes[r]
 
 # normalise to scores to the total number of
 # reaction classes observed in the networks
 # how the reaction classes chang relative
 # to their union
-for c,r in enumerate(observed_reaction_classes):
-	reaction_numbers[:,c] /= observed_reaction_classes[r]
+# for c,r in enumerate(class_names):
+# 	reaction_numbers[:,c] /= observed_reaction_classes[r]
 
 # remove column containing zeroes or nan
 reaction_numbers = np.nan_to_num(reaction_numbers)
@@ -124,6 +114,7 @@ reaction_numbers = np.delete(reaction_numbers,zero_idx, axis = 1)
 # update the class names
 class_names = [c for i,c in enumerate(class_names) if i not in zero_idx]
 # get experiment labels
+exp_names = [n.Name for n in networks]
 exp_labels = [exp_info.loc[n.Name,'Experiment_entry'] for n in networks]
 
 # plot the results in a heatmap
@@ -131,9 +122,10 @@ exp_labels = [exp_info.loc[n.Name,'Experiment_entry'] for n in networks]
 # as it is easier for those with
 # colour vision deficiency to view compared to other
 # colour maps, and it cycles between low values of blue
-# and higher values of yellow
-# it looks nice, to me, too.
-# see Nuñez, PLoS, 2018
+# and higher values of yellow.
+# It looks nice, to me, too.
+# see Nuñez, Anderton, Renslow, PLoS One, 2018, 13, 1–14.
+# - 'Color map poem' W. E. Robinson, 2021
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 fig, ax = plt.subplots(figsize = (35/2.54,15/2.54))
 
@@ -154,3 +146,37 @@ cbar.ax.tick_params(labelsize= 6)
 
 fig.tight_layout()
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
+plt.close()
+# creating a version of the figure with zones of the heatmap
+# organised by reaction expression
+
+# try creating sorting based on reaction classes
+idx = np.lexsort((reaction_numbers[:,-10],reaction_numbers[:,11],reaction_numbers[:,8],reaction_numbers[:,9]))
+
+exp_labels_r_order = [exp_labels[i] for i in idx]
+exp_names_r_order = [exp_names[i] for i in idx]
+
+# use idx to re-order reaction_numbers
+reaction_numbers_r_order = reaction_numbers[idx]
+
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+fig, ax = plt.subplots(figsize = (35/2.54,15/2.54))
+
+ax.tick_params(axis = 'both', which = 'both', length = 0)
+im = ax.imshow(reaction_numbers_r_order.T, cmap = 'cividis')
+# 0.5 offset to centre the ticklabels
+ax.set_xticks(np.arange(0.5,len(exp_labels)+0.5,1))
+ax.set_xticklabels(exp_names_r_order, fontsize = 8, rotation = 45, ha = 'right')
+
+ax.set_yticks(np.arange(0,len(class_names),1))
+ax.set_yticklabels(class_names, fontsize = 8)
+
+divider = make_axes_locatable(ax)
+cax = divider.append_axes("right", size="5%", pad=0.1)
+cbar = plt.colorbar(im, cax=cax)
+cbar.set_label('Fractional expression',labelpad = 10)
+cbar.ax.tick_params(labelsize= 6)
+
+fig.tight_layout()
+plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
+plt.close()
