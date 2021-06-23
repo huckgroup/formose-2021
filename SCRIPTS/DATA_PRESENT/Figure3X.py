@@ -33,7 +33,8 @@ reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
 # load in experiment information.
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
-series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
+series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv',
+						index_col = 0)
 
 # Import clusters for ordering the data sets
 clusters = {}
@@ -43,7 +44,8 @@ with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
 		clusters[c] = ins[1:]
 
 # loading in the formose reaction as a NorthNet Network Object
-with open(repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle', 'rb') as f:
+formose_file = repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle'
+with open(formose_file, 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
 # get a list of all of the reactions classes
@@ -81,7 +83,8 @@ for n in networks:
 	for r in n.NetworkReactions:
 		merged_network.add_reactions([n.get_reaction(r)])
 
-observed_reaction_classes = {cls:0 for cls in class_names} # container for all observed reaction classes
+# container for all observed reaction classes
+observed_reaction_classes = {cls:0 for cls in class_names}
 for r in merged_network.NetworkReactions:
 	class_name = merged_network.get_reaction_name(r)
 
@@ -99,7 +102,6 @@ for c,n in enumerate(networks):
 # normalise the reaction counts to the total
 # number of the reactions of that class present
 # in the search framework.
-
 # this measure brings out much more detail
 # in the data that other measures.
 # it can be viewed as a measure on how the
@@ -107,7 +109,6 @@ for c,n in enumerate(networks):
 # the observed pathways from the set
 # for c,r in enumerate(reaction_classes):
 # 	reaction_numbers[:,c] /= reaction_classes[r]
-
 
 # normalise to scores to the total number of
 # reaction classes observed in the networks
@@ -123,7 +124,7 @@ reaction_numbers = np.delete(reaction_numbers,zero_idx, axis = 1)
 # update the class names
 class_names = [c for i,c in enumerate(class_names) if i not in zero_idx]
 # get experiment labels
-exp_labels = [n.Name for n in networks]
+exp_labels = [exp_info.loc[n.Name,'Experiment_entry'] for n in networks]
 
 # plot the results in a heatmap
 # cividis is a good colourmap for this purpose
@@ -137,22 +138,19 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 fig, ax = plt.subplots(figsize = (35/2.54,15/2.54))
 
 ax.tick_params(axis = 'both', which = 'both', length = 0)
-# ax.set_position([0.25,0.25,0.7,0.7])
-# mappable = ax.scatter(x_vals,y_vals, s=15, c = colours, zorder = 3, marker = 's', cmap = cm.seismic)
 im = ax.imshow(reaction_numbers.T, cmap = 'cividis')
-ax.set_xticks(np.arange(0,len(exp_labels),1))
-ax.set_xticklabels(exp_labels, rotation = 90, fontsize = 6)
+# 0.5 offset to centre the ticklabels
+ax.set_xticks(np.arange(0.5,len(exp_labels)+0.5,1))
+ax.set_xticklabels(exp_labels, fontsize = 8, rotation = 45, ha = 'right')
 
 ax.set_yticks(np.arange(0,len(class_names),1))
-ax.set_yticklabels(class_names, fontsize = 6)
-
-# ax.set_position([0.1,0.1,0.8,0.8])
+ax.set_yticklabels(class_names, fontsize = 8)
 
 divider = make_axes_locatable(ax)
 cax = divider.append_axes("right", size="5%", pad=0.1)
 cbar = plt.colorbar(im, cax=cax)
-cbar.set_label('Fractional expression', rotation=270, labelpad = 10)
+cbar.set_label('Fractional expression',labelpad = 10)
 cbar.ax.tick_params(labelsize= 6)
-# ax.set_aspect('equal')
+
 fig.tight_layout()
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
