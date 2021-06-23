@@ -46,6 +46,19 @@ with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
 with open(repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle', 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
+# get a list of all of the reactions classes
+# present in the search framework
+reaction_classes = {}
+for r in FormoseNetwork.NetworkReactions:
+	class_name = FormoseNetwork.get_reaction_name(r)
+	if class_name in reaction_classes:
+		reaction_classes[class_name] += 1
+	else:
+		reaction_classes[class_name] = 1
+
+class_names = [*reaction_classes]
+class_names.sort()
+
 # load in the reaction lists determined for
 # modulated data sets.
 # use dictionary insertion ordering to
@@ -56,66 +69,82 @@ for e in exp_info.index:
 		fname = '{}_reaction_list.txt'.format(e)
 		with open(reaction_list_directory/fname, 'r') as f:
 			for line in f:
-				ins = line.strip('\n').split(',')
-				rxns = [FormoseNetwork.NetworkReactions[r] for r in ins]
-				networks.append(Classes.Network(rxns, e, ''))
+				lines = f.readlines()
+		rxns = []
+		for l in lines:
+			rxns.append(FormoseNetwork.NetworkReactions[l.strip('\n')])
 
-print(networks)
-quit()
-# get a set of all of the reactions found
-# in the reaction pathways.
-all_pathway_reactions = []
-for r in reactions:
-	all_pathway_reactions.extend(reactions[r])
+		networks.append(Classes.Network(rxns, e, ''))
 
-# remove duplicates using a set operation
-all_reactions = list(set(all_reactions))
-# sort
-all_reactions.sort()
+merged_network = Classes.Network([],'merged','')
+for n in networks:
+	for r in n.NetworkReactions:
+		merged_network.add_reactions([n.get_reaction(r)])
 
-# get a list of all of the reactions classes
-# present in the search framework
-full_set_reaction_classes = []
-for r in FormoseNetwork.NetworkReactions:
-	full_set_reaction_classes.append(FormoseNetwork.get_reaction_name(r))
+observed_reaction_classes = {cls:0 for cls in class_names} # container for all observed reaction classes
+for r in merged_network.NetworkReactions:
+	class_name = merged_network.get_reaction_name(r)
 
-all_reaction_classes = list(set(full_set_reaction_classes))
-all_reaction_classes.sort()
+	observed_reaction_classes[class_name] += 1
 
-base_reaction_class_numbers = [full_set_reaction_classes.count(x)
-								for x in all_reaction_classes]
+# get number of each reaction class in the networks
+# store the results in an array
+reaction_numbers = np.zeros((len(networks),len(reaction_classes)))
+for c,n in enumerate(networks):
+	for r in n.NetworkReactions:
+		cls = n.get_reaction_name(r)
+		idx = class_names.index(cls)
+		reaction_numbers[c,idx] += 1
 
-reaction_expression_stack = np.zeros((len(reactions),len(all_reaction_classes)))
-for c,r in enumerate(reactions):
-	reaction_classes = [FormoseNetwork.get_reaction_name(x) for x in reactions[r]]
-	for c2,rc in enumerate(all_reaction_classes):
-		reaction_expression_stack[c,c2] = reaction_classes.count(rc)
+# normalise the reaction counts to the total
+# number of the reactions of that class present
+# in the search framework.
 
-# remove columns consisting completely of zeros.
-remove_idx = np.argwhere(np.all(reaction_expression_stack[:,...] == 0, axis=0))
-reaction_expression_stack = np.delete(reaction_expression_stack, remove_idx, axis = 1)
-# edit the reaction c
-all_reaction_classes = [x for i,x in enumerate(all_reaction_classes) if i not in remove_idx]
+# this measure brings out much more detail
+# in the data that other measures.
+# it can be viewed as a measure on how the
+# environmental conditions have 'sculpted'
+# the observed pathways from the set
+# for c,r in enumerate(reaction_classes):
+# 	reaction_numbers[:,c] /= reaction_classes[r]
 
-colours = np.array([])
-for x in range(0,len(reaction_expression_stack)):
-	for y in range(0,len(reaction_expression_stack[0])):
-		colours = np.hstack((colours, reaction_expression_stack[x,y]/reaction_expression_stack[x].max()))
 
-reaction_class_names = [info_params.reaction_class_names[r] for r in all_reaction_classes]
+# normalise to scores to the total number of
+# reaction classes observed in the networks
+# how the reaction classes chang relative
+# to their union
+for c,r in enumerate(observed_reaction_classes):
+	reaction_numbers[:,c] /= observed_reaction_classes[r]
 
+# remove column containing zeroes or nan
+reaction_numbers = np.nan_to_num(reaction_numbers)
+zero_idx = np.argwhere(np.all(reaction_numbers[..., :] == 0, axis=0))
+reaction_numbers = np.delete(reaction_numbers,zero_idx, axis = 1)
+# update the class names
+class_names = [c for i,c in enumerate(class_names) if i not in zero_idx]
+# get experiment labels
+exp_labels = [n.Name for n in networks]
+
+# plot the results in a heatmap
+# cividis is a good colourmap for this purpose
+# as it is easier for those with
+# colour vision deficiency to view compared to other
+# colour maps, and it cycles between low values of blue
+# and higher values of yellow
+# it looks nice, to me, too.
+# see Nuñez, PLoS, 2018
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 fig, ax = plt.subplots(figsize = (35/2.54,15/2.54))
 
 ax.tick_params(axis = 'both', which = 'both', length = 0)
 # ax.set_position([0.25,0.25,0.7,0.7])
 # mappable = ax.scatter(x_vals,y_vals, s=15, c = colours, zorder = 3, marker = 's', cmap = cm.seismic)
-im = ax.imshow(reaction_expression_stack.T, cmap = 'cividis')
-ax.set_xticks(np.arange(0,len(reactions),1))
-ax.set_xticklabels([*reactions], rotation = 90, fontsize = 6)
+im = ax.imshow(reaction_numbers.T, cmap = 'cividis')
+ax.set_xticks(np.arange(0,len(exp_labels),1))
+ax.set_xticklabels(exp_labels, rotation = 90, fontsize = 6)
 
-ax.set_yticks(np.arange(0,len(reaction_class_names),1))
-ax.set_yticklabels(reaction_class_names, fontsize = 6)
+ax.set_yticks(np.arange(0,len(class_names),1))
+ax.set_yticklabels(class_names, fontsize = 6)
 
 # ax.set_position([0.1,0.1,0.8,0.8])
 
