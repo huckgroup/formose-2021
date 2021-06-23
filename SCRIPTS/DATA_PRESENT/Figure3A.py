@@ -22,7 +22,7 @@ from helpers.network_load_helper import load_reaction_list
 from helpers.network_load_helper import convert_to_networkx
 
 # name for output files
-figname = 'Figure3X'
+figname = 'Figure3A'
 # set paths to files
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
