@@ -102,6 +102,12 @@ for x in range(n_clusters):
 
     ax[0].annotate(x+1, xy = (np.average(x_coords), np.average(y_coords)),
                     fontsize = 12, fontweight = 'bold')
+# the y-axis is flipped upside down
+# not necessary, but I forgot to remove it
+# before making the final figures, so it
+# gets left in!
+ylm = ax[0].get_ylim()
+ax[0].set_ylim(ylm[1],ylm[0])
 ax[0].set_aspect('equal')
 ax[0].set_axis_off()
 plt.savefig(repository_dir/'RESOURCES/KMeans_cluster_positions.png', dpi = 600)

@@ -88,7 +88,11 @@ for n in G.nodes:
 
         axin.pie(average_data.loc[n].to_numpy()/average_sum.loc[n],
                  colors = compound_clrs)
-
+                 
+# the y-axis is flipped upside down
+# not necessary, but I forgot to remove it
+# before making the final figures, so it
+# gets left in!
 ylm = ax.get_ylim()
 ax.set_ylim(ylm[1],ylm[0])
 ax.set_position([0,0,1,1])
