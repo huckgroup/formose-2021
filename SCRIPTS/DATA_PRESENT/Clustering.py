@@ -80,9 +80,9 @@ cluster_labels = kmeans.labels_
 n_clusters = len(np.unique(cluster_labels))
 print('number of clusters', n_clusters)
 
-fig, ax = plt.subplots(ncols = 2)
+fig, ax = plt.subplots(ncols = 2, figsize = (10,5))
 ax[1].axhline(y = cut_level)
-dendrogram(augmented_amplitude_linkages, ax = ax[1], color_threshold = cut_level)
+dendro = dendrogram(augmented_amplitude_linkages, ax = ax[1], color_threshold = cut_level)
 
 ax[0].plot(lines[0],lines[1],
             c = '#000000', linewidth = 2.5,
@@ -112,7 +112,6 @@ ax[0].set_aspect('equal')
 ax[0].set_axis_off()
 plt.savefig(repository_dir/'RESOURCES/KMeans_cluster_positions.png', dpi = 600)
 
-
 clusters = []
 for x in range(n_clusters):
     clust = []
@@ -126,3 +125,7 @@ with open(repository_dir/'RESOURCES/clusters.txt', 'w') as f:
         f.write('Cluster_{},'.format(c))
         [f.write('{},'.format(x)) for x in v]
         f.write('\n')
+
+exp_list = [experiment_names[x] for x in dendro['leaves']]
+with open(repository_dir/'RESOURCES/leaf_list.txt', 'w') as f:
+    [f.write('{},'.format(x)) for x in exp_list]
