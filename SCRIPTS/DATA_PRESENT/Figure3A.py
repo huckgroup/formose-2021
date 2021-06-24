@@ -42,7 +42,8 @@ with open(formose_file, 'rb') as f:
 # present in the search framework
 reaction_classes = {}
 for r in FormoseNetwork.NetworkReactions:
-	class_name = FormoseNetwork.get_reaction_name(r)
+	rxn_name = FormoseNetwork.get_reaction_name(r)
+	class_name = info_params.reaction_class_names[rxn_name]
 	if class_name in reaction_classes:
 		reaction_classes[class_name] += 1
 	else:
@@ -76,8 +77,8 @@ for n in networks:
 # container for all observed reaction classes
 observed_reaction_classes = {cls:0 for cls in class_names}
 for r in merged_network.NetworkReactions:
-	class_name = merged_network.get_reaction_name(r)
-
+	rxn_name = merged_network.get_reaction_name(r)
+	class_name = info_params.reaction_class_names[rxn_name]
 	observed_reaction_classes[class_name] += 1
 
 # get number of each reaction class in the networks
@@ -85,7 +86,8 @@ for r in merged_network.NetworkReactions:
 reaction_numbers = np.zeros((len(networks),len(reaction_classes)))
 for c,n in enumerate(networks):
 	for r in n.NetworkReactions:
-		cls = n.get_reaction_name(r)
+		rxn_name = n.get_reaction_name(r)
+		cls = info_params.reaction_class_names[rxn_name]
 		idx = class_names.index(cls)
 		reaction_numbers[c,idx] += 1
 
@@ -147,11 +149,22 @@ cbar.ax.tick_params(labelsize= 6)
 fig.tight_layout()
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 plt.close()
+
 # creating a version of the figure with zones of the heatmap
 # organised by reaction expression
 
-# try creating sorting based on reaction classes
-idx = np.lexsort((reaction_numbers[:,-10],reaction_numbers[:,11],reaction_numbers[:,8],reaction_numbers[:,9]))
+with open('RESOURCES/clusters.txt', 'r') as f:
+	lines = f.readlines()
+
+# create a new experiment ordering based on clusters
+cluster_order_exp_labels = []
+for l in lines:
+	line= l.strip('\n').split(',')
+	cluster_order_exp_labels.extend([x for x in line[1:] if x in exp_names])
+
+# get the indices which will sort the data according to
+# the new experiment order.
+idx = [exp_names.index(x) for x in cluster_order_exp_labels]
 
 exp_labels_r_order = [exp_labels[i] for i in idx]
 exp_names_r_order = [exp_names[i] for i in idx]
