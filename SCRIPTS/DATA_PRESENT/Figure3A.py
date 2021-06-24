@@ -91,24 +91,6 @@ for c,n in enumerate(networks):
 		idx = class_names.index(cls)
 		reaction_numbers[c,idx] += 1
 
-# normalise the reaction counts to the total
-# number of the reactions of that class present
-# in the search framework.
-# this measure brings out much more detail
-# in the data that other measures.
-# it can be viewed as a measure on how the
-# environmental conditions have 'sculpted'
-# the observed pathways from the set
-# for c,r in enumerate(class_names):
-# 	reaction_numbers[:,c] /= reaction_classes[r]
-
-# normalise to scores to the total number of
-# reaction classes observed in the networks
-# how the reaction classes chang relative
-# to their union
-# for c,r in enumerate(class_names):
-# 	reaction_numbers[:,c] /= observed_reaction_classes[r]
-
 # normalise the scores to the total number of reactions
 # observed in the reaction system for each network.
 for c,r in enumerate(class_names):
@@ -135,6 +117,18 @@ cluster_order_exp_labels = []
 for l in lines:
 	line= l.strip('\n').split(',')
 	cluster_order_exp_labels.extend([x for x in line[1:] if x in exp_names])
+
+# the order was edited slightly so experiments that fall on the same branch
+# in the main text are contiguous
+cluster_order_exp_labels = ['FRN055B', 'FRN103', 'FRN104A',  'FRN104B',
+'FRN105A', 'FRN105B', 'FRN106C',  'FRN106D', 'FRN106E', 'FRN090A', 'FRN090B',
+'FRN090C', 'FRN090D', 'FRN093A',  'FRN093B', 'FRN094A', 'FRN094B', 'FRN094C',
+'FRN100A', 'FRN100B', 'FRN100C', 'FRN061B', 'FRN062A', 'FRN092A', 'FRN092B',
+'FRN062B', 'FRN062C', 'FRN062D', 'FRN091','FRN051B', 'FRN059B', 'FRN060B',
+'FRN093C', 'FRN071A', 'FRN071B', 'FRN071C', 'FRN071D', 'FRN077A', 'FRN077B',
+'FRN077C', 'FRN077D',  'FRN106A', 'FRN106B', 'FRN087A', 'FRN087B', 'FRN087C',
+'FRN087D', 'FRN087E', 'FRN088A', 'FRN088B', 'FRN088C', 'FRN089A', 'FRN089B',
+'FRN089C', 'FRN089D']
 
 # get the indices which will sort the data according to
 # the new experiment order.
