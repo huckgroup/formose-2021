@@ -1,10 +1,27 @@
-import pandas as pd
 import NorthNet
+import pandas as pd
 from rdkit import Chem
-from rdkit.Chem import AllChem
 from rdkit.Chem import Draw
+from rdkit.Chem import AllChem
 
-df = pd.read_csv('information_sources/AverageData.csv', index_col = 0)
+import sys
+from pathlib import Path
+# add the SCRIPTS directory to the system path
+# so that its contents can be imported
+script_dir = Path(__file__).parents[1].as_posix()
+sys.path.append(script_dir)
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
+# set paths to files
+data_folder = repository_dir/'DATA'
+derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
+plot_folder = repository_dir/'PLOTS'
+report_directory = data_folder/'DATA_REPORTS'
+exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
+reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
+
+
+df = pd.read_csv(derived_parameters_dir/'AverageData.csv', index_col = 0)
 df = df.dropna(axis = 1)
 
 df = df.loc[:, (df != 0).any(axis=0)]
@@ -12,7 +29,7 @@ df = df.loc[:, (df != 0).any(axis=0)]
 compound_numbering = {str(x.split('/')[0]):i for i,x in enumerate(df.columns,1)}
 
 
-with open('information_sources/compound_numbering.txt', 'w') as f:
+with open(repository_dir/'COMPOUND_INFO/compound_numbering.txt', 'w') as f:
     for c in compound_numbering:
         f.write('{},{}\n'.format(c,compound_numbering[c]))
 
@@ -36,9 +53,9 @@ svg=Draw.MolsToGridImage(molecules,molsPerRow=10,
                         subImgSize=(300,300),
                         legends=[str(compound_numbering[c]) for c in compound_numbering],
                         useSVG = True)
-img.save('plots_for_paper/compound_numbering.png')
+img.save(repository_dir/'PLOTS/compound_numbering.png')
 
-with open('plots_for_paper/compound_numbering.svg', 'w') as f:
+with open(repository_dir/'PLOTS/compound_numbering.svg', 'w') as f:
     f.write(svg)
 
 
@@ -56,4 +73,5 @@ for i,x in enumerate(compound_numbering):
 for a in ax:
     a.set_axis_off()
 
-plt.savefig('plots_for_paper/colour_key.png')
+plt.savefig(repository_dir/'PLOTS/colour_key.png')
+plt.close()
