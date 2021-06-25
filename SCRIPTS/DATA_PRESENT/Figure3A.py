@@ -93,8 +93,9 @@ for c,n in enumerate(networks):
 
 # normalise the scores to the total number of reactions
 # observed in the reaction system for each network.
+reaction_numbers_normalised = np.zeros(reaction_numbers.shape)
 for c,r in enumerate(class_names):
-	reaction_numbers[:,c] /= reaction_numbers[:,c].max()#observed_reaction_classes[r]#len(networks[c].NetworkReactions)
+	reaction_numbers_normalised[:,c] = reaction_numbers[:,c]/reaction_numbers[:,c].max()
 
 # remove column containing zeroes or nan
 reaction_numbers = np.nan_to_num(reaction_numbers)
@@ -145,6 +146,16 @@ exp_names_r_order = [exp_names[i] for i in idx]
 
 # use idx to re-order reaction_numbers
 reaction_numbers_r_order = reaction_numbers[idx]
+reaction_numbers_normalised_r_order = reaction_numbers_normalised[idx]
+
+with open(repository_dir/'RESOURCES/reaction_expression.csv', 'w') as f:
+	f.write(',')
+	[f.write('{},'.format(rn)) for rn in class_names]
+	f.write('\n')
+	for c,v in enumerate(exp_names_r_order):
+		f.write('{},'.format(v))
+		[f.write('{},'.format(reaction_numbers_r_order[c,x])) for x in range(0,len(reaction_numbers_r_order[c]))]
+		f.write('\n')
 
 # plot the results in a heatmap
 # cividis is a good colourmap for this purpose
@@ -159,7 +170,7 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 fig, ax = plt.subplots(figsize = (36/2.54,15/2.54))
 
 ax.tick_params(axis = 'both', which = 'both', length = 0)
-im = ax.imshow(reaction_numbers_r_order.T, cmap = 'cividis')
+im = ax.imshow(reaction_numbers_normalised_r_order.T, cmap = 'cividis')
 # 0.5 offset to centre the ticklabels
 ax.set_xticks(np.arange(0.5,len(exp_labels)+0.5,1))
 ax.set_xticklabels(exp_labels_r_order, fontsize = 8, rotation = 45, ha = 'right')
