@@ -26,6 +26,8 @@ network_file = repository_dir/'FORMOSE_REACTION/FullFormoseReaction.txt'
 
 # load in experiment information.
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
+# sequences of data set keys
+series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
 
 # loading in the formose reaction as a NorthNet Network Object
 formose_file = repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle'
@@ -35,15 +37,18 @@ with open(formose_file, 'rb') as f:
 series_sel = 'Formaldehyde_paper_series'
 condition_sel_x = '[C=O]/ M'
 factor = 1000
+# get the experiment codes for the series
+data_keys = series_seqs.loc[series_sel]
+data_set_selections = list(data_keys.dropna())
 
 # load in the reaction lists determined for
 # modulated data sets.
 # use dictionary insertion ordering to
 # add network reactions into a
-networks = []
+networks = {}
 for e in exp_info.index:
-	if exp_info.loc[e,'Modulated_component'] != 'None':
-		fname = '{}_reaction_list.txt'.format(e)
+	for d in data_set_selections:
+		fname = '{}_reaction_list.txt'.format(d)
 		with open(reaction_list_directory/fname, 'r') as f:
 			for line in f:
 				lines = f.readlines()
@@ -53,6 +58,9 @@ for e in exp_info.index:
 
 		n_net = Classes.Network(rxns, e, '')
 
-		networks.append(convert_to_networkx(n_net))
+		networks[d] = convert_to_networkx(n_net)
 
+# create a network merging all of the networks
 F = nx.DiGraph()
+for n in networks:
+	pass
