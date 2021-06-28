@@ -14,6 +14,7 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 from NorthNet import Classes
+from helpers.network_load_helper import convert_to_networkx
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
@@ -50,4 +51,8 @@ for e in exp_info.index:
 		for l in lines:
 			rxns.append(FormoseNetwork.NetworkReactions[l.strip('\n')])
 
-		networks.append(Classes.Network(rxns, e, ''))
+		n_net = Classes.Network(rxns, e, '')
+
+		networks.append(convert_to_networkx(n_net))
+
+F = nx.DiGraph()
