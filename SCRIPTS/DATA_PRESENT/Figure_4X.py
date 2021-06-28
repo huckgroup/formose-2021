@@ -63,6 +63,11 @@ for e in exp_info.index:
 
 		networks[d] = convert_to_networkx(n_net)
 
+# remove secondary reactant nodes
+node_removals = ['C=O', 'O', '[OH-]']
+for n in networks:
+	[networks[n].remove_node(node) for node in node_removals
+										if node in networks[n]]
 # create a network merging all of the networks
 F = nx.DiGraph()
 for n in networks:
