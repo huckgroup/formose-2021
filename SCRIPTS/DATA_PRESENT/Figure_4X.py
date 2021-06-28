@@ -20,17 +20,21 @@ from helpers.network_load_helper import convert_to_networkx
 from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
 
 data_folder = repository_dir/'DATA'
-derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
+determined_params_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
-report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
-network_file = repository_dir/'FORMOSE_REACTION/FullFormoseReaction.txt'
 
 # load in experiment information.
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 # sequences of data set keys
 series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
+# average data for sizing nodes
+average_data = pd.read_csv(determined_params_dir/'AverageData.csv', index_col = 0)
+average_data = average_data.dropna(axis = 1)
+# amplitude data for sizing nodes
+amplitude_data = pd.read_csv(determined_params_dir/'AmplitudeData.csv', index_col = 0)
+amplitude_data = amplitude_data.dropna(axis = 1)
 
 # loading in the formose reaction as a NorthNet Network Object
 formose_file = repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle'
@@ -38,8 +42,8 @@ with open(formose_file, 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
 series_sel = 'Formaldehyde_paper_series'
-condition_sel_x = '[C=O]/ M'
-factor = 1000
+file_name = 'Figure_4X'
+
 # get the experiment codes for the series
 data_keys = series_seqs.loc[series_sel]
 data_set_selections = list(data_keys.dropna())
@@ -93,9 +97,11 @@ for n in networks:
 for n in networks:
 	for node in networks[n].nodes:
 		if '>>' in node:
-			networks[n].nodes[node]['color'] = "#00000"
+			networks[n].nodes[node]['color'] = "#000000"
 		else:
 			networks[n].nodes[node]['color'] = info_params.colour_assignments[node]
+
+for n in networks:
 	for edge in networks[n].edges:
 		for e in edge:
 			if '>>' in e:
@@ -103,9 +109,23 @@ for n in networks:
 				col = info_params.reaction_class_colours[r_class]
 				networks[n].edges[edge]['color'] = col
 
+'''Add sizing information into networks'''
+min_node_size = 5
+node_size_factor = 1e4
+for n in networks:
+	for node in networks[n].nodes:
+		if '>>' in node:
+			networks[n].nodes[node]['size'] = min_node_size
+		elif node + '/ M' in average_data.columns:
+			conc = average_data.loc[n,node +'/ M']
+			amp = amplitude_data.loc[n,node +'/ M']
+			networks[n].nodes[node]['size'] = conc*node_size_factor
+		else:
+			networks[n].nodes[node]['size'] = min_node_size
+
 '''Plotting series in four panels'''
-fig_width = 7.91/2.54 # cm conversion to inches for plt
-fig_height = 8.42/2.54 # cm conversion to inches for plt
+fig_width = 10/2.54 # cm conversion to inches for plt
+fig_height = 10/2.54 # cm conversion to inches for plt
 
 base_linew = 0.5
 
@@ -117,7 +137,7 @@ for c,n in enumerate(networks):
 	axes[c].plot(base_net_plot[0],base_net_plot[1],
 				c = '#acb5ad',
 				linewidth = base_linew,
-				zorder =0)
+				zorder = 0)
 
 	for e in networks[n].edges:
 	    arrow = FancyArrowPatch(networks[n].nodes[e[0]]['pos'],
@@ -129,12 +149,34 @@ for c,n in enumerate(networks):
 	                            facecolor = networks[n].edges[e]['color'],
 	                            edgecolor = networks[n].edges[e]['color'],
 	                            linewidth = 1,
-	                            mutation_scale = 10,
+	                            mutation_scale = 5,
 	                            shrinkA = 0,
 	                            shrinkB = 0,
 	                            alpha = 1)
+
 	    axes[c].add_patch(arrow)
+
+	# build node scatter
+	nodes_x = []
+	nodes_y = []
+	node_colours = []
+	node_sizes = []
+	node_rings = []
+	for node in networks[n].nodes:
+		nodes_x.append(networks[n].nodes[node]['pos'][0])
+		nodes_y.append(networks[n].nodes[node]['pos'][1])
+		node_colours.append(networks[n].nodes[node]['color'])
+		node_sizes.append(networks[n].nodes[node]['size'])
+
+	# plot solid scatter for compound concentrations
+	axes[c].scatter(nodes_x, nodes_y,
+				facecolors = node_colours,
+				s = node_sizes,
+				zorder = 2,
+				edgecolors = 'None',
+				alpha = 1)
 
 	axes[c].set_axis_off()
 
-plt.show()
+fig.tight_layout()
+plt.savefig(plot_folder/'{}.png'.format(file_name), dpi = 600)
