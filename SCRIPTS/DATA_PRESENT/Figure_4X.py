@@ -145,14 +145,14 @@ for c,n in enumerate(networks):
 	                            arrowstyle='-|>',
 	                            path = None,
 	                            connectionstyle='Arc',
-	                            zorder = 1,
 	                            facecolor = networks[n].edges[e]['color'],
 	                            edgecolor = networks[n].edges[e]['color'],
 	                            linewidth = 1,
 	                            mutation_scale = 5,
-	                            shrinkA = 0,
-	                            shrinkB = 0,
-	                            alpha = 1)
+	                            shrinkA = 2,
+	                            shrinkB = 1,
+	                            alpha = 1,
+								zorder = 1)
 
 	    axes[c].add_patch(arrow)
 
