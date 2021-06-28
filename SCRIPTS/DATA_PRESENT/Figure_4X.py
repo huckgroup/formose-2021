@@ -5,7 +5,6 @@ import networkx as nx
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
-from networkx.drawing.nx_agraph import graphviz_layout
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -15,6 +14,7 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 from NorthNet import Classes
+from helpers.layout import graphviz_layout
 from helpers import chem_info as info_params
 from helpers.network_load_helper import convert_to_networkx
 from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
@@ -78,7 +78,7 @@ for n in networks:
 	F = nx.compose(F,networks[n])
 
 # create a layout for F (this will be the layout for each plotted network)
-pos = graphviz_layout(F, prog = 'neato')
+pos = graphviz_layout(F, render_engine = 'neato')
 
 # use F to process coordinate system
 c_ops.set_network_coords(F,pos)
