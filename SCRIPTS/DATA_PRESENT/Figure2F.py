@@ -49,8 +49,16 @@ node_path = [(a,b) for a,b in zip(data_set_selections,data_set_selections[1:])]
 
 fig, ax = plt.subplots(figsize=(8.965/2.54,6.55/2.54))
 
-ax.plot(lines[0],lines[1], zorder = 0, c = '#000000')
-ax.scatter(dots[0],dots[1], zorder = 0, c = '#000000', s = 5)
+ax.plot(lines[0],lines[1], '-o',
+    zorder = 0, c = '#000000',
+    markersize = 2)
+
+for n in data_set_selections:
+    pos = G.nodes[n]['pos']
+    ax.scatter(pos[0],pos[1], c = None,
+            facecolor = 'none',
+            edgecolor = 'b',
+            alpha = 0.5)
 
 for node_pair in node_path:
     arrow = FancyArrowPatch(G.nodes[node_pair[0]]['pos'],
