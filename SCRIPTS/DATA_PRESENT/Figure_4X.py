@@ -15,6 +15,7 @@ repository_dir = Path(__file__).parents[2]
 
 from NorthNet import Classes
 from helpers.network_load_helper import convert_to_networkx
+from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
@@ -63,4 +64,16 @@ for e in exp_info.index:
 # create a network merging all of the networks
 F = nx.DiGraph()
 for n in networks:
-	pass
+	F = nx.compose(F,networks[n])
+
+# create a layout for F (this will be the layout for each plotted network)
+pos = graphviz_layout(F, prog = 'neato')
+
+# use F to process coordinate system
+c_ops.set_network_coords(F,pos)
+c_ops.normalise_network_coordinates(F)
+# create new position container from F
+pos_norm = {n:F.nodes[n]['pos'] for n in F}
+
+for n in networks:
+	c_ops.set_network_coords(networks[n],pos_norm)
