@@ -98,10 +98,11 @@ reaction_numbers = np.delete(reaction_numbers,zero_idx, axis = 1)
 # update the class names
 class_names = [c for i,c in enumerate(class_names) if i not in zero_idx]
 
-# normalise the scores to the highest reaction class count for the experiment
+# normalise the the reaction class scores to the total number of reaction
+# classes of the same type observed for all of the reaction systems analysed
 reaction_numbers_normalised = np.zeros(reaction_numbers.shape)
 for c,r in enumerate(class_names):
-	reaction_numbers_normalised[:,c] = reaction_numbers[:,c]/reaction_numbers[:,c].max()
+	reaction_numbers_normalised[:,c] = reaction_numbers[:,c]/observed_reaction_classes[r]
 
 # get experiment labels
 exp_names = [n.Name for n in networks]
