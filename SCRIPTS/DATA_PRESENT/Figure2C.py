@@ -98,6 +98,10 @@ for x in range(0,len(series_progression)):
     #             xy = (x_pos, y_pos),
     #             zorder = 1000)
 
+ax.set_xlabel(x_name)
+ax.set_ylabel('Concentration/ mM')
+plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)
+
 label_x_positions = np.linspace(0,series_x_values[-1], num = len(trace_labels))
 label_x_positions*=1.5
 label_y_positions = np.full(len(trace_labels),y_factor*series_progression.max())
@@ -115,9 +119,6 @@ for c,t in enumerate(trace_labels):
                 zorder = 1000,
                 ha = 'center',
                 va = 'center')
-
-ax.set_xlabel(x_name)
-ax.set_ylabel('Concentration/ mM')
-plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}_series_annotated.png'.format(figname), dpi = 600)
 
 plt.close()
