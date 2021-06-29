@@ -78,12 +78,17 @@ for x in range(0,len(series_stack)):
     H = subplot_height
     axin = ax.inset_axes([L,B,W,H], transform=ax.transData)
 
-    axin.pie(series_stack[x]/series_stack[x].max(),
-             colors = compound_clrs,
-             radius = 1.9,
-             # labels = [compound_numbering[x.split('/')[0]] for x in
-             #        header]
-             )
+    wedges, texts = axin.pie(series_stack[x]/series_stack[x].max(),
+                        colors = compound_clrs,
+                        radius = 1.9,
+                        # labels = [compound_numbering[x.split('/')[0]] for x in
+                        #         sel.columns],
+                        # textprops={'fontsize': 3}
+                        )
+
+    for w in wedges:
+        w.set_linewidth(0.1)
+        w.set_edgecolor('#000000')
 
 ylim = ax.get_ylim()
 xlim = ax.get_xlim()
