@@ -6,6 +6,7 @@ import pandas as pd
 import networkx as nx
 from pathlib import Path
 import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -41,31 +42,46 @@ for file in os.listdir(path):
 
 data = Classes.DataSet(data_reports = loaded_reports)
 
+fig,ax = plt.subplots(nrows =  len(compound_number_sel), ncols = 1, sharex = True)
 
-for n in compound_number_sel:
+class plot_parameters:
+    plot_width = 7.93; plot_height = 9.95
+    left = 0.12; right = 0.95
+    top = 1; bottom = 0.1
+    ax_height = 0.05
+
+ax_width = plot_parameters.right-plot_parameters.left
+fig.set_figheight(plot_parameters.plot_height/2.54)
+fig.set_figwidth(plot_parameters.plot_width/2.54)
+ax_height = (plot_parameters.top-plot_parameters.bottom)/len(ax)
+
+for c,n in enumerate(compound_number_sel):
     name = compound_numbering[n]
-    print(name)
-    x, y = data.get_entry(name + '/ M')
-    fig, ax = plt.subplots(figsize = (3/2.54,1.5/2.54))
-    ax.plot(x,1000*y, '-o', markersize = 2.5, linewidth  = 1,
-            c = info_params.colour_assignments[name])
-    fig.tight_layout()
-    ax.set_position([0.2, 0.1, 0.7, 0.8])
-    ax.tick_params(which = 'both', axis = 'both',
-                labelsize = 6, pad = 1, length = 1)
-    ax.yaxis.set_major_locator(MaxNLocator(3))
-    ax.set_ylim(1000*(y.min() - y.min()*0.5), 1000*y.max()*1.1)
 
-    # scalebar = AnchoredSizeBar(ax.transData,
-    #                        6*60, '{} s'.format(6*60),
-    #                        'lower right',
-    #                        pad=0.1,
-    #                        color='#000000',
-    #                        frameon=False,
-    #                        size_vertical=0.05,
-    #                        fontproperties = fontprops)
-    #
-    # ax.add_artist(scalebar)
-    ax.set_xticklabels([])
-    plt.savefig(repository_dir/'PLOTS/{}_amps.png'.format(name), dpi = 600)
-    plt.close()
+    x, y = data.get_entry(name + '/ M')
+
+    ax[c].plot(x,1000*y, '-o', markersize = 2.5, linewidth  = 1,
+            c = info_params.colour_assignments[name])
+
+for c2 in range(0,len(ax)):
+    ax[c2].yaxis.set_major_locator(mticker.MaxNLocator(nbins=3, prune='both',
+                                    min_n_ticks  = 3))
+    ax[c2].tick_params(axis='both', which='major', labelsize = 4.5,
+                       length = 2, pad = 2)
+
+    ax_ypos = plot_parameters.top - plot_parameters.bottom - c2*ax_height
+
+    ax_h = ax_height*0.8
+    B = ax_ypos - 0.5 * ax_h
+
+    ax[c2].set_position([plot_parameters.left,B,ax_width,ax_h])
+
+    x_lims = ax[c2].get_xlim()
+    y_lims = ax[c2].get_ylim()
+
+fig.text(0.02, 0.55, "Concentration/ mM", va='center', rotation='vertical',
+         fontsize = 9)
+fig.text(0.55, 0.02, "time/ s", ha='center', fontsize = 9)
+
+plt.savefig(repository_dir/'PLOTS/Figure_3A.png'.format(name), dpi = 600)
+plt.close()
