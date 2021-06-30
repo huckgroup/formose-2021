@@ -143,7 +143,8 @@ with open(repository_dir/'RESOURCES/reaction_expression.csv', 'w') as f:
 	f.write('\n')
 	for c,v in enumerate(exp_names_r_order):
 		f.write('{},'.format(v))
-		[f.write('{},'.format(reaction_numbers_r_order[c,x])) for x in range(0,len(reaction_numbers_r_order[c]))]
+		[f.write('{},'.format(reaction_numbers_r_order[c,x]))
+						for x in range(0,len(reaction_numbers_r_order[c]))]
 		f.write('\n')
 
 # plot the results in a heatmap
@@ -156,25 +157,25 @@ with open(repository_dir/'RESOURCES/reaction_expression.csv', 'w') as f:
 # see Nuñez, Anderton, Renslow, PLoS One, 2018, 13, 1–14.
 # - 'Color map poem' W. E. Robinson, 2021
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-fig, ax = plt.subplots(figsize = (36/2.54,15/2.54))
+fig, ax = plt.subplots(figsize = (20/2.54,9/2.54))
 
 ax.tick_params(axis = 'both', which = 'both', length = 0)
 im = ax.imshow(reaction_numbers_normalised_r_order.T, cmap = 'cividis')
-# 0.5 offset to centre the ticklabels
-ax.set_xticks(np.arange(0.5,len(exp_labels)+0.5,1))
-ax.set_xticklabels([])
+
+ax.set_xticks(np.arange(0,len(exp_labels_r_order),1))
+ax.set_xticklabels(exp_labels_r_order, fontsize = 3, rotation = 45)
 
 ax.set_yticks(np.arange(0,len(class_names),1))
-ax.set_yticklabels(class_names, fontsize = 8)
+ax.set_yticklabels(class_names, fontsize = 6)
 
-ax.set_xlabel('Experiment')
-ax.set_ylabel('Reaction class')
+ax.set_xlabel('Experiment', fontsize = 9)
+ax.set_ylabel('Reaction class', fontsize = 9)
 
 divider = make_axes_locatable(ax)
-cax = divider.append_axes("right", size="5%", pad=0.1)
-cbar = plt.colorbar(im, cax=cax)
-cbar.set_label('Fractional expression',labelpad = 10)
-cbar.ax.tick_params(labelsize= 6)
+cax = divider.append_axes("bottom", size="5%", pad=0.3)
+cbar = plt.colorbar(im, cax=cax, orientation = 'horizontal')
+cbar.set_label('Fractional expression',labelpad = 5, fontsize = 9)
+cbar.ax.tick_params(labelsize= 6, length = 1)
 
 fig.tight_layout()
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
