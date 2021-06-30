@@ -10,7 +10,7 @@ from NorthNet import network_generation as n_gen
 from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
 ~~~
 
-The code can either be copied into the repository (any downsides?), or NorthNet must be made ready for 'release' (however, it is undergoing an overhaul, and needs some more work and testing before being released). `Classes` and `network_generation` are the important components.
+The code will be released with the formose-2021 repository, and will be hosted on the Will-Robin GitHub NorthNet repository.
 
 ## Finish creating the reaction expression heatmap (or similar)
 
