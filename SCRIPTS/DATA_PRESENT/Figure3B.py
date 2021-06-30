@@ -42,7 +42,7 @@ with open(formose_file, 'rb') as f:
 	FormoseNetwork = pickle.load(f)
 
 series_sel = 'Formaldehyde_paper_series'
-file_name = 'Figure_4X'
+file_name = 'Figure3B'
 
 # get the experiment codes for the series
 data_keys = series_seqs.loc[series_sel]
@@ -157,24 +157,39 @@ for c,n in enumerate(networks):
 	    axes[c].add_patch(arrow)
 
 	# build node scatter
-	nodes_x = []
-	nodes_y = []
-	node_colours = []
-	node_sizes = []
-	node_rings = []
+	compound_nodes_x = []
+	compound_nodes_y = []
+	compound_node_colours = []
+	compound_node_sizes = []
+
+	reaction_nodes_x = []
+	reaction_nodes_y = []
+
 	for node in networks[n].nodes:
-		nodes_x.append(networks[n].nodes[node]['pos'][0])
-		nodes_y.append(networks[n].nodes[node]['pos'][1])
-		node_colours.append(networks[n].nodes[node]['color'])
-		node_sizes.append(networks[n].nodes[node]['size'])
+		if '>>' in node:
+			reaction_nodes_x.append(networks[n].nodes[node]['pos'][0])
+			reaction_nodes_y.append(networks[n].nodes[node]['pos'][1])
+		else:
+			compound_nodes_x.append(networks[n].nodes[node]['pos'][0])
+			compound_nodes_y.append(networks[n].nodes[node]['pos'][1])
+			compound_node_colours.append(networks[n].nodes[node]['color'])
+			compound_node_sizes.append(networks[n].nodes[node]['size'])
 
 	# plot solid scatter for compound concentrations
-	axes[c].scatter(nodes_x, nodes_y,
-				facecolors = node_colours,
-				s = node_sizes,
+	axes[c].scatter(compound_nodes_x, compound_nodes_y,
+				facecolors = compound_node_colours,
+				s = compound_node_sizes,
 				zorder = 2,
 				edgecolors = 'None',
 				alpha = 1)
+
+	axes[c].scatter(reaction_nodes_x, reaction_nodes_y,
+					c = '#000000',
+					s = min_node_size,
+					marker = 'D',
+					edgecolors = 'None',
+					zorder = 2,
+					alpha = 1)
 
 	axes[c].set_axis_off()
 
