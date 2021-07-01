@@ -30,18 +30,27 @@ average_data = average_data.dropna(axis = 1)
 compounds = list(average_data.columns)
 
 # Choose a parameter from Experiment_parameters.csv
-x_key = '[NaOH]/ M'
+x_key = 'residence_time/ s'
 y_key = '[CaCl2]/ M'
 x_axis = exp_info.loc[:,x_key].to_numpy()
 y_axis = exp_info.loc[:,y_key].to_numpy()
 
-fig, ax = plt.subplots(subplot_kw = {'projection':'3d'})
+# 3D plot choice (2D: use x_axis)
+threeD = False
+if threeD:
+    independents = [x_axis,y_axis]
+    subplot_arg = {'projection':'3d'}
+else:
+    independents = [x_axis]
+    subplot_arg = None
+
+fig, ax = plt.subplots(subplot_kw = subplot_arg)
 for c in compounds:
     clr = info_params.colour_assignments[c.split('/')[0]]
     if average_data.loc[:,c].sum() > 0.0:
-        ax.plot(x_axis, y_axis, 1000*average_data.loc[:,c],
+        ax.plot(*independents, 1000*average_data.loc[:,c],
                 '-o',
-                linewidth = 0,
+                linewidth = 1,
                 c = clr)
 
 ax.set_xlabel(x_key)
