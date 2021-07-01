@@ -89,3 +89,12 @@ compound_numbering = {}
 for l in lines:
     SMILES_num = l.split(',')
     compound_numbering[SMILES_num[0]]  = SMILES_num[1]
+
+
+reaction_colours = {}
+with open(parent/"REACTION_INFO/reaction_colour_assignments.csv", 'r') as f:
+    lines = f.readlines()
+
+lines = [l.strip('\n').split(',') for l in lines][1:]
+
+reaction_colours = {l[0]:l[1] for l in lines}
