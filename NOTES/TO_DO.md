@@ -1,13 +1,15 @@
 # To do list
 
-## deal with NorthNet code
+## Dealing with NorthNet code
 
 Not much of the code is used in these scripts, only these parts are imported:
 
-~~~python
+```python
 from NorthNet import Classes
 from NorthNet import network_generation as n_gen
 from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
-~~~
+```
+
+From `NorthNet.Classes` used several classes from `chemical_classes` and `data_classes`, so both are required.
 
 The code will be released with the formose-2021 repository, and will be hosted on the Will-Robin GitHub NorthNet repository.
