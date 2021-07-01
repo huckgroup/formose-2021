@@ -192,5 +192,13 @@ for c,n in enumerate(networks):
 
 	axes[c].set_axis_off()
 
+	# optional annotations
+	# for node in networks[n].nodes:
+	# 	if node in info_params.compound_numbering:
+	# 		number = info_params.compound_numbering[node]
+	# 		axes[c].annotate(number, xy = networks[n].nodes[node]['pos'],
+	# 						ha = 'center', va = 'center',
+	# 						fontsize = 6)
+
 fig.tight_layout()
 plt.savefig(plot_folder/'{}.png'.format(file_name), dpi = 600)
