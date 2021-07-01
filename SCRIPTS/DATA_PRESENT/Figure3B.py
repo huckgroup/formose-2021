@@ -105,8 +105,7 @@ for n in networks:
 	for edge in networks[n].edges:
 		for e in edge:
 			if '>>' in e:
-				r_class = FormoseNetwork.get_reaction_name(e)
-				col = info_params.reaction_class_colours[r_class]
+				col = info_params.reaction_colours[e]
 				networks[n].edges[edge]['color'] = col
 
 '''Add sizing information into networks'''
