@@ -162,8 +162,9 @@ fig, ax = plt.subplots(figsize = (20/2.54,9/2.54))
 ax.tick_params(axis = 'both', which = 'both', length = 0)
 im = ax.imshow(reaction_numbers_normalised_r_order.T, cmap = 'cividis')
 
-ax.set_xticks(np.arange(0,len(exp_labels_r_order),1))
-ax.set_xticklabels(exp_labels_r_order, fontsize = 3, rotation = 45)
+ax.set_xticks([])
+# ax.set_xticks(np.arange(0,len(exp_labels_r_order),1))
+# ax.set_xticklabels(exp_labels_r_order, fontsize = 3, rotation = 45)
 
 ax.set_yticks(np.arange(0,len(class_names),1))
 ax.set_yticklabels(class_names, fontsize = 6)
