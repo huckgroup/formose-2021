@@ -78,6 +78,7 @@ with open(parent/'REACTION_INFO/reaction_SMARTS_templates.tsv', 'r') as f:
             ins = line.strip('\n').split('\t')
             reaction_SMARTS[ins[0]] = ins[3]
             reaction_class_colours[ins[0]] = ins[4]
+            reaction_class_colours[ins[6]] = ins[4]
             reaction_class_short_names[ins[0]] = ins[5]
             reaction_class_names[ins[0]] = ins[6]
 
