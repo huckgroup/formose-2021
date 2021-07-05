@@ -67,6 +67,8 @@ compound_clrs  = [info_params.colour_assignments[x] for x in compounds]
 
 series_stack = sel.to_numpy()
 
+
+
 subplot_width = 8
 subplot_height = 8
 fig, ax = plt.subplots(nrows = 1, figsize = (8.965/2.54,6.55/2.54))
@@ -90,6 +92,7 @@ for x in range(0,len(series_stack)):
         w.set_linewidth(0.1)
         w.set_edgecolor('#000000')
 
+
 ylim = ax.get_ylim()
 xlim = ax.get_xlim()
 ax.set_position([0.2, 0.2, 0.7, 0.7])
@@ -97,6 +100,14 @@ ax.set_ylim(ylim[0]-subplot_width/2, ylim[1]+subplot_width/2)
 ax.set_xlim(xlim[0]-subplot_width/2, xlim[1]+subplot_width/2)
 ax.set_xlabel('[NaOH]/ mM')
 ax.set_ylabel('[CaCl$_2$]/ mM')
+
+ratios = [a/b for a,b in zip(series_y_values, series_x_values)]
+ratios = [50, 5, 2, 0.5]
+points = [0.2, 2.5, max(series_x_values)]
+line_func = lambda a,x: a*x
+for r in ratios:
+    ax.plot(points, [line_func(r,x) for x in points], '--',
+            c = '#000000', alpha = 0.5, linewidth = 0.5)
 
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 plt.close()
