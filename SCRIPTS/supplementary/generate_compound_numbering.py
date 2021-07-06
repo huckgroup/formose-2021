@@ -45,7 +45,7 @@ for m in molecules:
     tmp=AllChem.Compute2DCoords(m)
 
 img=Draw.MolsToGridImage(molecules,molsPerRow=10,
-                        subImgSize=(100,100),
+                        subImgSize=(300,400),
                         legends=[str(compound_numbering[c]) for c in compound_numbering],
                         useSVG = False)
 
@@ -53,6 +53,7 @@ svg=Draw.MolsToGridImage(molecules,molsPerRow=10,
                         subImgSize=(300,300),
                         legends=[str(compound_numbering[c]) for c in compound_numbering],
                         useSVG = True)
+
 img.save(repository_dir/'PLOTS/compound_numbering.png')
 
 with open(repository_dir/'PLOTS/compound_numbering.svg', 'w') as f:
