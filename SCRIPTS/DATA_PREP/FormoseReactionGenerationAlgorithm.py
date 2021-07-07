@@ -27,7 +27,7 @@ for r in info_params.reaction_SMARTS:
     split_rxn_SMARTS = SMARTS.split('>>')
     reactant_SMARTS = split_rxn_SMARTS[0].split('.')
     product_SMARTS = split_rxn_SMARTS[1].split('.')
-    reactions[r] = Classes.Reaction_Template(r, SMARTS,
+    reactions[r] = Classes.ReactionTemplate(r, SMARTS,
                                             reactant_SMARTS,
                                             product_SMARTS)
 
@@ -103,7 +103,7 @@ reaction_pattern = deprotonation_rules + protonation_rules + \
 x = 0
 while x < iterations:
     for task in reaction_pattern:
-        n_gen.extend_network_task(t_net, reactions[task], [])
+        n_gen.extend_network_task(t_net, reactions[task])
 
     n_gen.carbonyl_migration_isomers_multiclass(t_net,
             deprot_rules = [reactions[d] for d in deprotonation_rules],
@@ -114,7 +114,7 @@ while x < iterations:
     # In effect, this is equivalent to setting all chain-growing reaction
     # rules to not occur for C6 compounds
     # i.e. [$(C(O)=CO)!$(C(O)=C(O)C(O)C(O)C(O)CO)], etc.
-    remove_compounds = [c for c in t_net.NetworkCompounds
+    remove_compounds = [t_net.NetworkCompounds[c] for c in t_net.NetworkCompounds
         if len(count_carbons(t_net.NetworkCompounds[c].Mol)) > 6]
     t_net.remove_compounds(remove_compounds)
 
