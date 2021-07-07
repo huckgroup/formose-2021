@@ -17,7 +17,7 @@ from NorthNet import Classes
 from helpers.layout import graphviz_layout
 from helpers import chem_info as info_params
 from helpers.network_load_helper import convert_to_networkx
-from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
+from NorthNet.network_visualisation import coordinates as c_ops
 
 data_folder = repository_dir/'DATA'
 determined_params_dir = data_folder/'DERIVED_PARAMETERS'
