@@ -18,7 +18,6 @@ repository_dir = Path(__file__).parents[2]
 from NorthNet import Classes
 
 import helpers.chem_info as info_params
-from helpers.loading_helper import load_data_set
 
 from matplotlib.ticker import MaxNLocator
 from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
