@@ -13,7 +13,7 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 import helpers.chem_info as info_params
-from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
+from NorthNet.network_visualisation import coordinates as c_ops
 from helpers.network_load_helper import load_from_edge_list,load_coordinates_list
 
 data_folder = repository_dir/'DATA'
