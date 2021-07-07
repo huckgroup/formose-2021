@@ -5,8 +5,11 @@ import numpy as np
 import pandas as pd
 import networkx as nx
 from pathlib import Path
+
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
+import matplotlib.font_manager as fm
+from matplotlib.ticker import MaxNLocator
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -19,9 +22,6 @@ from NorthNet import Classes
 
 import helpers.chem_info as info_params
 
-from matplotlib.ticker import MaxNLocator
-from mpl_toolkits.axes_grid1.anchored_artists import AnchoredSizeBar
-import matplotlib.font_manager as fm
 fontprops = fm.FontProperties(size=6)
 
 experiment_code = 'FRN088C'
