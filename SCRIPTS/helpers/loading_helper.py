@@ -14,7 +14,6 @@ repository_dir = Path(__file__).parents[2]
 import helpers.chem_info as info_params
 
 from NorthNet import Classes
-from NorthNet.file_loads import data_loads, info_loads
 from NorthNet.data_processing import dataset_operations as d_ops
 
 def load_data_files_from_folder(path):
