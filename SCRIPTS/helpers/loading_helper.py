@@ -24,38 +24,6 @@ def load_data_files_from_folder(path):
 			loaded_reports.append(Classes.DataReport(file = file_path))
 	return loaded_reports
 
-def load_data_set(path):
-
-	loaded_reports = load_data_files_from_folder(path)
-
-	if 'time' in loaded_reports[0].series_unit:
-		t_dep = True
-	else:
-		t_dep = False
-
-	if len(loaded_reports) == 1:
-		return loaded_reports[0]
-	else:
-		data_set = d_ops.combine_datasets(loaded_reports, time_dependent = t_dep)
-		return data_set
-
-def load_all_data_sets(exp_info):
-	data_sets = {}
-	for e in exp_info:
-	    loaded_reports = []
-	    for file in os.listdir(exp_info[e].path):
-	        if file.endswith('csv'):
-	            file_path = '{}/{}'.format(exp_info[e].path,file)
-	            loaded_reports.append(Classes.DataReport(file = file_path))
-	    if 'time' in loaded_reports[0].series_unit:
-	        t_dep = True
-	    else:
-	        t_dep = False
-
-	    data_sets[e] = d_ops.combine_datasets(loaded_reports, time_dependent = t_dep)
-
-	return data_sets
-
 def get_carbon_inputs(exp_info, compounds_from_data):
 	'''
 	exp_info: NorthNet ExperimentInformation
