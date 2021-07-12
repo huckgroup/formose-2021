@@ -69,7 +69,7 @@ for node_pair in node_path:
                             zorder = 1,
                             facecolor = '#2E2EFE',
                             edgecolor = '#2E2EFE',
-                            linewidth = 1,
+                            linewidth = 2,
                             mutation_scale = 10,
                             shrinkA = 0,
                             shrinkB = 0,
@@ -81,4 +81,5 @@ ylm = ax.get_ylim()
 ax.set_ylim(ylm[1],ylm[0])
 fig.tight_layout()
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
 plt.close()

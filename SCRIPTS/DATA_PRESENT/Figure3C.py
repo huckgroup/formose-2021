@@ -180,4 +180,5 @@ cbar.ax.tick_params(labelsize= 6, length = 1)
 
 fig.tight_layout()
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
 plt.close()

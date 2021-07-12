@@ -74,3 +74,4 @@ fig.text(margins.left/3, 0.57, 'log$_{10}$(concentration/ M)',
             fontsize = axis_label_font_size)
 
 plt.savefig(plot_folder/'Figure2A.png', dpi = 600)
+plt.savefig(plot_folder/'Figure2A.svg')

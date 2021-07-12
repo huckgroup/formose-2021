@@ -110,4 +110,5 @@ for r in ratios:
             c = '#000000', alpha = 0.5, linewidth = 0.5)
 
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
 plt.close()

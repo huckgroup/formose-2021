@@ -120,5 +120,5 @@ for c,t in enumerate(trace_labels):
                 ha = 'center',
                 va = 'center')
 plt.savefig(repository_dir/'PLOTS/{}_series_annotated.png'.format(figname), dpi = 600)
-
+plt.savefig(repository_dir/'PLOTS/{}_series_annotated.svg'.format(figname))
 plt.close()

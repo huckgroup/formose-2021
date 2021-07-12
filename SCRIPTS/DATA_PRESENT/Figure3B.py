@@ -202,3 +202,4 @@ for c,n in enumerate(networks):
 
 fig.tight_layout()
 plt.savefig(plot_folder/'{}.png'.format(file_name), dpi = 600)
+plt.savefig(plot_folder/'{}.svg'.format(file_name))

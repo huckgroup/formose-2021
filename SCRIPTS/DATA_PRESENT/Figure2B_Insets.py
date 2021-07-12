@@ -91,4 +91,5 @@ for c,v in enumerate(condition_dict,0):
     ylm = ax.get_ylim()
     ax.set_ylim(ylm[1],ylm[0])
     plt.savefig(repository_dir/'PLOTS/{}_Figure2B_inset.png'.format(v.split('/')[0]), dpi = 600)
+    plt.savefig(repository_dir/'PLOTS/{}_Figure2B_inset.svg'.format(v.split('/')[0]))
     plt.close()

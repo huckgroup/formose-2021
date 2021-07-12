@@ -83,4 +83,5 @@ fig.text(0.02, 0.55, "Concentration/ mM", va='center', rotation='vertical',
 fig.text(0.55, 0.02, "time/ s", ha='center', fontsize = 9)
 
 plt.savefig(repository_dir/'PLOTS/Figure_3A.png'.format(name), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/Figure_3A.svg'.format(name))
 plt.close()
