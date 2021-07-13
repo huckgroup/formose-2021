@@ -45,7 +45,7 @@ fig,ax = plt.subplots(nrows =  len(compound_number_sel), ncols = 1, sharex = Tru
 
 class plot_parameters:
     plot_width = 7.93; plot_height = 9.95
-    left = 0.12; right = 0.95
+    left = 0.14; right = 0.95
     top = 1; bottom = 0.1
     ax_height = 0.05
 
@@ -65,7 +65,7 @@ for c,n in enumerate(compound_number_sel):
 for c2 in range(0,len(ax)):
     ax[c2].yaxis.set_major_locator(mticker.MaxNLocator(nbins=3, prune='both',
                                     min_n_ticks  = 3))
-    ax[c2].tick_params(axis='both', which='major', labelsize = 4.5,
+    ax[c2].tick_params(axis='both', which='major', labelsize = 7,
                        length = 2, pad = 2)
 
     ax_ypos = plot_parameters.top - plot_parameters.bottom - c2*ax_height
