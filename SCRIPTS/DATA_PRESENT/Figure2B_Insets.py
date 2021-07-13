@@ -54,7 +54,7 @@ dots  = c_ops.get_network_scatter(G)
 
 factor = 800
 for c,v in enumerate(condition_dict,0):
-    fig, ax = plt.subplots(figsize = (3.13/2.54,2.81/2.54), frameon = False)
+    fig, ax = plt.subplots(figsize = (3.9/2.54,2.81/2.54), frameon = False)
     ax.plot(lines[0],lines[1],
            c = '#000000', linewidth = 0.5,
            zorder = 0)
@@ -79,10 +79,10 @@ for c,v in enumerate(condition_dict,0):
     cbar = plt.colorbar(scattr,
                         ax = ax,
                         location="bottom")
-    cbar.ax.tick_params(labelsize=6, length = 2, pad = 1)
+    cbar.ax.tick_params(labelsize=7, length = 2, pad = 1)
     cbar.ax.set_position([0.0,0.25,0.95,0.05])
     ax.set_position([0.0,0.3,0.95,0.65])
-    cbar.set_label(condition_names[c], fontsize = 6, labelpad = 2)
+    cbar.set_label(condition_names[c], fontsize = 8, labelpad = 2)
     ax.set_axis_off()
     # the y-axis is flipped upside down
     # not necessary, but I forgot to remove it
