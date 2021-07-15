@@ -1,9 +1,10 @@
+import os
 import sys
 import numpy as np
-import pandas as pd
 from pathlib import Path
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
+from ChromProcess import Classes
+import matplotlib.patches as patches
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -12,113 +13,77 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-import helpers.chem_info as info_params
-from helpers.loading_helper import get_carbon_inputs
+from ChromProcess import file_import
+from ChromProcess import info_params
+from ChromProcess import file_import as f_i
 
-data_folder = repository_dir/'DATA'
-derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
-report_directory = data_folder/'DATA_REPORTS'
-exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 
-exp_info = pd.read_csv(exp_info_dir, index_col = 0)
+C_chain_regions = {"tetradecane" : [6.5,6.9],
+                   "C3": [5.2,6.5],
+                   "C4": [7.5,8.8],
+                   "C5": [9.3,12],
+                   "C6": [12,18]}
 
-series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
+C_chain_colors = { "tetradecane" : "#000000",
+                   "C3": "#f09c08",
+                   "C4": "#2738e7",
+                   "C5": "#cb340b",
+                   "C6": "#30bd37",
+                   "C7": "#592387"}
 
-compound_numbering = info_params.compound_numbering
-
-# series_sel = 'Temperature_series'
-# condition_sel = 'temperature/ oC'
-# x_name = 'Temperature/ $^o$C'
-# x_factor = 1
-# y_factor = 1000
-
-figname = 'Figure2C'
-series_sel = 'Formaldehyde_2_series'
-condition_sel = '[C=O]/ M'
-x_name = '[formaldehyde]/ mM'
-x_factor = 1000
-y_factor = 1000
-
-data_keys = series_seqs.loc[series_sel]
-data_set_selections = list(data_keys.dropna())
-
-average_data = pd.read_csv(derived_parameters_dir/'AverageData.csv', index_col = 0)
-# remove empty columns
-average_data = average_data.dropna(axis = 1)
-
-carbon_inputs = get_carbon_inputs(exp_info, average_data.columns)
-
-# remove reactants
-for c in carbon_inputs:
-    for x in carbon_inputs[c]:
-        if x in average_data.columns:
-            average_data.loc[c,x] = 0.0
-
-exclusions = ['O=CCO/ M','O=C[C@H]C(O)CO/ M']
-for x in exclusions:
-    average_data.loc[:,x] = 0.0
-
-sel = average_data.loc[data_set_selections]
-# remove columns containing only zeros
-sel = sel.loc[:, (sel != 0).any(axis=0)]
-
-series_stack = sel.to_numpy()
-
-series_progression = series_stack.T
-
-series_x_values = [x_factor*exp_info.loc[x,condition_sel]
-                                            for x in data_set_selections]
-
-compounds = [x.split('/')[0] for x in sel.columns]
-compound_clrs  = [info_params.colour_assignments[x] for x in compounds]
-
-fig, ax = plt.subplots(figsize=(8.965/2.54,6.55/2.54))
-ax.set_position([0.2, 0.2, 0.7, 0.7])
-
-trace_labels = []
-for x in range(0,len(series_progression)):
-    if np.sum(series_progression[x]) == 0.0:
-        continue
-    species_name = compounds[x].split('/')[0]
-    if species_name in info_params.colour_assignments:
-        clr = info_params.colour_assignments[species_name]
-    else:
-        clr = 'k'
-    ax.plot(series_x_values,series_progression[x]*y_factor, '-o',
-            c = clr, markersize = 5, zorder = 100-species_name.count('C'))
-
-    max_idx = np.where(series_progression[x] ==series_progression[x].max())[0]
-    trace_labels.append((compound_numbering[species_name], clr))
+# Choose the experiment code (see Data_information.csv)
+exp_name = 'FRN089B'
 
 
-    x_pos = series_x_values[max_idx[0]]
-    y_pos = y_factor*series_progression[x,max_idx]
-    # ax.annotate(compound_numbering[species_name],
-    #             xy = (x_pos, y_pos),
-    #             zorder = 1000)
+# importing information
+storage_stem = Path(r'/Users/williamrobinson/documents/nijmegen/PrebioticDatabase')
 
-ax.set_xlabel(x_name)
-ax.set_ylabel('Concentration/ mM')
-plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)
+calib_file_path = '/Users/williamrobinson/Documents/Nijmegen/PrebioticDatabase/Analysis_Information/GCMS/2020_03_16_GCMS_Calibrations.csv'
+calib = Classes.Instrument_Calibration(file = calib_file_path)
 
-label_x_positions = np.linspace(0,series_x_values[-1], num = len(trace_labels))
-label_x_positions*=1.5
-label_y_positions = np.full(len(trace_labels),y_factor*series_progression.max())
+Path_file = storage_stem/'Data_information/Data_information.csv'
+exp_paths = Classes.DataPaths(Path_file)
 
-label_x_positions[13:] = label_x_positions[:len(label_x_positions)-13]
-label_y_positions[13:] = y_factor*series_progression.max()*0.9
-for c,t in enumerate(trace_labels):
-    x_pos = label_x_positions[c]
-    y_pos = label_y_positions[c]
-    ax.annotate(t[0],
-                xy = (x_pos, label_y_positions[c]),
-                fontsize = 6,
-                fontweight = 'bold',
-                color = t[1],
-                zorder = 1000,
-                ha = 'center',
-                va = 'center')
-plt.savefig(repository_dir/'PLOTS/{}_series_annotated.png'.format(figname), dpi = 600)
-plt.savefig(repository_dir/'PLOTS/{}_series_annotated.svg'.format(figname))
-plt.close()
+figure_width = 4.7/2.54
+figure_height = 5.67/2.54
+
+experiment = exp_paths.exp_code_path[exp_name]
+data_type = experiment.data_type
+exp_path = experiment.path
+
+mod_bd_file = storage_stem/'Data/GCMS/FRN/{}/{}_local_assignments.csv'.format(exp_name,exp_name)
+modified_bounds = file_import.read_local_assignments(mod_bd_file)
+calib.modify_boundaries(modified_bounds)
+
+# State directory in which to store results
+store_folder = Path(storage_stem/'Data'/data_type/'FRN'/exp_name/'Chromatograms')
+
+
+fig,ax = plt.subplots(figsize = (9.05/2.54,6.1/2.54))
+time, signal = f_i.load_chromatogram_csv(store_folder/'FRN089_036.csv')
+ax.plot(time, signal, c = "#000000", linewidth = 1)
+
+# Create a Rectangle patch
+for c in C_chain_regions:
+    xy = [C_chain_regions[c][0],0]
+    width = C_chain_regions[c][1] - C_chain_regions[c][0]
+    height = np.amax(signal)
+    rect = patches.Rectangle(xy, width, height, facecolor = C_chain_colors[c],
+                            alpha = 0.5, zorder = 0)
+    # Add the patch to the Axes
+    ax.add_patch(rect)
+
+bbox_props = dict( fc="none", ec='none')
+kw = dict(arrowprops=dict(arrowstyle="-"),
+          bbox=bbox_props, zorder=0, va="center")
+
+ax.set_xlim(5.2,17)
+ax.set_yticklabels([])
+ax.set_xlabel('Retention time/ min.', fontsize = 9)
+ax.set_ylabel('Total ion count', fontsize = 9)
+ax.tick_params(axis='both', which='major', labelsize = 7, length = 1.75)
+ax.set_position([0.1,0.15,0.87,0.8])
+
+plt.savefig(plot_folder/'Figure1C.png', dpi = 600)
+plt.savefig(plot_folder/'Figure1C.svg', dpi = 600)
