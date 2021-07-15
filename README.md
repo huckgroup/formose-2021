@@ -1,7 +1,11 @@
 # formose-2021
-Data and analysis for the formose paper (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
+Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
 
-Requires installation of NorthNet (ask W.E.R.), numpy, scipy, networkx, pandas
+Requires [NorthNet](https://github.com/Will-Robin/NorthNet.git), numpy, scipy, networkx and pandas.
+
+## Abstract
+
+The origin of life from an abiotic environment required a gradual process of chemical evolution towards greater molecular complexity. Although elaborate prebiotically-relevant synthetic routes to many of the building blocks of life have been established, it is unclear how functional systems evolved with only the inherent chemical reactivity of molecules as driving forces for organization. Using the formose reaction as a model system, we demonstrate that complex systems of chemical reactions self-organize in response to changes in the environment, strongly narrowing the potential compositional complexity of the reaction outcome. We observe how Breslow’s cycle contributes to the reaction composition by feeding C2 building blocks into the network, alongside reaction pathways dominated by formaldehyde-driven chain growth. The emergence of organized systems of chemical reactions in response to changes in the environment offers a potential mechanism for a chemical evolution process that bridges the gap between prebiotic chemical building blocks and the origin of life.
 
 ## Contents
 ### COMPOUND_INFO
