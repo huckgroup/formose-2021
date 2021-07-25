@@ -89,9 +89,9 @@ for n in G.nodes:
         axin.pie(average_data.loc[n].to_numpy()/average_sum.loc[n],
                  colors = compound_clrs)
         # annotate experiment entry number
-        axin.annotate(exp_info.loc[n,'Experiment_entry'],
-                    xy = (0,0),
-                    ha = 'center', va = 'center')
+        # axin.annotate(exp_info.loc[n,'Experiment_entry'],
+        #             xy = (0,0),
+        #             ha = 'center', va = 'center')
 
 # the y-axis is flipped upside down
 # not necessary, but I forgot to remove it
