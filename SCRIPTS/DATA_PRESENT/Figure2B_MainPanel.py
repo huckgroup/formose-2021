@@ -65,15 +65,15 @@ G = load_from_edge_list(edge_list)
 pos = load_coordinates_list(coord_list)
 c_ops.set_network_coords(G,pos)
 c_ops.normalise_network_coordinates(G)
-# c_ops.rotate_network(G, -np.pi/4 - np.pi/6)
 lines = c_ops.get_network_lineplot(G)
 dots  = c_ops.get_network_scatter(G)
 
-fig, ax = plt.subplots(figsize = (17.64/2.54, 13.44/2.54), frameon = False)
+fig, ax = plt.subplots(figsize = (18.7/2.54, 8/2.54), frameon = False)
 
 ax.plot(lines[0],lines[1],
        c = '#000000', linewidth = 2.5,
-       zorder = 0)
+       zorder = 0,
+       solid_capstyle="round")
 
 subplot_width = 0.05
 subplot_height = 0.05
@@ -93,12 +93,6 @@ for n in G.nodes:
         #             xy = (0,0),
         #             ha = 'center', va = 'center')
 
-# the y-axis is flipped upside down
-# not necessary, but I forgot to remove it
-# before making the final figures, so it
-# gets left in!
-ylm = ax.get_ylim()
-ax.set_ylim(ylm[1],ylm[0])
 ax.set_position([0,0,1,1])
 ax.set_axis_off()
 plt.savefig(repository_dir/'PLOTS/Figure2B_Main.png', dpi = 600)
