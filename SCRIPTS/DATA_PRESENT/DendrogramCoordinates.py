@@ -4,6 +4,7 @@ import pandas as pd
 import networkx as nx
 from pathlib import Path
 from networkx.drawing.nx_agraph import graphviz_layout
+from NorthNet.network_visualisation import coordinates as c_ops
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -52,11 +53,17 @@ augmented_amplitude_linkages = linkage(augmented_amplitude_distances, method='av
 ci, coph_dists = cophenet(augmented_amplitude_linkages, augmented_amplitude_distances)
 
 G = graph_from_linkage(augmented_amplitude_linkages)
-pos = graphviz_layout(G, prog = 'neato', args='-GK=0.7')
+'''neato, dot, twopi, circo, fdp, nop, wc,
+acyclic, gvpr, gvcolor, ccomps, sccmap,
+tred, sfdp, unflatten'''.split(',')
+pos = graphviz_layout(G, prog = 'neato', args='')
 
 # add coordinates into nodes of G
 for n in G.nodes:
     G.nodes[n]['pos'] = pos[n]
+
+# apply rotation
+c_ops.rotate_network(G, -np.pi/5)
 
 # write to file
 with open(repository_dir/'RESOURCES/dendrogram_coordinates.csv', 'w') as f:
