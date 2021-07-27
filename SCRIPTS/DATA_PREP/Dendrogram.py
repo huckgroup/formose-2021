@@ -18,11 +18,9 @@ from scipy.cluster.hierarchy import linkage, cophenet, fcluster, dendrogram
 
 from sklearn.cluster import KMeans
 
-from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
+from NorthNet.network_visualisation import coordinates as c_ops
 
 from helpers.cluster_tree import graph_from_linkage
-from helpers.network_load_helper import load_from_edge_list
-from helpers.network_load_helper import load_coordinates_list
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
