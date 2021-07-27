@@ -48,7 +48,6 @@ G = load_from_edge_list(edge_list)
 pos = load_coordinates_list(coord_list)
 c_ops.set_network_coords(G,pos)
 c_ops.normalise_network_coordinates(G)
-# c_ops.rotate_network(G, -np.pi/4 - np.pi/6)
 lines = c_ops.get_network_lineplot(G)
 dots  = c_ops.get_network_scatter(G)
 
@@ -84,12 +83,7 @@ for c,v in enumerate(condition_dict,0):
     ax.set_position([0.0,0.3,0.95,0.65])
     cbar.set_label(condition_names[c], fontsize = 8, labelpad = 2)
     ax.set_axis_off()
-    # the y-axis is flipped upside down
-    # not necessary, but I forgot to remove it
-    # before making the final figures, so it
-    # gets left in!
-    ylm = ax.get_ylim()
-    ax.set_ylim(ylm[1],ylm[0])
+
     plt.savefig(repository_dir/'PLOTS/{}_Figure2B_inset.png'.format(v.split('/')[0]), dpi = 600)
     plt.savefig(repository_dir/'PLOTS/{}_Figure2B_inset.svg'.format(v.split('/')[0]))
     plt.close()
