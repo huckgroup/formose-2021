@@ -1,3 +1,6 @@
+'''
+Generates a numbering scheme for detected compounds.
+'''
 import NorthNet
 import pandas as pd
 from rdkit import Chem
