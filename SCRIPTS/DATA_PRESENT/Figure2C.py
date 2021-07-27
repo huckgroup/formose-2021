@@ -77,7 +77,7 @@ series_x_values = [x_factor*exp_info.loc[x,condition_sel]
 compounds = [x.split('/')[0] for x in sel.columns]
 compound_clrs  = [info_params.colour_assignments[x] for x in compounds]
 
-fig, ax = plt.subplots(figsize=(8.965/2.54,6.55/2.54))
+fig, ax = plt.subplots(figsize=(8.965/2.54,5.6/2.54))
 ax.set_position([0.2, 0.2, 0.7, 0.7])
 
 trace_labels = []
@@ -101,7 +101,7 @@ for x in range(0,len(series_progression)):
     # ax.annotate(compound_numbering[species_name],
     #             xy = (x_pos, y_pos),
     #             zorder = 1000)
-
+ax.tick_params(which = 'both', axis = 'both', length = 2)
 ax.set_xlabel(x_name)
 ax.set_ylabel('Concentration/ mM')
 plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)

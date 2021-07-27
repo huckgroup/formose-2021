@@ -51,7 +51,7 @@ data_set_selections = list(data_keys.dropna())
 
 node_path = [(a,b) for a,b in zip(data_set_selections,data_set_selections[1:])]
 
-fig, ax = plt.subplots(figsize=(8.965/2.54,6.55/2.54))
+fig, ax = plt.subplots(figsize=(8.965/2.54,5.6/2.54))
 
 ax.plot(lines[0],lines[1], '-o',
     zorder = 0, c = '#000000',

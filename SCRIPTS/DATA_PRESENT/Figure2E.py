@@ -75,7 +75,7 @@ series_stack = sel.to_numpy()
 
 subplot_width = 8
 subplot_height = 8
-fig, ax = plt.subplots(nrows = 1, figsize = (8.965/2.54,6.55/2.54))
+fig, ax = plt.subplots(nrows = 1, figsize = (8.965/2.54,5.6/2.54))
 ax.scatter(series_x_values, series_y_values, alpha = 0.0)
 for x in range(0,len(series_stack)):
     L = series_x_values[x] - subplot_width/2
@@ -100,6 +100,7 @@ for x in range(0,len(series_stack)):
 ylim = ax.get_ylim()
 xlim = ax.get_xlim()
 ax.set_position([0.2, 0.2, 0.7, 0.7])
+ax.tick_params(which = 'both', axis = 'both', length = 2)
 ax.set_ylim(ylim[0]-subplot_width/2, ylim[1]+subplot_width/2)
 ax.set_xlim(xlim[0]-subplot_width/2, xlim[1]+subplot_width/2)
 ax.set_xlabel('[NaOH]/ mM')
