@@ -1,3 +1,7 @@
+'''
+Illustration of the dendrogram traversals controlled by varying formaldehyde
+concentrations. Figure 2D
+'''
 import sys
 import numpy as np
 import pandas as pd

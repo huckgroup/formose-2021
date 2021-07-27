@@ -1,3 +1,7 @@
+'''
+Generates a dendrogram based on average concentration and amplitude data.
+'''
+
 import sys
 import numpy as np
 import pandas as pd

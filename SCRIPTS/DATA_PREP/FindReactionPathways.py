@@ -1,3 +1,7 @@
+'''
+Searches for reaction pathways within an overarching formose reaction network
+based on the transfer of modulated input concentrations to reaction products.
+'''
 import sys
 import numpy as np
 import pandas as pd

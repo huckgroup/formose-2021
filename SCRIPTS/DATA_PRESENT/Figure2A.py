@@ -1,3 +1,6 @@
+'''
+Example bar charts of compositional data. Figure 2A
+'''
 import sys
 from pathlib import Path
 

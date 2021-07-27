@@ -1,3 +1,6 @@
+'''
+Performs a clustering analysis to provide partitioned subsets of the data.
+'''
 import sys
 import numpy as np
 import pandas as pd

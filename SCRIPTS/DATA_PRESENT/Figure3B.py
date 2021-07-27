@@ -1,3 +1,8 @@
+'''
+Example reaction networks determined from amplitude data. Specifically
+illustrating the variation of reaction pathways as the formaldehyde
+concentration is variated. Figure 2B.
+'''
 import sys
 import pickle
 import pandas as pd

@@ -1,3 +1,7 @@
+'''
+Generates a dendrogram and generates a layout on which dendrogram-containing
+figures will be based.
+'''
 import sys
 import numpy as np
 import pandas as pd

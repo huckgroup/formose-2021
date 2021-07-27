@@ -1,3 +1,7 @@
+'''
+A heatmap illustrating the relative reaction class occurences in modulated
+data sets. Figure 3C.
+'''
 import os
 import sys
 import pickle

@@ -1,4 +1,6 @@
-# generate demonstrative amplitude diagrams for the formose reactions
+'''
+Example compound concentration timecourses. Figure 3A.
+'''
 import os
 import sys
 import numpy as np

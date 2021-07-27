@@ -1,3 +1,6 @@
+'''
+An example GC-MS chromatogram with annotation. Figure 1C of the main text.
+'''
 import os
 import sys
 import numpy as np

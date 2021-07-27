@@ -1,3 +1,7 @@
+'''
+A dendrogram with the compositions for each data set annotated on its leaves.
+Figure 2B, main panel
+'''
 import sys
 import numpy as np
 import pandas as pd

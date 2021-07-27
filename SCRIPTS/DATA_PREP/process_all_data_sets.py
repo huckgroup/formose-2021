@@ -1,3 +1,6 @@
+'''
+Extracts average concentration and amplitude information from data reports.
+'''
 import sys
 import numpy as np
 import pandas as pd

@@ -1,3 +1,7 @@
+'''
+Inset dendrograms indicating the variation of key parameters which affect
+experimentally-determined compositions. Figure 2B insets.
+'''
 import sys
 import numpy as np
 import pandas as pd

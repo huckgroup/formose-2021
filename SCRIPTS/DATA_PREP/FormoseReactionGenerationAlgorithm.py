@@ -1,3 +1,6 @@
+'''
+Generates an reaction network for the formose reaction based on reaction rules.
+'''
 import sys
 import pickle
 from rdkit import Chem

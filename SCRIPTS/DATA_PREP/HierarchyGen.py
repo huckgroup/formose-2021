@@ -1,3 +1,7 @@
+'''
+Creates a JSON file describing the hierarchical clustering of the ampltidue and
+average compositional data.
+'''
 import sys
 import numpy as np
 import pandas as pd

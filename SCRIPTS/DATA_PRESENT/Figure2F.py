@@ -1,3 +1,7 @@
+'''
+Illustration of how the concentration of sodium hydroxide and calcium chloride
+induced compositional transitions accross the dendrogram. Figure 2F.
+'''
 import sys
 import numpy as np
 import pandas as pd

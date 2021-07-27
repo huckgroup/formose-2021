@@ -1,3 +1,7 @@
+'''
+A selection of data sets showing how the concentration of formaldehyde
+affects the reaction composition. Figure 2C.
+'''
 import sys
 import numpy as np
 import pandas as pd

@@ -1,3 +1,7 @@
+'''
+Processing to derive a measure of the relative reaction expression of reaction
+classes found in data-derived reaction networks.
+'''
 import os
 import sys
 import pickle

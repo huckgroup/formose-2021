@@ -1,3 +1,7 @@
+'''
+Compiling the data sets ready for submission. Experiment data files are renamed
+and recompiled to conform to an arabic numeral-based naming system.
+'''
 import sys
 import numpy as np
 import pandas as pd
@@ -64,10 +68,6 @@ def write_to_file(dataset, filename = '', path = None):
             outfile.write("\n")
 
         outfile.write("end_data\n")
-
-'''
-Compiling the data sets ready for submission.
-'''
 
 # set paths to files
 data_folder = repository_dir/'DATA'
