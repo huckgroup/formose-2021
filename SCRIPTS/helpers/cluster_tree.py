@@ -1,3 +1,6 @@
+'''
+Functions for dealing with dendrogram data.
+'''
 import networkx as nx
 from scipy.cluster import hierarchy
 

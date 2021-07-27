@@ -1,3 +1,6 @@
+'''
+Functions for loading and converting reaction network data.
+'''
 from NorthNet import Classes
 
 def convert_to_networkx(network):

@@ -1,3 +1,6 @@
+'''
+Function for determining concentration amplitudes from data.
+'''
 import numpy as np
 from scipy import fftpack
 from scipy import interpolate

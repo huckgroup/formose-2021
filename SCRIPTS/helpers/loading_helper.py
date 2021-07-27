@@ -1,3 +1,6 @@
+'''
+Function for loading files.
+'''
 import os
 import sys
 import copy

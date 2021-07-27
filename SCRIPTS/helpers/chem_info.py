@@ -1,3 +1,6 @@
+'''
+General information for compound and reaction naming and formatting.
+'''
 from pathlib import Path
 
 # get the path of the project folder

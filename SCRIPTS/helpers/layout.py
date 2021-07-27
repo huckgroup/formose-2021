@@ -1,3 +1,6 @@
+'''
+Graph layout generator.
+'''
 def graphviz_layout(network, render_engine = 'fdp'):
     '''
     Uses graphviz to generate a layout from a networkx graph.

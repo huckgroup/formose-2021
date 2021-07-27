@@ -1,3 +1,6 @@
+'''
+Functions for pathway searching.
+'''
 import networkx as nx
 
 def shortest_path_between_compounds(G, source, target):
