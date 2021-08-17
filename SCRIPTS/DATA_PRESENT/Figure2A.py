@@ -40,15 +40,15 @@ comp_clrs  = [info_params.colour_assignments[x] for x in comp_ax]
 comp_numbers = [info_params.compound_numbering[x] for x in comp_ax]
 
 # define plot parameters
-class margins: left = 0.2;right = 0.03;top = 0.15;bottom = 0.025;
+class margins: left = 0.08;right = 0.01;top = 0.15;bottom = 0.025;
 left = margins.left
 width = 1-margins.left-margins.right
 height = (1-margins.top-margins.bottom)/len(data_set_selections)
-axis_label_font_size = 9
+axis_label_font_size = 8
 
 # create the plot
 fig, ax = plt.subplots(nrows = len(data_set_selections),
-                        figsize = (17.1/2.54,4.0/2.54))
+                        figsize = (16.7/2.54,3.7/2.54))
 
 for x in range(0,len(plot_stack)):
     ax[x].bar(comp_numbers, plot_stack[x],
