@@ -1,0 +1,8 @@
+# Name                    Version                   Build  Channel
+matplotlib-base           3.4.1            py39hb07454d_0    conda-forge
+networkx                  2.5.1                    pypi_0    pypi
+numpy                     1.20.2           py39h7eed0ac_0    conda-forge
+pandas                    1.2.4            py39h23ab428_0
+rdkit                     2021.03.1        py39h88273a1_0    conda-forge
+scikit-learn              0.24.2           py39h4b1dcc9_0    conda-forge
+scipy                     1.6.3            py39h056f1c0_0    conda-forge
