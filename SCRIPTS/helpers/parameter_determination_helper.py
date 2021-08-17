@@ -5,7 +5,6 @@ import numpy as np
 from scipy import fftpack
 from scipy import interpolate
 from scipy.optimize import curve_fit
-from NorthNet import info_params
 
 def fourier_transform(X,Y):
     # interpolate axes to get even time steps
