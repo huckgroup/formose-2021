@@ -20,7 +20,7 @@ Contains folders named according to experiment codes containing data reports of 
 
 #### DERIVED_PARAMETERS
 
-Contains the average concentrations (AmplitudeData.csv) and concentration amplitudes (AmplitudeData.csv) determined for each experiment.
+Contains the average concentrations (AverageData.csv) and concentration amplitudes (AmplitudeData.csv) determined for each experiment.
 
 ### EXPERIMENT_INFO
 
