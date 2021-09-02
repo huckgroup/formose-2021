@@ -51,7 +51,7 @@ Python scripts used to analyse and plot the data.
 
 ## Installation
 
-The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx and pandas matplotlib and sklearn libraries (see `environment.yaml`)
+The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx and pandas matplotlib and sklearn libraries (see `environment.yml`)
 
 This software should work on all systems capable of installing the dependencies described above. It has been run successfully on MacOS (10.15) and Windows (Windows 10) machines.
 
@@ -127,3 +127,8 @@ conda:
 pip:
   - Install from the repository root using pip: `pip install .`,
   - Or in editable mode (so edits are immediately reflected): `pip install -e .`
+
+
+## Expected run times
+
+Many of the programs should not take more than a few minutes to run on a modern laptop.
