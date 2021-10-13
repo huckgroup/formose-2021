@@ -75,7 +75,7 @@ series_stack = sel.to_numpy()
 
 subplot_width = 8
 subplot_height = 8
-fig, ax = plt.subplots(nrows = 1, figsize = (8.965/2.54,5.6/2.54))
+fig, ax = plt.subplots(nrows = 1, figsize = (8.965/2.54,6.27/2.54))
 ax.scatter(series_x_values, series_y_values, alpha = 0.0)
 for x in range(0,len(series_stack)):
     L = series_x_values[x] - subplot_width/2
