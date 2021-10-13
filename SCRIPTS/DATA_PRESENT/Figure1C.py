@@ -40,9 +40,10 @@ exp_name = 'FRN089B'
 
 
 # importing information
-storage_stem = Path(r'/Users/williamrobinson/documents/nijmegen/PrebioticDatabase')
+system_root = Path(r'C:/Users/willi/Documents')
+storage_stem = system_root/'PrebioticDatabase'
 
-calib_file_path = '/Users/williamrobinson/Documents/Nijmegen/PrebioticDatabase/Analysis_Information/GCMS/2020_03_16_GCMS_Calibrations.csv'
+calib_file_path = storage_stem/'Analysis_Information/GCMS/2020_03_16_GCMS_Calibrations.csv'
 calib = Classes.Instrument_Calibration(file = calib_file_path)
 
 Path_file = storage_stem/'Data_information/Data_information.csv'
@@ -62,16 +63,15 @@ calib.modify_boundaries(modified_bounds)
 # State directory in which to store results
 store_folder = Path(storage_stem/'Data'/data_type/'FRN'/exp_name/'Chromatograms')
 
-
 fig,ax = plt.subplots(figsize = (9.05/2.54,6.1/2.54))
-time, signal = f_i.load_chromatogram_csv(store_folder/'FRN089_036.csv')
-ax.plot(time, signal, c = "#000000", linewidth = 1)
+chrom = Classes.Chromatogram(file = store_folder/'FRN089_036.csv')
+ax.plot(chrom.time, chrom.signal, c = "#000000", linewidth = 0.5)
 
 # Create a Rectangle patch
 for c in C_chain_regions:
     xy = [C_chain_regions[c][0],0]
     width = C_chain_regions[c][1] - C_chain_regions[c][0]
-    height = np.amax(signal)
+    height = np.amax(chrom.signal)
     rect = patches.Rectangle(xy, width, height, facecolor = C_chain_colors[c],
                             alpha = 0.5, zorder = 0)
     # Add the patch to the Axes
