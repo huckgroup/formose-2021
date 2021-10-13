@@ -127,3 +127,8 @@ conda:
 pip:
   - Install from the repository root using pip: `pip install .`,
   - Or in editable mode (so edits are immediately reflected): `pip install -e .`
+
+
+## Expected run times
+
+Many of the programs should not take more than a few minutes to run on a modern laptop.
