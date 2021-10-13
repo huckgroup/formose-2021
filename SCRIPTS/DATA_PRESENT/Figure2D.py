@@ -79,12 +79,22 @@ for n in G.nodes:
         leaf_y.append(xy[1])
         leaf_colours.append(experiment_dict[n]*factor)
 
+# Set colour for the arrows
+arrow_colour = '#5B6F8D'
+
 # create the plot
 fig, ax = plt.subplots(figsize=(8.965/2.54,5.6/2.54))
 
 # Plot lines for the dendrogram
 ax.plot(lines[0],lines[1],linewidth = 1.5, 
         zorder = 0, c = '#000000')
+
+for n in data_set_selections:
+    pos = G.nodes[n]['pos']
+    ax.scatter(pos[0],pos[1], c = None,
+            facecolor = 'none',
+            edgecolor = arrow_colour,
+            alpha = 1.0)
 
 # Plot the coloured leaf nodes 
 scattr = ax.scatter(leaf_x,leaf_y, s = 10, c = leaf_colours,
@@ -97,7 +107,6 @@ cbar = plt.colorbar(scattr,
                     location="bottom", aspect = 30)
 
 # add in the path formaldehyde induces across the dendrogram
-arrow_colour = '#5B6F8D'
 for node_pair in node_path:
     arrow = FancyArrowPatch(G.nodes[node_pair[0]]['pos'],
                             G.nodes[node_pair[1]]['pos'],
