@@ -8,6 +8,7 @@ import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
+import matplotlib.cm as cm
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -42,8 +43,16 @@ figname = 'Figure2F'
 series_sel = 'Ca_OH_grid_series'
 condition_sel_1 = '[CaCl2]/ M'
 condition_sel_2 = '[NaOH]/ M'
+factor = 800
 x_factor = 1000
 y_factor = 1000
+
+experiment_codes = exp_info.index
+# Extract the required information for the plot
+experiment_dict = {}
+experiment_dict['Ca_OH_ratio'] = {}
+for e in experiment_codes:
+    experiment_dict[e] = exp_info.loc[e,'[CaCl2]/ M']/exp_info.loc[e,'[NaOH]/ M']/1000
 
 series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
 data_keys = series_seqs.loc[series_sel]
@@ -51,11 +60,30 @@ data_set_selections = list(data_keys.dropna())
 
 node_path = [(a,b) for a,b in zip(data_set_selections,data_set_selections[1:])]
 
+# create leaf position scatter and colours
+leaf_colours = []
+leaf_x = []
+leaf_y = []
+for n in G.nodes:
+    if n in experiment_codes:
+        xy = G.nodes[n]['pos']
+        leaf_x.append(xy[0])
+        leaf_y.append(xy[1])
+        leaf_colours.append(experiment_dict[n]*factor)
+
 fig, ax = plt.subplots(figsize=(8.965/2.54,5.6/2.54))
 
-ax.plot(lines[0],lines[1], '-o',
-    zorder = 0, c = '#000000',
-    markersize = 2)
+scattr = ax.scatter(leaf_x,leaf_y, s = 10, c = leaf_colours,
+                        cmap = cm.coolwarm,
+                    zorder = 1)
+
+ax.plot(lines[0],lines[1],linewidth = 1.5, 
+    zorder = 0, c = '#000000')
+
+# Colour bar for the nodes
+cbar = plt.colorbar(scattr,
+                    ax = ax,
+                    location="bottom", aspect = 30)
 
 for n in data_set_selections:
     pos = G.nodes[n]['pos']
@@ -64,26 +92,41 @@ for n in data_set_selections:
             edgecolor = 'b',
             alpha = 0.5)
 
+# add in the path formaldehyde induces across the dendrogram
+arrow_colour = '#5B6F8D'
 for node_pair in node_path:
     arrow = FancyArrowPatch(G.nodes[node_pair[0]]['pos'],
                             G.nodes[node_pair[1]]['pos'],
-                            arrowstyle='-',
+                            arrowstyle='-|>',
                             path = None,
-                            connectionstyle='Angle3',#'Angle3'
+                            connectionstyle='Angle3',
                             zorder = 1,
-                            facecolor = '#2E2EFE',
-                            edgecolor = '#2E2EFE',
-                            linewidth = 2,
+                            facecolor = arrow_colour,
+                            edgecolor = arrow_colour ,
+                            linewidth = 1,
                             mutation_scale = 10,
-                            shrinkA = 0,
-                            shrinkB = 0,
+                            shrinkA = 3,
+                            shrinkB = 3,
                             alpha = 1)
     ax.add_patch(arrow)
 
+# plot settings 
 ax.set_axis_off()
 ylm = ax.get_ylim()
-ax.set_ylim(ylm[1],ylm[0])
-fig.tight_layout()
+
+# Colourbar setting
+cbar.ax.tick_params(labelsize=7, length = 2, pad = 1)
+cbar.set_label('[CaCl$_2$]/[NaOH]', fontsize = 8, labelpad = 2)
+
+# Colorbar to plot ratio
+cbar_width = 0.9
+cbar_height = 0.1
+plot_width = 1
+plot_height = 0.85
+cbar.ax.set_position([0.05,0.075,cbar_width,cbar_height])
+ax.set_position([0.0,0.15,plot_width,plot_height])
+
+# Save output
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
-plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
+plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname), dpi = 600)
 plt.close()

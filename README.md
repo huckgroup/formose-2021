@@ -20,7 +20,7 @@ Contains folders named according to experiment codes containing data reports of 
 
 #### DERIVED_PARAMETERS
 
-Contains the average concentrations (AmplitudeData.csv) and concentration amplitudes (AmplitudeData.csv) determined for each experiment.
+Contains the average concentrations (AverageData.csv) and concentration amplitudes (AmplitudeData.csv) determined for each experiment.
 
 ### EXPERIMENT_INFO
 
@@ -51,7 +51,7 @@ Python scripts used to analyse and plot the data.
 
 ## Installation
 
-The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx and pandas matplotlib and sklearn libraries (see `environment.yaml`)
+The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx and pandas matplotlib and sklearn libraries (see `environment.yml`)
 
 This software should work on all systems capable of installing the dependencies described above. It has been run successfully on MacOS (10.15) and Windows (Windows 10) machines.
 

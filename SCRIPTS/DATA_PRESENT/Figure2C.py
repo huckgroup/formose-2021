@@ -77,7 +77,7 @@ series_x_values = [x_factor*exp_info.loc[x,condition_sel]
 compounds = [x.split('/')[0] for x in sel.columns]
 compound_clrs  = [info_params.colour_assignments[x] for x in compounds]
 
-fig, ax = plt.subplots(figsize=(8.965/2.54,5.6/2.54))
+fig, ax = plt.subplots(figsize=(8.965/2.54,6.27/2.54))
 ax.set_position([0.2, 0.2, 0.7, 0.7])
 
 trace_labels = []
@@ -123,6 +123,7 @@ for c,t in enumerate(trace_labels):
                 zorder = 1000,
                 ha = 'center',
                 va = 'center')
+
 plt.savefig(repository_dir/'PLOTS/{}_series_annotated.png'.format(figname), dpi = 600)
 plt.savefig(repository_dir/'PLOTS/{}_series_annotated.svg'.format(figname))
 plt.close()
