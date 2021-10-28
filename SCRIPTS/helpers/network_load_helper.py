@@ -1,6 +1,8 @@
 '''
 Functions for loading and converting reaction network data.
 '''
+from rdkit import Chem
+from rdkit.Chem import AllChem
 from NorthNet import Classes
 
 def convert_to_networkx(network):
@@ -35,11 +37,19 @@ def convert_to_networkx(network):
 
 def load_network_from_reaction_list(reaction_list):
 
-    rxns = []
+    reactions = []
     for r in reaction_list:
-        rxns.append(Classes.Reaction(r))
+        # Parse reaction SMILES
+        split_reaction = r.split('>>')
+        reactants = [Chem.MolFromSmiles(m) for m in split_reaction[0].split('.')]
+        products = [Chem.MolFromSmiles(m) for m in split_reaction[1].split('.')]
 
-    network = Classes.Network(rxns, '','')
+        rxn = AllChem.ChemicalReaction() # Create an empty chemical reaction
+        [rxn.AddReactantTemplate(r) for r in reactants]
+        [rxn.AddProductTemplate(p) for p in products]
+        reactions.append(Classes.Reaction(rxn))
+
+    network = Classes.Network(reactions, '','')
 
     return network
 

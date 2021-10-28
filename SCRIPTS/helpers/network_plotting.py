@@ -5,10 +5,9 @@ import networkx as nx
 from networkx.drawing.nx_agraph import graphviz_layout
 import matplotlib.pyplot as plt
 
-from NorthNet.file_exports.plotting import network_plotting as northplot
-from NorthNet.network_manipulations.networkx_ops import coordinates as c_ops
-from NorthNet.file_exports.plotting import data_plotting
-from NorthNet import info_params
+from helpers import chem_info as info_params
+from NorthNet.plotting import network_plotting as northplot
+from NorthNet.network_visualisation import coordinates as c_ops
 
 def plot_network(G, filename, prog = 'neato'):
     pos = graphviz_layout(G, prog = prog)
