@@ -114,7 +114,7 @@ exp_labels = [exp_info.loc[n.Name,'Experiment_entry'] for n in networks]
 
 # organise zones of the heatmap by reaction expression
 # load clusters upon which reaction ordering will be based.
-with open('RESOURCES/clusters.txt', 'r') as f:
+with open(repository_dir/'RESOURCES/clusters.txt', 'r') as f:
 	lines = f.readlines()
 
 # create a new experiment ordering based on clusters
