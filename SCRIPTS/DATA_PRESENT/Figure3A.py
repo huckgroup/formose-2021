@@ -35,7 +35,7 @@ with open(repository_dir/'COMPOUND_INFO/compound_numbering.txt', 'r') as f:
         compound_numbering[int(ins[1])] = ins[0]
 
 loaded_reports = []
-path = 'DATA/DATA_REPORTS/{}'.format(experiment_code)
+path = repository_dir/'DATA/DATA_REPORTS/{}'.format(experiment_code)
 for file in os.listdir(path):
     if file.endswith('csv'):
         file_path = '{}/{}'.format(path,file)
