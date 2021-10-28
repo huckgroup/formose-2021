@@ -102,5 +102,5 @@ for c,n in enumerate(networks):
 # normalise the the reaction class scores to the total number of reaction
 # classes of the same type observed for all of the reaction systems analysed
 reaction_numbers_normalised = np.zeros(reaction_numbers.shape)
-for c,r in enumerate(class_names):
+for c,r in enumerate(observed_reaction_classes):
 	reaction_numbers_normalised[:,c] = reaction_numbers[:,c]/observed_reaction_classes[r]
