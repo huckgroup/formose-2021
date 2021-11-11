@@ -38,7 +38,6 @@ C_chain_colors = { "tetradecane" : "#000000",
 # Choose the experiment code (see Data_information.csv)
 exp_name = 'FRN089B'
 
-
 # importing information
 system_root = Path(r'C:/Users/willi/Documents')
 storage_stem = system_root/'PrebioticDatabase'
