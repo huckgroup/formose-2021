@@ -123,7 +123,7 @@ for n in networks:
 		elif node + '/ M' in average_data.columns:
 			conc = average_data.loc[n,node +'/ M']
 			amp = amplitude_data.loc[n,node +'/ M']
-			networks[n].nodes[node]['size'] = conc*node_size_factor
+			networks[n].nodes[node]['size'] = amp*node_size_factor
 		else:
 			networks[n].nodes[node]['size'] = min_node_size
 
