@@ -91,7 +91,7 @@ for c in formose_network.NetworkCompounds:
 		undetected.append(c)
 
 # loop over amplitude data sets
-e = 'FRN093B'
+e = 'FRN089A'
 
 # remove C7 compounds: including C7 compounds
 # in the search framework creates a huge jump
