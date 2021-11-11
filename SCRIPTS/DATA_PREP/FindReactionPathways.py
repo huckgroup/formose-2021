@@ -79,7 +79,7 @@ remove_nodes = ['C=O', 'O', '[OH-]']
 # define compounds which were not detected experimentally
 # (with consistency)
 undetected = ['O', '[OH-]','O=CCO','O=C[C@H](O)CO',
-			  'O=C[C@@H](O)CO','CC1COC(C)CO1']
+			  'O=C[C@@H](O)CO','OC1COC(CO1)O']
 
 # find and append enolates to the list of undetected compounds
 # enolates are the only species with C=C bonds
