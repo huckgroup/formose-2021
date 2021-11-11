@@ -87,9 +87,9 @@ for x in range(0,len(series_stack)):
     wedges, texts = axin.pie(series_stack[x]/series_stack[x].max(),
                         colors = compound_clrs,
                         radius = 1.9,
-                        # labels = [compound_numbering[x.split('/')[0]] for x in
-                        #         sel.columns],
-                        # textprops={'fontsize': 3}
+                         #labels = [compound_numbering[x.split('/')[0]] for x in
+                         #        sel.columns],
+                         #textprops={'fontsize': 3}
                         )
 
     for w in wedges:
