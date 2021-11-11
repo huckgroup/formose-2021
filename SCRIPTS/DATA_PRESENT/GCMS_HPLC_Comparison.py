@@ -44,17 +44,19 @@ factor = 1e6
 
 GCMS_chrom = Classes.Chromatogram(file = storage_stem/'FRN093_041_GCMS_chromatogram.csv')
 HPLC_chrom = Classes.Chromatogram(file = storage_stem/'FRN093_041_HPLC_chromatogram.csv')
+GCMS_inds = np.where((GCMS_chrom.time > 6) & (GCMS_chrom.time < 17))[0]
+HPLC_inds = np.where((HPLC_chrom.time > 2) & (HPLC_chrom.time < 12))[0]
 
 fig,ax = plt.subplots(nrows = 2, figsize = (figure_width, figure_height))
 
-ax[0].plot(HPLC_chrom.time, HPLC_chrom.signal/factor,
+ax[0].plot(HPLC_chrom.time[HPLC_inds], HPLC_chrom.signal[HPLC_inds]/factor,
         c = "#000000", linewidth = 1.5)
-ax[1].plot(GCMS_chrom.time, GCMS_chrom.signal/factor,
-        c = "#000000", linewidth = .15)
+ax[1].plot(GCMS_chrom.time[GCMS_inds], GCMS_chrom.signal[GCMS_inds]/factor,
+        c = "#000000", linewidth = 1.5)
 
+ax[0].set_ylabel('Intensity (360 nm)/ kV', fontsize = 10)
 ax[1].set_xlabel('residence time/ min.', fontsize = 10)
 ax[1].set_ylabel('Total ion counts/ 10$^6$', fontsize = 10)
-ax[0].set_ylabel('Intensity (360 nm)/ kV', fontsize = 10)
 
 for a in ax:
     a.tick_params(labelsize = 8)
