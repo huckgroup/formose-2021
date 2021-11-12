@@ -35,6 +35,12 @@ C_chain_colors = { "tetradecane" : "#000000",
                    "C6": "#30bd37",
                    "C7": "#592387"}
 
+storage_stem = Path('../../../../../PrebioticDatabase/Analysis_Information')
+GCMS_calib_path = storage_stem/'GCMS/2020_03_16_GCMS_Calibrations.csv'
+HPLC_calib_path = storage_stem/'HPLC/2020_03_16_HPLC_GIST_Calibrations.csv'
+GCMS_calib = Classes.Instrument_Calibration(file = GCMS_calib_path)
+HPLC_calib = Classes.Instrument_Calibration(file = HPLC_calib_path)
+quit()
 # importing information
 storage_stem = repository_dir/'DATA'/'CHROMATOGRAMS'
 
