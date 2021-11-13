@@ -45,7 +45,7 @@ compound_header = [x+'/ M' for x in info_params.smiles_to_names]
 # create storage arrays for the data
 amps_out = np.zeros((len(exp_info),len(compound_header)))
 averages_out = np.zeros((len(exp_info),len(compound_header)))
-import matplotlib.pyplot as plt
+
 for c1,d in enumerate(data_sets):
 
     if exp_info.loc[d, 'Modulated_component'] == 'None':
@@ -78,11 +78,10 @@ for c1,d in enumerate(data_sets):
 
             x_fourier_section = x_fourier[ida]
             y_fourier_section = y_fourier[ida]
-
             idx, _ = find_peaks(y_fourier_section,distance = 10)
 
             if len(idx) > 0:
-                amps_out[c1,comp_idx] = y_fourier[idx]
+                amps_out[c1,comp_idx] = y_fourier_section[idx]
 
 with open(derived_parameters_dir/'AverageData.csv', 'w') as f:
     f.write(',')
