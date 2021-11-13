@@ -2,15 +2,13 @@ O=C(CO)CO.[OH-]>>OC=C(O)CO.[OH-]
 O=C[C@H](O)CO.OC=C(O)CO>>O=C[C@@](O)(CO)[C@@H](O)[C@H](O)CO
 O=C(CO)CO.OC=C(O)CO>>O=C[C@@](O)(CO)C(O)(CO)CO
 O=CCO.OC=C(O)CO>>O=C(CO)[C@H](O)[C@H](O)CO
-C=O.OC=C(O)CO>>O=C(CO)[C@H](O)CO
 C=O.OC=C(O)CO>>O=CC(O)(CO)CO
+C=O.OC=C(O)CO>>O=C(CO)[C@H](O)CO
 O=C(CO)[C@H](O)[C@H](O)CO>>O=CCO.OC=C(O)CO
 O=CCO.OC=CO>>O=C[C@H](O)[C@H](O)CO
 C=O.O=C[C@H](O)[C@H](O)CO.[OH-]>>O=CO.OC[C@H](O)[C@H](O)CO
 O=CCO.OC=C(O)CO>>O=C[C@@](O)(CO)[C@H](O)CO
 O=C[C@@](O)(CO)[C@@H](O)[C@H](O)CO>>O=C[C@H](O)CO.OC=C(O)CO
 O=C(CO)[C@H](O)CO.[OH-]>>OC=C(O)[C@H](O)CO.[OH-]
-C=O.OC=C(O)[C@H](O)CO>>O=C[C@@](O)(CO)[C@H](O)CO
-O=C[C@@](O)(CO)[C@H](O)CO>>O=CCO.OC=C(O)CO
 O.OC=C(O)[C@H](O)CO>>O.O=C[C@H](O)[C@H](O)CO
 O=CCO.[OH-]>>OC=CO.[OH-]
