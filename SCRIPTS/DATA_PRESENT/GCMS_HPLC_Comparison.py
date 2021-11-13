@@ -19,6 +19,7 @@ repository_dir = Path(__file__).parents[2]
 from ChromProcess import file_import
 from ChromProcess import info_params
 from ChromProcess import file_import as f_i
+import helpers.chem_info as info_params
 
 plot_folder = repository_dir/'PLOTS'
 
@@ -35,12 +36,6 @@ C_chain_colors = { "tetradecane" : "#000000",
                    "C6": "#30bd37",
                    "C7": "#592387"}
 
-storage_stem = Path('../../../../../PrebioticDatabase/Analysis_Information')
-GCMS_calib_path = storage_stem/'GCMS/2020_03_16_GCMS_Calibrations.csv'
-HPLC_calib_path = storage_stem/'HPLC/2020_03_16_HPLC_GIST_Calibrations.csv'
-GCMS_calib = Classes.Instrument_Calibration(file = GCMS_calib_path)
-HPLC_calib = Classes.Instrument_Calibration(file = HPLC_calib_path)
-quit()
 # importing information
 storage_stem = repository_dir/'DATA'/'CHROMATOGRAMS'
 
@@ -64,6 +59,7 @@ ax[0].set_ylabel('Intensity (360 nm)/ kV', fontsize = 10)
 ax[1].set_xlabel('residence time/ min.', fontsize = 10)
 ax[1].set_ylabel('Total ion counts/ 10$^6$', fontsize = 10)
 
+ax[0].set_ylim(-0.01,0.2)
 for a in ax:
     a.tick_params(labelsize = 8)
 
