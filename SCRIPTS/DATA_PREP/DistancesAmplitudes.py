@@ -54,7 +54,7 @@ with open(formose_file, 'rb') as f:
 
 # Load in reaction list and convert to
 # a networkx graph
-reaction_file = reaction_list_directory/f'FRN088B_reaction_list.txt'
+reaction_file = reaction_list_directory/f'{exp_code}_reaction_list.txt'
 
 with open(reaction_file, 'r') as f:
     lines = f.readlines()
@@ -64,6 +64,7 @@ reactions = [x.strip('\n') for x in lines]
 rxn_objs = [FormoseNetwork.NetworkReactions[r] for r in reactions]
 network = Classes.Network(rxn_objs, exp_code, '')
 graph = convert_to_networkx(network)
+graph = FormoseNetwork.convert_to_networkx()
 
 # edit network to remove secondary reactants
 node_removals = ['C=O', 'O', '[OH-]']
@@ -79,6 +80,10 @@ search_list = [x for x in detected_compounds
 shortest_paths = {c:[] for c in detected_compounds}
 
 root_node = 'O=C(CO)CO'
+
+del shortest_paths[root_node]
+del shortest_paths['C=O']
+
 for d in search_list:
     if d == root_node:
         continue
@@ -91,15 +96,15 @@ for d in search_list:
 path_lengths = {d:len(shortest_paths[d]) for d in shortest_paths}
 
 x_ax = [path_lengths[d] for d in path_lengths]
-y_ax = [amplitude_data.loc[exp_code,c+'/ M'] for c in detected_compounds]
-clrs = [info_params.colour_assignments[x] for x in detected_compounds]
-compound_numbers = [compound_numbering[x] for x in detected_compounds]
+y_ax = [amplitude_data.loc[exp_code,c+'/ M'] for c in path_lengths]
+clrs = [info_params.colour_assignments[x] for x in path_lengths]
+compound_numbers = [compound_numbering[x] for x in path_lengths]
 
 width = 5/2.54
 height = 5/2.54
 
 fig, ax = plt.subplots(figsize = (width, height))
 
-ax.bar(compound_numbers, y_ax, color = clrs)
+ax.bar(x_ax, y_ax, color = clrs)
 
 plt.show()

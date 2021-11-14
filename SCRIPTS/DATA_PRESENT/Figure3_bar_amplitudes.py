@@ -52,7 +52,9 @@ with open(repository_dir/'COMPOUND_INFO/compound_numbering.txt', 'r') as f:
 
 numbers_to_compounds = {compound_numbering[c]:c for c in compound_numbering}
 
-sel_numbers = [3,9,12,13,18]
+sel_numbers = [3,9,12,13,18] # for specific compounds 
+sel_numbers = [c for c,v in enumerate(compounds) if 0 < c < 53] # all compounds
+sel_compounds = [numbers_to_compounds[n] for n in sel_numbers]
 sel_compounds = [numbers_to_compounds[n] for n in sel_numbers]
 amps = [factor*amplitude_data.loc[exp_code,c+'/ M'] for c in sel_compounds]
 clrs = [info_params.colour_assignments[x] for x in sel_compounds]
