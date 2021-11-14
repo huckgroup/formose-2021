@@ -97,6 +97,10 @@ for n in G.nodes:
         #             xy = (0,0),
         #             ha = 'center', va = 'center')
 
+        # axin.annotate(n,
+        #             xy = (0,0),
+        #             ha = 'center', va = 'center')
+
 ax.set_position([0,0,1,1])
 ax.set_axis_off()
 plt.savefig(repository_dir/'PLOTS/Figure2B_Main.png', dpi = 600)
