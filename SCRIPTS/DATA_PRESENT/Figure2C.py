@@ -104,7 +104,7 @@ for x in range(0,len(series_progression)):
 ax.tick_params(which = 'both', axis = 'both', length = 2)
 ax.set_xlabel(x_name)
 ax.set_ylabel('Concentration/ mM')
-plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)
+plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 
 label_x_positions = np.linspace(0,series_x_values[-1], num = len(trace_labels))
 label_x_positions*=1.5
