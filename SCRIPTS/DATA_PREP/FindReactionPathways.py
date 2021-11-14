@@ -44,13 +44,13 @@ amplitude_data = pd.read_csv(determined_params_dir/'AmplitudeData.csv', index_co
 amplitude_data = amplitude_data.dropna(axis = 1)
 
 experiment_amplitudes = {i:amplitude_data.loc[i].to_numpy()
-												for i in amplitude_data.index}
+                                                for i in amplitude_data.index}
 experiment_averages = {i:average_data.loc[i].to_numpy()
-												for i in average_data.index}
+                                                for i in average_data.index}
 
 carbon_inputs = get_carbon_inputs(exp_info, average_data.columns)
 for c in carbon_inputs:
-	carbon_inputs[c] = [x.strip('/ M') for x in carbon_inputs[c]]
+    carbon_inputs[c] = [x.strip('/ M') for x in carbon_inputs[c]]
 
 # Compounds below amplitude_filter will not be included in the search
 amplitude_filter = 0.0 # / M
@@ -79,178 +79,180 @@ remove_nodes = ['C=O', 'O', '[OH-]']
 # define compounds which were not detected experimentally
 # (with consistency)
 undetected = ['O', '[OH-]','O=CCO','O=C[C@H](O)CO',
-			  'O=C[C@@H](O)CO','OC1COC(CO1)O']
+              'O=C[C@@H](O)CO','OC1COC(CO1)O']
 
 # find and append enolates to the list of undetected compounds
 # enolates are the only species with C=C bonds
 # considered within the scope of this study.
 enol_patt = Chem.MolFromSmarts('C=C')
 for c in formose_network.NetworkCompounds:
-	compound = formose_network.NetworkCompounds[c]
-	if compound.Mol.HasSubstructMatch(enol_patt):
-		undetected.append(c)
+    compound = formose_network.NetworkCompounds[c]
+    if compound.Mol.HasSubstructMatch(enol_patt):
+        undetected.append(c)
 
 # create a container for the pathway search results
 network_results = {}
 
 # loop over amplitude data sets
 for e in experiment_amplitudes:
-	# if all amplitudes are equal to zero,
-	# ingnore go to the next data set.
-	if np.sum(experiment_amplitudes[e]) == 0.0:
-		print('no amps', e)
-		continue
+    # if all amplitudes are equal to zero,
+    # ingnore go to the next data set.
+    if np.sum(experiment_amplitudes[e]) == 0.0:
+        print('no amps', e)
+        continue
 
-	# remove C7 compounds: including C7 compounds
-	# in the search framework creates a huge jump
-	# in the size of the network.
-	for c,p in enumerate(header):
-		if p.count('C') == 7:
-			experiment_amplitudes[e][c] = 0.0
-			experiment_averages[e][c] = 0.0
+    # remove C7 compounds: including C7 compounds
+    # in the search framework creates a huge jump
+    # in the size of the network.
+    for c,p in enumerate(header):
+        if p.count('C') == 7:
+            experiment_amplitudes[e][c] = 0.0
+            experiment_averages[e][c] = 0.0
 
-	# sort amplitudes in decreasing magnitude
-	idx = np.argsort(experiment_amplitudes[e])
-	idx = np.flip(idx)
-	sorted_amplitudes = experiment_amplitudes[e][idx]
+    # sort amplitudes in decreasing magnitude
+    idx = np.argsort(experiment_amplitudes[e])
+    idx = np.flip(idx)
+    sorted_amplitudes = experiment_amplitudes[e][idx]
 
-	# create a similarly sorted list of compounds
-	loc_header = [header[i] for i in idx]
+    # create a similarly sorted list of compounds
+    loc_header = [header[i] for i in idx]
 
-	# filter amplitudes
-	nonzero_idx_1 = np.argwhere(sorted_amplitudes > amplitude_filter).T[0]
-	# loc_header becomes the ordered search list
-	loc_header = [loc_header[i].split('/')[0] for i in nonzero_idx_1]
+    # filter amplitudes
+    nonzero_idx_1 = np.argwhere(sorted_amplitudes > amplitude_filter).T[0]
+    # loc_header becomes the ordered search list
+    loc_header = [loc_header[i].split('/')[0] for i in nonzero_idx_1]
 
-	# place the input reactants at the top of the search list
-	for ci in carbon_inputs[e]:
-		if ci in loc_header: loc_header.remove(ci)
-		else: pass
+    # place the input reactants at the top of the search list
+    for ci in carbon_inputs[e]:
+        if ci in loc_header: loc_header.remove(ci)
+        else: pass
 
-	# Get a list of all detected compounds from the data vector
-	nonzero_idx_2 = np.argwhere(experiment_averages[e] > 0.0).T[0]
-	detected_compounds = [header[i].split('/')[0] for i in nonzero_idx_2]
+    # Get a list of all detected compounds from the data vector
+    nonzero_idx_2 = np.argwhere(experiment_averages[e] > 0.0).T[0]
+    detected_compounds = [header[i].split('/')[0] for i in nonzero_idx_2]
 
-	# include compounds which were not detected experimentally in the
-	# 'detected' list
-	# (if they could not be detected, their presence cannot be ruled out)
-	detected_compounds.extend(undetected)
+    # include compounds which were not detected experimentally in the
+    # 'detected' list
+    # (if they could not be detected, their presence cannot be ruled out)
+    detected_compounds.extend(undetected)
 
-	# create a copy of the network to edit for pathway
-	# searching.
-	F = network.copy()
+    # create a copy of the network to edit for pathway
+    # searching.
+    F = network.copy()
 
-	# editing the network
-	remove_reactions = []
-	for r in formose_network.NetworkReactions:
-		reactants = formose_network.NetworkReactions[r].Reactants
-		products = formose_network.NetworkReactions[r].Products
+    # editing the network
+    remove_reactions = []
+    for r in formose_network.NetworkReactions:
+        reactants = formose_network.NetworkReactions[r].Reactants
+        products = formose_network.NetworkReactions[r].Products
 
-		# remove reactions from the networks for which the reactants
-		# are not detected experimentally.
-		if not all(r in detected_compounds for r in reactants):
-			remove_reactions.append(r)
-		# remove all reactions in which the inputs are products
-		for inp in carbon_inputs[e]:
-			if inp in products:
-				remove_reactions.append(r)
+        # remove reactions from the networks for which the reactants
+        # are not detected experimentally.
+        if not all([r in detected_compounds for r in reactants]):
+            remove_reactions.append(r)
+        # remove all reactions in which the inputs are products
+        for inp in carbon_inputs[e]:
+            if inp in products:
+                remove_reactions.append(r)
 
-	# convert remove_reactions to a set to remove duplicate entries
-	remove_reactions = set(remove_reactions)
-	# remove the contents of remove_reactions from the network
-	for r in remove_reactions:
-		F.remove_node(r)
+    # convert remove_reactions to a set to remove duplicate entries
+    remove_reactions = set(remove_reactions)
+    # remove the contents of remove_reactions from the network
+    for r in remove_reactions:
+        F.remove_node(r)
 
-	# container for results
-	R = nx.DiGraph()
-	[R.add_node(header[i].split('/')[0]) for i in nonzero_idx_2]
+    # container for results
+    R = nx.DiGraph()
+    [R.add_node(header[i].split('/')[0]) for i in nonzero_idx_2]
 
-	# first, find paths from inputs to compounds downstream
-	for ci in carbon_inputs[e]:
-		if ci == 'C=O':
-			pass
-		else:
-			R.add_node(ci)
-			for l in loc_header:
-				edge_list = path_hlp.shortest_path_between_compounds(F, ci, l)
-				if edge_list:
-					R.add_edges_from(edge_list)
+    # first, find paths from inputs to compounds downstream
+    for ci in carbon_inputs[e]:
+        if ci == 'C=O':
+            pass
+        else:
+            R.add_node(ci)
+            for l in loc_header:
+                edge_list = path_hlp.shortest_path_between_compounds(F, ci, l)
+                if edge_list:
+                    R.add_edges_from(edge_list)
 
-	# iterate down the amplitude list, find shortest pathways to every compound
-	# downstream of the node.
-	for s in range(0,len(loc_header)-1):
-		for t in range(s+1,len(loc_header)-1):
-			source = loc_header[s]
-			target = loc_header[t]
-			edge_list = path_hlp.shortest_path_between_compounds(F, source, target)
-			if edge_list:
-				R.add_edges_from(edge_list)
+    # iterate down the amplitude list, find shortest pathways to every compound
+    # downstream of the node.
+    for s in range(0,len(loc_header)-1):
+        for t in range(s+1,len(loc_header)-1):
+            source = loc_header[s]
+            target = loc_header[t]
+            edge_list = path_hlp.shortest_path_between_compounds(F, source, target)
+            if edge_list:
+                R.add_edges_from(edge_list)
+            if e == 'FRN088C' and target == 'O=C([C@@H](O)CO)[C@@H](O)[C@H](O)CO':
+                print(edge_list)
 
-	# iterate through the graph and check that all products have edges
-	# leading to them. If they do not, cycle backwards from them
-	# in the sorted list until a connection is found
+    # iterate through the graph and check that all products have edges
+    # leading to them. If they do not, cycle backwards from them
+    # in the sorted list until a connection is found
 
-	# find products without input edges
-	loose_ends = []
-	for n in R.nodes:
-		if len(R.in_edges(n)) == 0 and n not in carbon_inputs[e]\
-		 		and n not in remove_nodes:
-			loose_ends.append(n)
+    # find products without input edges
+    loose_ends = []
+    for n in R.nodes:
+        if len(R.in_edges(n)) == 0 and n not in carbon_inputs[e]\
+                and n not in remove_nodes:
+            loose_ends.append(n)
 
-	# iterate over these loose ends and add connections
-	for n in loose_ends:
-		# if the compound is detected, try to connect to compounds upstream
-		# from it
-		if n in loc_header:
-			reversed_list = list(reversed(loc_header[:loc_header.index(n)]))
-			for r in reversed_list:
-				edge_list = path_hlp.shortest_path_between_compounds(F, r, n)
-				if edge_list:
-					R.add_edges_from(edge_list)
-		# otherwise, connect to inputs
-		else:
-			for r in carbon_inputs[e]:
-				if r != 'C=O':
-					edge_list = path_hlp.shortest_path_between_compounds(F, r, n)
-					if edge_list:
-						R.add_edges_from(edge_list)
+    # iterate over these loose ends and add connections
+    for n in loose_ends:
+        # if the compound is detected, try to connect to compounds upstream
+        # from it
+        if n in loc_header:
+            reversed_list = list(reversed(loc_header[:loc_header.index(n)]))
+            for r in reversed_list:
+                edge_list = path_hlp.shortest_path_between_compounds(F, r, n)
+                if edge_list:
+                    R.add_edges_from(edge_list)
+        # otherwise, connect to inputs
+        else:
+            for r in carbon_inputs[e]:
+                if r != 'C=O':
+                    edge_list = path_hlp.shortest_path_between_compounds(F, r, n)
+                    if edge_list:
+                        R.add_edges_from(edge_list)
 
-	# insert some information for plotting
-	for rn in R.nodes:
-		if '>>' in rn:
-			R.nodes[rn]['size'] = scale_factor*5e-5
-		elif rn in loc_header or rn in carbon_inputs[e]:
-			R.nodes[rn]['size'] = experiment_amplitudes[e][header.index(rn +'/ M')]*scale_factor
-		else:
-			R.nodes[rn]['size'] = scale_factor*1e-4
+    # insert some information for plotting
+    for rn in R.nodes:
+        if '>>' in rn:
+            R.nodes[rn]['size'] = scale_factor*5e-5
+        elif rn in loc_header or rn in carbon_inputs[e]:
+            R.nodes[rn]['size'] = experiment_amplitudes[e][header.index(rn +'/ M')]*scale_factor
+        else:
+            R.nodes[rn]['size'] = scale_factor*1e-4
 
-	# remove 'reagent nodes' (see remove_nodes above this loop)
-	[R.remove_node(x) for x in remove_nodes if x in R.nodes]
+    # remove 'reagent nodes' (see remove_nodes above this loop)
+    [R.remove_node(x) for x in remove_nodes if x in R.nodes]
 
-	# copy the network into the result container.
-	network_results[e] = R.copy()
+    # copy the network into the result container.
+    network_results[e] = R.copy()
 
 # plotting the results
 from helpers.network_plotting import plot_network
 for n in network_results:
-	if len(network_results[n].nodes) < 3:
-		continue
-	else:
-		print(n, len(network_results[n].nodes), len(network_results[n].edges))
-		fname = repository_dir/'PLOTS/network_plots/{}_network.png'.format(n)
-		if len(network_results[n].edges) == 0:
-			pass
-		else:
-			plot_network(network_results[n], fname, prog = 'neato')
+    if len(network_results[n].nodes) < 3:
+        continue
+    else:
+        print(n, len(network_results[n].nodes), len(network_results[n].edges))
+        fname = repository_dir/'PLOTS/network_plots/{}_network.png'.format(n)
+        if len(network_results[n].edges) == 0:
+            pass
+        else:
+            plot_network(network_results[n], fname, prog = 'neato')
 
 # writing the resulting reaction lists to files
 for n in network_results:
-	output_list = []
-	for node in network_results[n].nodes:
-		if '>>' in node:
-			output_list.append(node)
+    output_list = []
+    for node in network_results[n].nodes:
+        if '>>' in node:
+            output_list.append(node)
 
-	with open(repository_dir/'REACTION_LISTS/{}_reaction_list.txt'.format(n), 'w') as f:
-		for o in output_list:
-			f.write(o)
-			f.write('\n')
+    with open(repository_dir/'REACTION_LISTS/{}_reaction_list.txt'.format(n), 'w') as f:
+        for o in output_list:
+            f.write(o)
+            f.write('\n')
