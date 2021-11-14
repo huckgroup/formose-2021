@@ -52,20 +52,28 @@ with open(repository_dir/'COMPOUND_INFO/compound_numbering.txt', 'r') as f:
 
 numbers_to_compounds = {compound_numbering[c]:c for c in compound_numbering}
 
-sel_numbers = [3,9,12,13,18] # for specific compounds 
-sel_numbers = [c for c,v in enumerate(compounds) if 0 < c < 53] # all compounds
+sel_numbers = [3,9,12,13,14,18,20,29,30,32,34,37]
 sel_compounds = [numbers_to_compounds[n] for n in sel_numbers]
 sel_compounds = [numbers_to_compounds[n] for n in sel_numbers]
 amps = [factor*amplitude_data.loc[exp_code,c+'/ M'] for c in sel_compounds]
 clrs = [info_params.colour_assignments[x] for x in sel_compounds]
 compound_numbers = [compound_numbering[x] for x in sel_compounds]
+x_labels = [str(s) for s in sel_numbers]
 
-width = 5/2.54
-height = 5/2.54
-print(amps)
+width = 9.4/2.54
+height = 2.5/2.54
+
+axis_label_font_size = 10
+tick_label_font_size = 8
+
 fig, ax = plt.subplots(figsize = (width, height))
+fig.patch.set_alpha = 0.0
+ax.bar(x_labels, amps, color = clrs)
+ax.set_xlabel('Compound number', fontsize = axis_label_font_size)
+ax.set_ylabel('Amp./ mM', fontsize = axis_label_font_size)
+ax.set_xticklabels(x_labels, fontweight = 'bold')
+ax.tick_params(axis='both', labelsize= tick_label_font_size)
+plt.savefig(plot_folder/'Figure3B_BarChart.png', dpi = 600)
+plt.savefig(plot_folder/'Figure3B_BarChart.svg')
+plt.close()
 
-ax.bar(sel_compounds, amps, color = clrs)
-ax.set_ylabel('Concentration/ mM')
-ax.set_xticklabels(sel_numbers, fontweight = 'bold')
-plt.show()

@@ -1,16 +1,15 @@
 '''
-A heatmap illustrating the relative reaction class occurences in modulated
-data sets. Figure 3C.
+Example reaction networks determined from amplitude data. Specifically
+illustrating the variation of reaction pathways as the formaldehyde
+concentration is variated. Figure 2B.
 '''
-import os
 import sys
 import pickle
-import numpy as np
 import pandas as pd
+import networkx as nx
 from pathlib import Path
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
-from matplotlib import patches
+from matplotlib.patches import FancyArrowPatch
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -20,126 +19,195 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 from NorthNet import Classes
-
-import helpers.chem_info as info_params
-from helpers.network_load_helper import load_reaction_list
+from helpers.layout import graphviz_layout
+from helpers import chem_info as info_params
 from helpers.network_load_helper import convert_to_networkx
+from NorthNet.network_visualisation import coordinates as c_ops
 
-# name for output files
-figname = 'Figure3C'
-# set paths to files
 data_folder = repository_dir/'DATA'
-derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
+determined_params_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
-report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
-reaction_expression = pd.read_csv(
-    repository_dir/'RESOURCES/reaction_expression_normalised.csv', index_col = 0
-)
-
-reaction_expression = reaction_expression.dropna(axis = 1)
-
-class_names = reaction_expression.columns[:-1]
-
+# load in experiment information.
+exp_info = pd.read_csv(exp_info_dir, index_col = 0)
+# sequences of data set keys
 series_seqs = pd.read_csv(repository_dir/'EXPERIMENT_INFO/Series_info.csv', index_col = 0)
+# average data for sizing nodes
+average_data = pd.read_csv(determined_params_dir/'AverageData.csv', index_col = 0)
+average_data = average_data.dropna(axis = 1)
+# amplitude data for sizing nodes
+amplitude_data = pd.read_csv(determined_params_dir/'AmplitudeData.csv', index_col = 0)
+amplitude_data = amplitude_data.dropna(axis = 1)
 
-#series_seqs = series_seqs.dropna(axis = 1)
+# loading in the formose reaction as a NorthNet Network Object
+formose_file = repository_dir/'FORMOSE_REACTION/FormoseReactionNetwork.pickle'
+with open(formose_file, 'rb') as f:
+	FormoseNetwork = pickle.load(f)
 
-formaldehyde_series = 'Formaldehyde_2_series'
-formaldehyde_series_labels = series_seqs.loc[formaldehyde_series]
-formaldehyde_series_labels = formaldehyde_series_labels.dropna()
-CaOH2_series = 'Ca_OH_grid_series'
-CaOH2_series_labels = series_seqs.loc[CaOH2_series]
-CaOH2_series_labels = CaOH2_series_labels.dropna()
-series_of_interest = pd.concat(
-    [formaldehyde_series_labels, CaOH2_series_labels],
-    axis = 0
-    )
-series_of_interest = series_of_interest.to_list()
+series_sel = 'Formaldehyde_2_series'
+file_name = 'Figure3C'
 
-'''
-print(series_of_interest)
-['FRN090B', 'FRN093A', 'FRN093B', 'FRN093C',
-'FRN089A', 'FRN089B', 'FRN089C', 'FRN089D', 'FRN103',
-'FRN104A', 'FRN104B', 'FRN105A', 'FRN105B', 'FRN088A',
-'FRN088B', 'FRN089B']
-'''
+# get the experiment codes for the series
+data_keys = series_seqs.loc[series_sel]
+data_set_selections = list(data_keys.dropna())
+data_set_selections = [data_set_selections[1], data_set_selections[-1]]
+print(data_set_selections)
 
-# break the data sets into branches manually
-branches = [
-    # branch I
-    ['FRN090B', 'FRN093A', 'FRN093B', 'FRN093C'],
-    # branch VII
-    ['FRN089A', 'FRN089B', 'FRN089C', 'FRN089D',
-        'FRN088A', 'FRN088B'],
-    # branch II
-    ['FRN105A', 'FRN105B'],
-    # branch IV
-    ['FRN104A', 'FRN104B'],
-    # branch III
-    ['FRN103'] 
-]
+# load in the reaction lists determined for
+# modulated data sets.
+# use dictionary insertion ordering to
+# add network reactions into a
+networks = {}
+for e in exp_info.index:
+	for d in data_set_selections:
+		fname = '{}_reaction_list.txt'.format(d)
+		with open(reaction_list_directory/fname, 'r') as f:
+			for line in f:
+				lines = f.readlines()
+		rxns = []
+		for l in lines:
+			rxns.append(FormoseNetwork.NetworkReactions[l.strip('\n')])
 
-branch_names = ['Branch I','Branch VII',
-            'Branch II','Branch IV','Branch III']
+		n_net = Classes.Network(rxns, e, '')
 
-from mpl_toolkits.axes_grid1 import make_axes_locatable
-fig, ax = plt.subplots(
-                    figsize = (15/2.54,9/2.54),
-                    )
+		networks[d] = convert_to_networkx(n_net)
 
-min_val = reaction_expression.to_numpy().min()
-max_val = reaction_expression.to_numpy().max()
+# remove secondary reactant nodes
+node_removals = ['C=O', 'O', '[OH-]']
+for n in networks:
+	[networks[n].remove_node(node) for node in node_removals
+										if node in networks[n].nodes]
+# create a network merging all of the networks
+F = nx.DiGraph()
+for n in networks:
+	F = nx.compose(F,networks[n])
 
-plot_array = np.array([])
-spacer = np.zeros((2,len(class_names)))
-for c,b in enumerate(branches):
-    selected_region = reaction_expression.loc[b,:]
-    expression_array = selected_region.to_numpy()[:,:-1]
+# create a layout for F (this will be the layout for each plotted network)
+pos = graphviz_layout(F, render_engine = 'neato')
 
-    if len(plot_array) == 0:
-        plot_array = expression_array
-    else:
-        plot_array = np.vstack((plot_array, expression_array))
+# use F to process coordinate system
+c_ops.set_network_coords(F,pos)
+c_ops.normalise_network_coordinates(F)
 
-    label_position = plot_array.shape[0] - expression_array.shape[0]/2
-    ax.annotate(branch_names[c], xy = (label_position,-0.52),
-        horizontalalignment = 'center', fontsize = 6)
+# get line plto for merged network
+base_net_plot = c_ops.get_network_lineplot(F)
 
-    if c == len(branches)-1:
-        break
+# create new position container from F
+pos_norm = {n:F.nodes[n]['pos'] for n in F}
 
-    # add in dividers between each branch
-    plot_array = np.vstack((plot_array, spacer))
+for n in networks:
+	c_ops.set_network_coords(networks[n],pos_norm)
 
-    rect = patches.Rectangle([plot_array.shape[0]-2.5,-0.5], 2,
-        len(class_names),
-        color = 'w', angle=0.0, zorder = 1)
+'''Add colouring information into the networks'''
+for n in networks:
+	for node in networks[n].nodes:
+		if '>>' in node:
+			networks[n].nodes[node]['color'] = "#000000"
+		else:
+			networks[n].nodes[node]['color'] = info_params.colour_assignments[node]
 
-    ax.add_patch(rect)
+for n in networks:
+	for edge in networks[n].edges:
+		for e in edge:
+			if '>>' in e:
+				col = info_params.reaction_colours[e]
+				networks[n].edges[edge]['color'] = col
 
-im = ax.imshow(
-                plot_array.T,
-                cmap = 'cividis',
-                vmin = min_val,
-                vmax = max_val,
-                zorder = 0
-                )
+'''Add sizing information into networks'''
+min_node_size = 5
+node_size_factor = 1e5
+for n in networks:
+	for node in networks[n].nodes:
+		if '>>' in node:
+			networks[n].nodes[node]['size'] = min_node_size
+		elif node + '/ M' in average_data.columns:
+			conc = average_data.loc[n,node +'/ M']
+			amp = amplitude_data.loc[n,node +'/ M']
+			networks[n].nodes[node]['size'] = amp*node_size_factor
+		else:
+			networks[n].nodes[node]['size'] = min_node_size
 
-ax.tick_params(axis = 'both', which = 'both', length = 0)
-ax.set_xticks([])
-ax.set_yticks(np.arange(0,len(class_names),1))
-ax.set_yticklabels(class_names, fontsize = 6)
+'''Plotting series in four panels'''
+fig_width = 10/2.54 # cm conversion to inches for plt
+fig_height = 10/2.54 # cm conversion to inches for plt
 
-ax.set_xlabel('Experiment', fontsize = 9)
-ax.set_ylabel('Reaction class', fontsize = 9)
+base_linew = 0.5
 
-cbar = fig.colorbar(im, orientation = 'vertical')
-cbar.set_label('Fractional expression',labelpad = 5, fontsize = 9)
-cbar.ax.tick_params(labelsize= 6, length = 1)
+fig,ax = plt.subplots(ncols = 2,
+				figsize = (fig_width, fig_height))
+axes = ax.flatten()
 
-plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
-plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
-plt.close()
+for c,n in enumerate(networks):
+	axes[c].plot(base_net_plot[0],base_net_plot[1],
+				c = '#acb5ad',
+				linewidth = base_linew,
+				zorder = 0)
+
+	for e in networks[n].edges:
+	    arrow = FancyArrowPatch(networks[n].nodes[e[0]]['pos'],
+	                            networks[n].nodes[e[1]]['pos'],
+	                            arrowstyle='-|>',
+	                            path = None,
+	                            connectionstyle='Arc',
+	                            facecolor = networks[n].edges[e]['color'],
+	                            edgecolor = networks[n].edges[e]['color'],
+	                            linewidth = 1,
+	                            mutation_scale = 5,
+	                            shrinkA = 2,
+	                            shrinkB = 1,
+	                            alpha = 1,
+								zorder = 1)
+
+	    axes[c].add_patch(arrow)
+
+	# build node scatter
+	compound_nodes_x = []
+	compound_nodes_y = []
+	compound_node_colours = []
+	compound_node_sizes = []
+
+	reaction_nodes_x = []
+	reaction_nodes_y = []
+
+	for node in networks[n].nodes:
+		if '>>' in node:
+			reaction_nodes_x.append(networks[n].nodes[node]['pos'][0])
+			reaction_nodes_y.append(networks[n].nodes[node]['pos'][1])
+		else:
+			compound_nodes_x.append(networks[n].nodes[node]['pos'][0])
+			compound_nodes_y.append(networks[n].nodes[node]['pos'][1])
+			compound_node_colours.append(networks[n].nodes[node]['color'])
+			compound_node_sizes.append(networks[n].nodes[node]['size'])
+
+	# plot solid scatter for compound concentrations
+	axes[c].scatter(compound_nodes_x, compound_nodes_y,
+				facecolors = compound_node_colours,
+				s = compound_node_sizes,
+				zorder = 2,
+				edgecolors = 'None',
+				alpha = 1)
+
+	axes[c].scatter(reaction_nodes_x, reaction_nodes_y,
+					c = '#000000',
+					s = min_node_size,
+					marker = 'D',
+					edgecolors = 'None',
+					zorder = 2,
+					alpha = 1)
+
+	axes[c].set_axis_off()
+
+	# optional annotations
+	# for node in networks[n].nodes:
+	# 	if node in info_params.compound_numbering:
+	# 		number = info_params.compound_numbering[node]
+	# 		axes[c].annotate(number, xy = networks[n].nodes[node]['pos'],
+	# 						ha = 'center', va = 'center',
+	# 						fontsize = 6)
+
+fig.tight_layout()
+plt.savefig(plot_folder/'{}.png'.format(file_name), dpi = 600)
+plt.savefig(plot_folder/'{}.svg'.format(file_name))
+plt.show()

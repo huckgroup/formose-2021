@@ -24,7 +24,7 @@ from NorthNet import Classes
 
 import helpers.chem_info as info_params
 
-fontprops = fm.FontProperties(size=6)
+fontprops = fm.FontProperties(size=8)
 
 experiment_code = 'FRN088C'
 compound_number_sel = [3,9,14,20,18,12]
@@ -81,8 +81,8 @@ for c2 in range(0,len(ax)):
     y_lims = ax[c2].get_ylim()
 
 fig.text(0.02, 0.55, "Concentration/ mM", va='center', rotation='vertical',
-         fontsize = 9)
-fig.text(0.55, 0.02, "time/ s", ha='center', fontsize = 9)
+         fontsize = 10)
+fig.text(0.55, 0.02, "time/ s", ha='center', fontsize = 10)
 
 plt.savefig(repository_dir/'PLOTS/Figure_3A.png'.format(name), dpi = 600)
 plt.savefig(repository_dir/'PLOTS/Figure_3A.svg'.format(name))
