@@ -63,6 +63,6 @@ ax[0].set_ylim(-0.01,0.2)
 for a in ax:
     a.tick_params(labelsize = 8)
 
-#plt.savefig(plot_folder/'Figure1C.png', dpi = 600)
-#plt.savefig(plot_folder/'Figure1C.svg', dpi = 600)
+plt.savefig(plot_folder/'GCMS_HPLC_Comparison.png', dpi = 600)
+plt.savefig(plot_folder/'GCMS_HPLC_Comparison.svg', dpi = 600)
 plt.show()
