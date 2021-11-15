@@ -207,5 +207,7 @@ for c,n in enumerate(networks):
 	# 						fontsize = 6)
 
 fig.tight_layout()
+plt.show()
+quit()
 plt.savefig(plot_folder/'{}.png'.format(file_name), dpi = 600)
 plt.savefig(plot_folder/'{}.svg'.format(file_name))
