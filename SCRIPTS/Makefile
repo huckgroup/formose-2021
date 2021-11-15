@@ -41,7 +41,7 @@ FIGURE2_PANEL_D=../PLOTS/Figure2D.svg
 FIGURE2_PANEL_E=../PLOTS/Figure2E.svg
 FIGURE2_PANEL_F=../PLOTS/Figure2F.svg
 FIGURE2_PANELS=$(FIGURE2_PANEL_A) $(FIGURE2_PANEL_B) $(FIGURE2_PANEL_C) \
-								$(FIGURE2_PANEL_D) $(FIGURE2_PANEL_E) $(FIGURE2_PANEL_F)
+		$(FIGURE2_PANEL_D) $(FIGURE2_PANEL_E) $(FIGURE2_PANEL_F)
 
 FIGURE3_PANEL_A=../PLOTS/Figure3A.svg
 FIGURE3_PANEL_B=../PLOTS/Figure3B_BarChart.svg
@@ -50,11 +50,11 @@ FIGURE3_PANEL_D=../PLOTS/Figure3D.svg
 FIGURE3_PANELS=$(FIGURE3_PANEL_A) $(FIGURE3_PANEL_B) $(FIGURE3_PANEL_C) $(FIGURE3_PANEL_D)
 
 CONDITIONS_DENDROGRAMS=../PLOTS/[C=O]_Figure2B_inset.svg \
-											../PLOTS/[CaCl2]_Figure2B_inset.svg \
-											../PLOTS/[NaOH]_Figure2B_inset.svg \
-											../PLOTS/[O=C(CO)CO]_Figure2B_inset.svg \
-											../PLOTS/residence_time_Figure2B_inset.svg \
-											../PLOTS/temperature_Figure2B_inset.svg
+		../PLOTS/[CaCl2]_Figure2B_inset.svg \
+		../PLOTS/[NaOH]_Figure2B_inset.svg \
+		../PLOTS/[O=C(CO)CO]_Figure2B_inset.svg \
+		../PLOTS/residence_time_Figure2B_inset.svg \
+		../PLOTS/temperature_Figure2B_inset.svg
 
 RESIDENCE_TIME_SERIES=../PLOTS/Residence_time_series.svg
 
