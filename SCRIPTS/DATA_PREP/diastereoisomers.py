@@ -37,15 +37,20 @@ for f in range(0,len(data[0])):
         comp_by_name[name] = data[:,f]
 
 selections = ['14', '15']
-listchars = ['--', '-', ':', '.-']
+markers = ['.', 'D', '^', 'x']
 print(exp_info.index)
 x_axis = [exp_info['[CaCl2]/ M'][e] for e in exp_code]
-fig, ax = plt.subplots(nrows = 2)
+factor = 1000
+
+fig, ax = plt.subplots()
 
 for c,s in enumerate(selections):
     name = comp_rev[s]
     print(name)
     colour = chem_info.colour_assignments[name]
-    ax[0].plot(x_axis, comp_by_num[s], listchars[c], c = colour, label = s) 
-ax[0].legend()
+    ax.scatter(x_axis, factor*comp_by_num[s], c = colour, label = s, marker =
+            markers[c]) 
+ax.set_xlabel('[CaCl$_2$]/ M')
+ax.set_ylabel('Concentration/ mM')
+ax.legend()
 plt.show()
