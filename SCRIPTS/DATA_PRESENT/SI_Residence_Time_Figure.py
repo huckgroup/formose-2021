@@ -44,6 +44,8 @@ for c,r in enumerate(residence_time_experiments):
     i = np.where(datasets == r)[0]
     data_series[c] = average_data.iloc[i]
 
+compound_numbering = info_params.compound_numbering
+
 y_factor = 1000
 width = 10
 height = 7
@@ -57,12 +59,29 @@ for x in range(0,len(data_plot)):
     if name == 'C=O' or name == 'O=C(CO)CO':
         continue
     colour = info_params.colour_assignments[name]
+    compound_number = compound_numbering[name]
     ax.plot(x_axis, data_plot[x]*y_factor, '-o', c = colour,
-            markersize = 5, zorder = 100-name.count('C'))
+            markersize = 5, zorder = 100-name.count('C'),
+           label = compound_number)
 
 ax.tick_params(which = 'both', axis = 'both', length = 2)
 ax.set_xlabel('Residence time/ s')
 ax.set_ylabel('Concentration/ mM')
 figname = 'Residence_time'
+ax.legend()
 plt.savefig(repository_dir/'PLOTS/{}_series.svg'.format(figname), dpi = 600)
 plt.savefig(repository_dir/'PLOTS/{}_series.png'.format(figname), dpi = 600)
+
+for x in range(0,len(data_plot)):
+    if np.sum(data_plot[x]) == 0.0:
+        continue
+    name = compound_list[x].split('/')[0]
+    if name == 'C=O' or name == 'O=C(CO)CO':
+        continue
+    colour = info_params.colour_assignments[name]
+    compound_number = compound_numbering[name]
+    inds = np.where(data_plot[x] == data_plot[x].max())[0]
+    ax.annotate(compound_number, xy = (x_axis[inds[0]],
+        data_plot[x][inds[0]]*y_factor))
+
+#plt.show()
