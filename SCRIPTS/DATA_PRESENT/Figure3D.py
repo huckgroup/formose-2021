@@ -78,8 +78,8 @@ branches = [
     ['FRN104A', 'FRN104B'] 
 ]
 
-branch_names = ['Branch I','Branch VII',
-            'Branch II','Branch IV','Branch III']
+branch_names = ['Branch I','Branch II',
+            'Branch III','Branch IV']
 
 # narrow down the data to the sets used in
 # the branches described above
