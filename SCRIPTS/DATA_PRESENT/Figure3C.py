@@ -84,7 +84,7 @@ for n in networks:
     F = nx.compose(F,networks[n])
 
 # create a layout for F (this will be the layout for each plotted network)
-pos = graphviz_layout(F, render_engine = 'sfdp')
+pos = graphviz_layout(F, render_engine = 'neato')
 
 # use F to process coordinate system
 c_ops.set_network_coords(F,pos)
@@ -116,7 +116,7 @@ for n in networks:
 
 '''Add sizing information into networks'''
 min_node_size = 10
-node_size_factor = 1e5
+node_size_factor = 1e4
 for n in networks:
     for node in networks[n].nodes:
         if '>>' in node:
@@ -129,8 +129,8 @@ for n in networks:
             networks[n].nodes[node]['size'] = min_node_size
 
 '''Plotting series in four panels'''
-fig_width = 10/2.54 # cm conversion to inches for plt
-fig_height = 10/2.54 # cm conversion to inches for plt
+fig_width = 7/2.54 # cm conversion to inches for plt
+fig_height = 8/2.54 # cm conversion to inches for plt
 
 base_linew = 0.5
 

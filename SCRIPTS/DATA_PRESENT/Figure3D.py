@@ -1,6 +1,6 @@
 '''
 A heatmap illustrating the relative reaction class occurences in modulated
-data sets. Figure 3C.
+data sets. Figure 3D.
 '''
 import os
 import sys
@@ -69,15 +69,13 @@ print(series_of_interest)
 branches = [
     # branch I
     ['FRN090B', 'FRN093A', 'FRN093B', 'FRN093C'],
-    # branch VII
+    # branch II
     ['FRN089A', 'FRN089B', 'FRN089C', 'FRN089D',
         'FRN088A', 'FRN088B'],
-    # branch II
-    ['FRN105A', 'FRN105B'],
-    # branch IV
-    ['FRN104A', 'FRN104B'],
     # branch III
-    ['FRN103'] 
+    ['FRN105A', 'FRN105B', 'FRN103'],
+    # branch IV
+    ['FRN104A', 'FRN104B'] 
 ]
 
 branch_names = ['Branch I','Branch VII',
