@@ -27,8 +27,8 @@ import helpers.chem_info as info_params
 
 fontprops = fm.FontProperties(size=6)
 
-experiment_code = 'FRN088C'
-compound_number_sel = [3,9,14,20,18,12]
+experiment_code = 'FRN089B'
+compound_number_sel = [3,9,13,21,18]
 compound_numbering = {}
 with open(repository_dir/'COMPOUND_INFO/compound_numbering.txt', 'r') as f:
     for line in f:
@@ -44,27 +44,27 @@ for file in os.listdir(path):
 
 data = Classes.DataSet(data_reports = loaded_reports)
 
-fig, ax = plt.subplots(figsize = (1.546/2.54,0.269/2.54))
 for c,n in enumerate(compound_number_sel):
-
+    fig, ax = plt.subplots(figsize = (1.5/2.54,0.5/2.54))
 
     name = compound_numbering[n]
 
     x, y = data.get_entry(name + '/ M')
 
-    ax.plot(x,1000*y, '-o', markersize = 1, linewidth  = 1,
+    ax.plot(x,1000*y, '-o', markersize = 0.8, linewidth  = 0.5,
             c = info_params.colour_assignments[name])
 
-ax.yaxis.set_major_locator(mticker.MaxNLocator(nbins=3, prune='both',
-                                min_n_ticks  = 3))
-ax.tick_params(axis='both', which='major', labelsize = 3,
-                   length = 2, pad = 2)
+    ylim = ax.get_ylim()
+    ax.set_ylim(ylim[0],ylim[1]*1.1)
+    ax.yaxis.set_major_locator(mticker.MaxNLocator(nbins=3, prune='both',
+                                    min_n_ticks  = 3))
+    ax.tick_params(axis='both', which='major', labelsize = 3,
+                       length = 2, pad = 2)
 
-ax.set_xlabel('time/s', fontsize = 9)
-ax.set_ylabel('Concentration/ mM', fontsize = 9)
-plt.tight_layout()
-#plt.savefig(repository_dir/'PLOTS/Figure_3_panel_insets.png'.format(name), dpi = 600)
-#plt.savefig(repository_dir/'PLOTS/Figure_3_panel_insets.svg'.format(name))
-plt.show()
-plt.close()
+    #ax.set_xlabel('time/s', fontsize = 9)
+    #ax.set_ylabel('Concentration/ mM', fontsize = 9)
+    plt.savefig(repository_dir/f'PLOTS/Figure_3_{n}_inset.png', dpi = 600)
+    plt.savefig(repository_dir/f'PLOTS/Figure_3_{n}_inset.svg')
+    #plt.show()
+    plt.close()
 
