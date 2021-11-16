@@ -129,7 +129,7 @@ for n in networks:
             networks[n].nodes[node]['size'] = min_node_size
 
 '''Plotting series in four panels'''
-fig_width = 7/2.54 # cm conversion to inches for plt
+fig_width = 14/2.54 # cm conversion to inches for plt
 fig_height = 8/2.54 # cm conversion to inches for plt
 
 base_linew = 0.5
@@ -140,9 +140,9 @@ axes = ax.flatten()
 
 for c,n in enumerate(networks):
     axes[c].plot(base_net_plot[0],base_net_plot[1],
-                c = '#acb5ad',
+                c = '#ffffff',
                 linewidth = base_linew,
-                zorder = 0)
+                zorder = 0, alpha = 0.0)
 
     for e in networks[n].edges:
         arrow = FancyArrowPatch(networks[n].nodes[e[0]]['pos'],
@@ -187,6 +187,14 @@ for c,n in enumerate(networks):
                 zorder = 2,
                 edgecolors = 'None',
                 alpha = 1)
+                
+    axes[c].scatter(compound_nodes_x, compound_nodes_y,
+                facecolors = 'none',
+                s = min([x for x in compound_node_sizes if x > 0]),
+                zorder = 0,
+                edgecolors = '#A99F9D',
+                alpha = 1)
+
 
     axes[c].scatter(reaction_nodes_x, reaction_nodes_y,
                     c = '#000000',
