@@ -53,7 +53,8 @@ file_name = 'Figure3C'
 data_keys = series_seqs.loc[series_sel]
 data_set_selections = list(data_keys.dropna())
 data_set_selections = [data_set_selections[1], data_set_selections[-1]]
-
+print(data_set_selections)
+quit()
 # load in the reaction lists determined for
 # modulated data sets.
 # use dictionary insertion ordering to
@@ -115,18 +116,14 @@ for n in networks:
                 networks[n].edges[edge]['color'] = col
 
 '''Add sizing information into networks'''
-min_node_size = 10
-node_size_factor = 1e4
+reaction_node_size = 10
+compound_node_size = 40
 for n in networks:
     for node in networks[n].nodes:
         if '>>' in node:
-            networks[n].nodes[node]['size'] = min_node_size
-        elif node + '/ M' in average_data.columns:
-            conc = average_data.loc[n,node +'/ M']
-            amp = amplitude_data.loc[n,node +'/ M']
-            networks[n].nodes[node]['size'] = conc*node_size_factor
+            networks[n].nodes[node]['size'] = reaction_node_size
         else:
-            networks[n].nodes[node]['size'] = min_node_size
+            networks[n].nodes[node]['size'] = compound_node_size
 
 '''Plotting series in four panels'''
 fig_width = 14/2.54 # cm conversion to inches for plt
@@ -154,8 +151,8 @@ for c,n in enumerate(networks):
                                 edgecolor = networks[n].edges[e]['color'],
                                 linewidth = 1,
                                 mutation_scale = 5,
-                                shrinkA = 2,
-                                shrinkB = 1,
+                                shrinkA = 5,
+                                shrinkB = 3,
                                 alpha = 1,
                                 zorder = 1)
 
@@ -180,7 +177,7 @@ for c,n in enumerate(networks):
             compound_node_colours.append(networks[n].nodes[node]['color'])
             compound_node_sizes.append(networks[n].nodes[node]['size'])
 
-    # plot solid scatter for compound concentrations
+    # plot solid scatter for compounds 
     axes[c].scatter(compound_nodes_x, compound_nodes_y,
                 facecolors = compound_node_colours,
                 s = compound_node_sizes,
@@ -188,17 +185,9 @@ for c,n in enumerate(networks):
                 edgecolors = 'None',
                 alpha = 1)
                 
-    axes[c].scatter(compound_nodes_x, compound_nodes_y,
-                facecolors = 'none',
-                s = min([x for x in compound_node_sizes if x > 0]),
-                zorder = 0,
-                edgecolors = '#A99F9D',
-                alpha = 1)
-
-
     axes[c].scatter(reaction_nodes_x, reaction_nodes_y,
                     c = '#000000',
-                    s = min_node_size,
+                    s = reaction_node_size,
                     marker = 'D',
                     edgecolors = 'None',
                     zorder = 2,
@@ -207,12 +196,12 @@ for c,n in enumerate(networks):
     axes[c].set_axis_off()
 
     # optional annotations
-    # for node in networks[n].nodes:
-    #   if node in info_params.compound_numbering:
-    #       number = info_params.compound_numbering[node]
-    #       axes[c].annotate(number, xy = networks[n].nodes[node]['pos'],
-    #                       ha = 'center', va = 'center',
-    #                       fontsize = 6)
+    for node in networks[n].nodes:
+      if node in info_params.compound_numbering:
+          number = info_params.compound_numbering[node]
+          axes[c].annotate(number, xy = networks[n].nodes[node]['pos'],
+                          ha = 'center', va = 'center',
+                          fontsize = 6)
 
 fig.tight_layout()
 plt.savefig(plot_folder/'{}.png'.format(file_name), dpi = 600)
