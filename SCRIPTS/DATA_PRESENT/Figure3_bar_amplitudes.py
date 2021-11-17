@@ -29,7 +29,7 @@ plot_folder = repository_dir/'PLOTS'
 reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
 # Define experiment code
-exp_code = 'FRN089C'
+exp_code = 'FRN089B'
 factor = 1000
 
 data_file = determined_params_dir/'AmplitudeData.csv'

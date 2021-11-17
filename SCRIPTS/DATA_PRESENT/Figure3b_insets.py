@@ -51,11 +51,10 @@ for c,n in enumerate(compound_number_sel):
 
     x, y = data.get_entry(name + '/ M')
 
-    ax.plot(x,1000*y, '-o', markersize = 0.8, linewidth  = 0.5,
+    trace = ax.plot(x,1000*y, '-o', markersize = 0.5, linewidth  = 0.5,
             c = info_params.colour_assignments[name])
+    trace[0].set_clip_on(False)
 
-    ylim = ax.get_ylim()
-    ax.set_ylim(ylim[0],ylim[1]*1.1)
     ax.yaxis.set_major_locator(mticker.MaxNLocator(nbins=3, prune='both',
                                     min_n_ticks  = 3))
     ax.tick_params(axis='both', which='major', labelsize = 3,
