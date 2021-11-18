@@ -36,20 +36,25 @@ for f in range(0,len(data[0])):
         comp_by_num[compound_numbering[name]] = data[:,f]
         comp_by_name[name] = data[:,f]
 
-selections = ['14', '15']
-markers = ['.', 'D', '^', 'x']
-print(exp_info.index)
+selections = ['12', '13']
+hatches = ['None','/']
 x_axis = [exp_info['[CaCl2]/ M'][e] for e in exp_code]
+group_x_positions = []
+width = 0.001
+for c,s in enumerate(selections):
+    group_x = [x+(c*width) for x in x_axis]
+    group_x_positions.append(group_x)    
+
 factor = 1000
 
 fig, ax = plt.subplots()
 
 for c,s in enumerate(selections):
     name = comp_rev[s]
-    print(name)
     colour = chem_info.colour_assignments[name]
-    ax.scatter(x_axis, factor*comp_by_num[s], c = colour, label = s, marker =
-            markers[c]) 
+    ax.scatter(group_x_positions[c], factor*comp_by_num[s], color = colour,
+            label = s)#, width = width, hatch = hatches[c])
+
 ax.set_xlabel('[CaCl$_2$]/ M')
 ax.set_ylabel('Concentration/ mM')
 ax.legend()
