@@ -55,7 +55,7 @@ ax[0].plot(HPLC_chrom.time[HPLC_inds], HPLC_chrom.signal[HPLC_inds]/factor,
 ax[1].plot(GCMS_chrom.time[GCMS_inds], GCMS_chrom.signal[GCMS_inds]/factor,
         c = "#000000", linewidth = 1.5)
 
-ax[0].set_ylabel('Intensity (360 nm)/ kV', fontsize = 10)
+ax[0].set_ylabel('Intensity (364 nm)/ kV', fontsize = 10)
 ax[1].set_xlabel('residence time/ min.', fontsize = 10)
 ax[1].set_ylabel('Total ion counts/ 10$^6$', fontsize = 10)
 
