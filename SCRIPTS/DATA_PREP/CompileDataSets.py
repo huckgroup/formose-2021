@@ -14,56 +14,7 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 from helpers.loading_helper import load_data_files_from_folder
-
-def write_to_file(dataset, filename = '', path = None):
-    '''
-    Parameters
-    ----------
-    filename: str
-        name for file
-    path: pathlib Path object
-        Path to folder for file storage.
-    '''
-
-    import numpy as np
-
-    if filename == '':
-        filename = dataset.filename
-    elif not filename.endswith('.csv'):
-        filename = filename + '.csv'
-    if path == None:
-        fname = filename
-    else:
-        fname = path/filename
-
-    with open(fname, 'w') as outfile:
-        # writing experiment conditions to file
-        dataset.write_conditions_header(outfile)
-        # writing data
-        sorted_keys = sorted([*dataset.data], key = lambda x:x.count('C'))
-
-        outfile.write("start_data\n")
-
-        p_header = [dataset.series_unit]
-
-        out = np.array([dataset.series_values])
-
-        for s in sorted_keys:
-            p_header.append(s)
-            out = np.vstack((out,dataset.data[s]))
-
-        out = out.T
-        [outfile.write("{},".format(x)) for x in p_header]
-
-        outfile.write("\n")
-
-        for x in range(0,len(out)):
-            for y in range(0,len(out[x])):
-                outfile.write("{},".format(out[x,y]))
-            outfile.write("\n")
-
-        outfile.write("end_data\n")
-
+    
 # set paths to files
 data_folder = repository_dir/'DATA'
 report_directory = data_folder/'DATA_REPORTS'
@@ -89,4 +40,4 @@ for d in data_sets:
     d.experiment_code = exp_info.loc[d.experiment_code,'Experiment_entry']
 
 for d in data_sets:
-    write_to_file(d, path = output_directory)
+    d.write_to_file(filename = d.filename, path = output_directory)
