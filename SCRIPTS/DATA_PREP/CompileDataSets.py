@@ -3,7 +3,6 @@ Compiling the data sets ready for submission. Experiment data files are renamed
 and recompiled to conform to an arabic numeral-based naming system.
 '''
 import sys
-import numpy as np
 import pandas as pd
 from pathlib import Path
 
@@ -14,7 +13,6 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from NorthNet import Classes
 from helpers.loading_helper import load_data_files_from_folder
 
 def write_to_file(dataset, filename = '', path = None):
@@ -28,10 +26,6 @@ def write_to_file(dataset, filename = '', path = None):
     '''
 
     import numpy as np
-    if 'Chromatography_method' in dataset.analysis_details:
-        an_type = dataset.analysis_details['Chromatography_method'][0]
-    else:
-        an_type = 'not specified'
 
     if filename == '':
         filename = dataset.filename
@@ -51,6 +45,7 @@ def write_to_file(dataset, filename = '', path = None):
         outfile.write("start_data\n")
 
         p_header = [dataset.series_unit]
+
         out = np.array([dataset.series_values])
 
         for s in sorted_keys:

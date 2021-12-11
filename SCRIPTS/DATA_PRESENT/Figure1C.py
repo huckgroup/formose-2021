@@ -17,8 +17,6 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 from ChromProcess import file_import
-from ChromProcess import info_params
-from ChromProcess import file_import as f_i
 
 plot_folder = repository_dir/'PLOTS'
 

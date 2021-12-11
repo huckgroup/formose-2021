@@ -11,7 +11,6 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 

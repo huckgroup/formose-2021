@@ -3,10 +3,8 @@ Subset of the data illustrating how the reaction composition changes with
 varying sodium hydroxide and calcium chloride concentrations. Figure 2E.
 '''
 import sys
-import numpy as np
 import pandas as pd
 from pathlib import Path
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 
 # add the SCRIPTS directory to the system path

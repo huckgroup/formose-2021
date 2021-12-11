@@ -21,6 +21,7 @@ from helpers import pathway_helpers as path_hlp
 from helpers.loading_helper import get_carbon_inputs
 from helpers.network_load_helper import load_network_from_reaction_list
 from helpers.network_load_helper import load_reaction_list,convert_to_networkx
+from helpers.network_plotting import plot_network
 
 header = [x+'/ M' for x in info_params.smiles_to_names]
 
@@ -232,8 +233,6 @@ for e in experiment_amplitudes:
     # copy the network into the result container.
     network_results[e] = R.copy()
 
-# plotting the results
-from helpers.network_plotting import plot_network
 for n in network_results:
     if len(network_results[n].nodes) < 3:
         continue

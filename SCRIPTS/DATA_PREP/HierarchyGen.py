@@ -5,9 +5,7 @@ average compositional data.
 import sys
 import numpy as np
 import pandas as pd
-import networkx as nx
 from pathlib import Path
-import matplotlib.pyplot as plt
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -16,15 +14,10 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from scipy.cluster import hierarchy
+from helpers import cluster_tree
+
 from scipy.spatial.distance import pdist, squareform
-from scipy.cluster.hierarchy import linkage, cophenet, fcluster, dendrogram
-
-from sklearn.cluster import KMeans
-
-from NorthNet.network_visualisation import coordinates as c_ops
-
-from helpers.cluster_tree import graph_from_linkage
+from scipy.cluster.hierarchy import linkage
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
@@ -58,8 +51,6 @@ distances_squareform = squareform(augmented_amplitude_distances)
 # the linkage function should detect that a distance matrix is being passed to it.
 augmented_amplitude_linkages = linkage(augmented_amplitude_distances, method='average',
                                 metric='', optimal_ordering=False)
-
-from helpers import cluster_tree
 
 json_string = cluster_tree.createNestedJSON(augmented_amplitude_linkages)
 

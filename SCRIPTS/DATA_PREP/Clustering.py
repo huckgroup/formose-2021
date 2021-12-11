@@ -15,15 +15,13 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist, squareform
-from scipy.cluster.hierarchy import linkage, cophenet, fcluster, dendrogram
+from scipy.cluster.hierarchy import linkage, fcluster, dendrogram
 
 from sklearn.cluster import KMeans
 
 from NorthNet.network_visualisation import coordinates as c_ops
 
-from helpers.cluster_tree import graph_from_linkage
 from helpers.network_load_helper import load_from_edge_list
 from helpers.network_load_helper import load_coordinates_list
 

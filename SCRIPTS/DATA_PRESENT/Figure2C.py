@@ -6,7 +6,6 @@ import sys
 import numpy as np
 import pandas as pd
 from pathlib import Path
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 
 # add the SCRIPTS directory to the system path

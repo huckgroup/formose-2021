@@ -2,13 +2,10 @@
 A heatmap illustrating the relative reaction class occurences in modulated
 data sets. Figure 3D.
 '''
-import os
 import sys
-import pickle
 import numpy as np
 import pandas as pd
 from pathlib import Path
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 from matplotlib import patches
 
@@ -18,12 +15,6 @@ script_dir = Path(__file__).parents[1].as_posix()
 sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
-
-from NorthNet import Classes
-
-import helpers.chem_info as info_params
-from helpers.network_load_helper import load_reaction_list
-from helpers.network_load_helper import convert_to_networkx
 
 # name for output files
 figname = 'Figure3D'

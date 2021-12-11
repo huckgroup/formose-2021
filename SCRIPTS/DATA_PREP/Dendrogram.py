@@ -5,7 +5,6 @@ Generates a dendrogram based on average concentration and amplitude data.
 import sys
 import numpy as np
 import pandas as pd
-import networkx as nx
 from pathlib import Path
 import matplotlib.pyplot as plt
 
@@ -16,15 +15,8 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from scipy.cluster import hierarchy
 from scipy.spatial.distance import pdist, squareform
-from scipy.cluster.hierarchy import linkage, cophenet, fcluster, dendrogram
-
-from sklearn.cluster import KMeans
-
-from NorthNet.network_visualisation import coordinates as c_ops
-
-from helpers.cluster_tree import graph_from_linkage
+from scipy.cluster.hierarchy import linkage, dendrogram
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
