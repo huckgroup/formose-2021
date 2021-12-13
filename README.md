@@ -1,4 +1,5 @@
-# formose-2021
+# Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network
+
 Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
 
 Requires [NorthNet](https://github.com/Will-Robin/NorthNet.git), numpy, scipy, networkx and pandas.
@@ -117,6 +118,7 @@ e.g. using conda:
 - `conda install -c rdkit`
 
 ### Install NorthNet
+
 In command line/terminal, navigate to the folder containing the NorthNet code, then type:
 
 conda:
