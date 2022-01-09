@@ -2,7 +2,7 @@
 
 Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
 
-Requires [NorthNet](https://github.com/Will-Robin/NorthNet.git), numpy, scipy, networkx and pandas.
+Requires numpy, scipy, networkx, pandas and NorthNet (a copy of the code is provided in this repository).
 
 ## Abstract
 
@@ -31,7 +31,7 @@ Contains experimental conditions (Experiment_parameters.csv) for each experiment
 
 Contains a full list of rule-generated formose reactions (FullFormoseReaction.txt) and the reaction classes assigned to each reaction (reaction_class_assignments.json).
 
-### NOTES  
+### NOTES
 Contains notes on the data analysis.
 
 ### PLOTS
@@ -129,7 +129,6 @@ conda:
 pip:
   - Install from the repository root using pip: `pip install .`,
   - Or in editable mode (so edits are immediately reflected): `pip install -e .`
-
 
 ## Expected run times
 
