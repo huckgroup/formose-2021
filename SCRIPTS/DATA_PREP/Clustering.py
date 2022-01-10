@@ -7,24 +7,22 @@ import pandas as pd
 import networkx as nx
 from pathlib import Path
 import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+from scipy.spatial.distance import pdist, squareform
+from scipy.cluster.hierarchy import linkage, fcluster, dendrogram
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
 script_dir = Path(__file__).parents[1].as_posix()
 sys.path.append(script_dir)
-# get the repository directory for file output
-repository_dir = Path(__file__).parents[2]
-
-from scipy.spatial.distance import pdist, squareform
-from scipy.cluster.hierarchy import linkage, fcluster, dendrogram
-
-from sklearn.cluster import KMeans
 
 from NorthNet.network_visualisation import coordinates as c_ops
 
 from helpers.network_load_helper import load_from_edge_list
 from helpers.network_load_helper import load_coordinates_list
 
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
@@ -35,13 +33,19 @@ exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 
 experiment_names = list(exp_info.index)
 
-average_data = pd.read_csv(derived_parameters_dir/'AverageData.csv', index_col = 0)
+average_data = pd.read_csv(
+                            derived_parameters_dir/'AverageData.csv', 
+                            index_col = 0
+                            )
 # remove empty columns
 average_data = average_data.dropna(axis = 1)
 # remove columns containing only zeros
 average_data = average_data.loc[:, (average_data != 0).any(axis=0)]
 
-amplitude_data = pd.read_csv(derived_parameters_dir/'AmplitudeData.csv', index_col = 0)
+amplitude_data = pd.read_csv(
+                            derived_parameters_dir/'AmplitudeData.csv', 
+                            index_col = 0
+                            )
 # remove empty columns
 amplitude_data = amplitude_data.dropna(axis = 1)
 # remove columns containing only zeros
@@ -55,8 +59,12 @@ augmented_amplitude_matrix = np.hstack((data, amplitudes))
 augmented_amplitude_distances = pdist(augmented_amplitude_matrix, 'correlation')
 distances_squareform = squareform(augmented_amplitude_distances)
 # the linkage function should detect that a distance matrix is being passed to it.
-augmented_amplitude_linkages = linkage(augmented_amplitude_distances, method='average',
-                                metric='', optimal_ordering=False)
+augmented_amplitude_linkages = linkage(
+                                        augmented_amplitude_distances, 
+                                        method='average',
+                                        metric='', 
+                                        optimal_ordering=False
+                                        )
 
 cut_level = 0.12
 cluster_labels = fcluster(augmented_amplitude_linkages,
@@ -83,11 +91,19 @@ print('number of clusters', n_clusters)
 
 fig, ax = plt.subplots(ncols = 2, figsize = (10,5))
 ax[1].axhline(y = cut_level)
-dendro = dendrogram(augmented_amplitude_linkages, ax = ax[1], color_threshold = cut_level)
+dendro = dendrogram(
+                    augmented_amplitude_linkages, 
+                    ax = ax[1], 
+                    color_threshold = cut_level
+                    )
 
-ax[0].plot(lines[0],lines[1],
-            c = '#000000', linewidth = 2.5,
-            zorder = 0)
+ax[0].plot(
+            lines[0], lines[1],
+            c = '#000000', 
+            linewidth = 2.5,
+            zorder = 0
+            )
+
 for x in range(n_clusters):
     idx = np.where(cluster_labels == x)[0]
     names = [v for i,v in enumerate(exp_info.index) if i in idx]

@@ -11,14 +11,14 @@ from pathlib import Path
 # so that its contents can be imported
 script_dir = Path(__file__).parents[1].as_posix()
 sys.path.append(script_dir)
-# get the repository directory for file output
-repository_dir = Path(__file__).parents[2]
 
 from NorthNet import Classes
 
 import helpers.chem_info as info_params
 
 # set paths to files
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'
 plot_folder = repository_dir/'PLOTS'
