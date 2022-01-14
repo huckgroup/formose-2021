@@ -36,11 +36,23 @@ exp_info = pd.read_csv(exp_info_dir/'Experiment_parameters.csv', index_col = 0)
 
 experiment_names = list(exp_info.index)
 
-average_data = pd.read_csv(determined_params_dir/'AverageData.csv', index_col = 0)
+#############################################
+# Load and pre-process compound averages data
+#############################################
+average_data = pd.read_csv(
+                            determined_params_dir/'AverageData.csv', 
+                            index_col = 0
+                            )
 # remove empty columns
 average_data = average_data.dropna(axis = 1)
 
-amplitude_data = pd.read_csv(determined_params_dir/'AmplitudeData.csv', index_col = 0)
+###############################################
+# Load and pre-process compound amplitudes data
+###############################################
+amplitude_data = pd.read_csv(
+                            determined_params_dir/'AmplitudeData.csv', 
+                            index_col = 0
+                            )
 # remove empty columns
 amplitude_data = amplitude_data.dropna(axis = 1)
 
