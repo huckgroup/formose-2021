@@ -49,6 +49,8 @@ Lists of reactions for each modulated experiment in as reaction SMILES strings. 
 
 Python scripts used to analyse and plot the data. It is possible to run each script individually, priovided that the correct data files are present in the repository. Reading and writing of files is designed to work within the directory structure of this repository. The primary source of data with respect to the analysis in this repository are the data files in `DATA/DATA_REPORTS` and the reaction rules outlined in `REACTION_INFO/reaction_smarts_templates.csv`. All other data files are derived from these sources using the scripts in `SCRIPTS/DATA_PREP`. For more details on the dependencies of the data, please see the `Makefile`.
 
+The scripts in `SCRIPTS/DATA_PRESENT` are for data visualisation purposes (for example, for inclusion as figures in the main text and supplementary information). They convert the various data files into graphical formats.
+
 ## Installation
 
 The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx, pandas matplotlib and sklearn libraries (see `environment.yml`).
