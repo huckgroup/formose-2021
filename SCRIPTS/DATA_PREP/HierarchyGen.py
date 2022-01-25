@@ -1,5 +1,5 @@
 '''
-Creates a JSON file describing the hierarchical clustering of the ampltidue and
+Creates a JSON file describing the hierarchical clustering of the amplitude and
 average compositional data.
 '''
 import sys
@@ -56,8 +56,10 @@ amplitude_data = amplitude_data.loc[:, (amplitude_data != 0).any(axis=0)]
 data = average_data.to_numpy()
 amplitudes = amplitude_data.to_numpy()
 
+##############################################################
+# Creating a linkage matrix based on sample pairwise distances
+##############################################################
 # Combine the averages and amplitudes arrays into a single array
-# Clustering of the data is based on this array.
 augmented_amplitude_matrix = np.hstack((data, amplitudes))
 # Calculate pairwise distances between data entries
 augmented_amplitude_distances = pdist(augmented_amplitude_matrix, 'correlation')
@@ -69,6 +71,9 @@ augmented_amplitude_linkages = linkage(
                                         optimal_ordering=False
                                         )
 
+#####################
+# Output data as json
+#####################
 json_string = cluster_tree.createNestedJSON(augmented_amplitude_linkages)
 
 with open(repository_dir/'RESOURCES/dendrogramHierarchy.json', 'w') as f:
