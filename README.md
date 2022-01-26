@@ -117,6 +117,7 @@ e.g. using conda:
 - `conda install matplotlib`
 - `conda install pandas`
 - `conda install -c conda-forge rdkit rdkit`
+- `conda install -c anaconda scikit-learn `
 
 ### Install NorthNet
 
