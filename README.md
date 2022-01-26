@@ -116,7 +116,7 @@ e.g. using conda:
 - `pip install networkx`
 - `conda install matplotlib`
 - `conda install pandas`
-- `conda install -c rdkit`
+- `conda install -c rdkit rdkit`
 
 ### Install NorthNet
 
