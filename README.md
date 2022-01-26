@@ -73,7 +73,7 @@ First, create a virtual environment:
 
 Create a virtual environment with conda:
 
-`conda create --name name-env`
+`conda create --name name-env python=3.9.2`
 
 Activate the virtual environment:
 
