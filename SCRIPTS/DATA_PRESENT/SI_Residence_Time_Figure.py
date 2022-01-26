@@ -6,7 +6,6 @@ import sys
 import numpy as np
 import pandas as pd
 from pathlib import Path
-import matplotlib.cm as cm
 import matplotlib.pyplot as plt
 
 # add the SCRIPTS directory to the system path
@@ -17,7 +16,6 @@ sys.path.append(script_dir)
 repository_dir = Path(__file__).parents[2]
 
 import helpers.chem_info as info_params
-from helpers.loading_helper import get_carbon_inputs
 
 data_folder = repository_dir/'DATA'
 derived_parameters_dir = data_folder/'DERIVED_PARAMETERS'

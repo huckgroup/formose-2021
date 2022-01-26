@@ -4,13 +4,10 @@ a reaction network vs. the amplitude of
 the compound.
 '''
 import sys
-import pickle
 import pandas as pd
-import networkx as nx
 import numpy as np
 from pathlib import Path
 import matplotlib.pyplot as plt
-import networkx as nx
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -19,9 +16,7 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-from NorthNet import Classes
 from helpers import chem_info as info_params
-from helpers.network_load_helper import convert_to_networkx
 
 data_folder = repository_dir/'DATA'
 determined_params_dir = data_folder/'DERIVED_PARAMETERS'

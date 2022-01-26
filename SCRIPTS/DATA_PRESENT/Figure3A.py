@@ -3,15 +3,11 @@ Example compound concentration timecourses. Figure 3A.
 '''
 import os
 import sys
-import numpy as np
-import pandas as pd
-import networkx as nx
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 import matplotlib.font_manager as fm
-from matplotlib.ticker import MaxNLocator
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -84,6 +80,6 @@ fig.text(0.02, 0.55, "Concentration/ mM", va='center', rotation='vertical',
          fontsize = 10)
 fig.text(0.55, 0.02, "time/ s", ha='center', fontsize = 10)
 
-plt.savefig(repository_dir/'PLOTS/Figure_3A.png'.format(name), dpi = 600)
-plt.savefig(repository_dir/'PLOTS/Figure_3A.svg'.format(name))
+plt.savefig(repository_dir/'PLOTS/Figure_3A.png', dpi = 600)
+plt.savefig(repository_dir/'PLOTS/Figure_3A.svg')
 plt.close()

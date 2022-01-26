@@ -1,13 +1,11 @@
 '''
 An example GC-MS chromatogram with annotation. Figure 1C of the main text.
 '''
-import os
 import sys
 import numpy as np
 from pathlib import Path
 import matplotlib.pyplot as plt
 from ChromProcess import Classes
-import matplotlib.patches as patches
 
 # add the SCRIPTS directory to the system path
 # so that its contents can be imported
@@ -15,11 +13,6 @@ script_dir = Path(__file__).parents[1].as_posix()
 sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
-
-from ChromProcess import file_import
-from ChromProcess import info_params
-from ChromProcess import file_import as f_i
-import helpers.chem_info as info_params
 
 plot_folder = repository_dir/'PLOTS'
 

@@ -3,7 +3,6 @@ Inset dendrograms indicating the variation of key parameters which affect
 experimentally-determined compositions. Figure 2B insets.
 '''
 import sys
-import numpy as np
 import pandas as pd
 from pathlib import Path
 import matplotlib.cm as cm
@@ -18,7 +17,6 @@ repository_dir = Path(__file__).parents[2]
 
 from NorthNet.network_visualisation import coordinates as c_ops
 
-import helpers.chem_info as info_params
 from helpers.network_load_helper import load_from_edge_list
 from helpers.network_load_helper import load_coordinates_list
 

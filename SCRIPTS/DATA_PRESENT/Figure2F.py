@@ -3,7 +3,6 @@ Illustration of how the concentration of sodium hydroxide and calcium chloride
 induced compositional transitions accross the dendrogram. Figure 2F.
 '''
 import sys
-import numpy as np
 import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
@@ -17,7 +16,6 @@ sys.path.append(script_dir)
 # get the repository directory for file output
 repository_dir = Path(__file__).parents[2]
 
-import helpers.chem_info as info_params
 from NorthNet.network_visualisation import coordinates as c_ops
 from helpers.network_load_helper import load_from_edge_list,load_coordinates_list
 

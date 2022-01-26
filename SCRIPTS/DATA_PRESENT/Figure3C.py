@@ -54,7 +54,6 @@ data_keys = series_seqs.loc[series_sel]
 data_set_selections = list(data_keys.dropna())
 data_set_selections = [data_set_selections[1], data_set_selections[-1]]
 print(data_set_selections)
-quit()
 # load in the reaction lists determined for
 # modulated data sets.
 # use dictionary insertion ordering to

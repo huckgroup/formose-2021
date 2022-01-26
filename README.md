@@ -1,13 +1,13 @@
-# formose-2021
-Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
+# Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network
 
-Requires [NorthNet](https://github.com/Will-Robin/NorthNet.git), numpy, scipy, networkx and pandas.
+Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
 
 ## Abstract
 
 The evolution of life from the prebiotic environment required a gradual process of chemical evolution towards greater molecular complexity. Elaborate prebiotically-relevant synthetic routes to the building blocks of life have been established. However, it is still unclear how functional chemical systems evolved with direction using only the interaction between inherent molecular chemical reactivity and the abiotic environment. Here, we demonstrate how complex systems of chemical reactions exhibit well-defined self-organisation in response to varying environmental conditions. This self-organisation allows the compositional complexity of the reaction products to be controlled as a function of factors such as feedstock and catalyst availability. We observe how Breslow's cycle contributes to the reaction composition by feeding C<sub>2</sub> building blocks into the network, alongside reaction pathways dominated by formaldehyde-driven chain growth. The emergence of organised systems of chemical reactions in response to changes in the environment offers a potential mechanism for a chemical evolution process that bridges the gap between prebiotic chemical building blocks and the origin of life.
 
 ## Contents
+
 ### COMPOUND_INFO
 
 Contains a compound numbering scheme for the manuscript (compound_numbering.txt) and general compound information (compound_properties.csv).
@@ -30,12 +30,12 @@ Contains experimental conditions (Experiment_parameters.csv) for each experiment
 
 Contains a full list of rule-generated formose reactions (FullFormoseReaction.txt) and the reaction classes assigned to each reaction (reaction_class_assignments.json).
 
-### NOTES  
+### NOTES
 Contains notes on the data analysis.
 
 ### PLOTS
 
-A container for plotting data (note: .png files will not be pushed to GitHub). This should be empty.
+A container for plotting data (note: .png files are ignored by the git repository). This should be empty.
 
 ### REACTION_INFO
 
@@ -47,11 +47,13 @@ Lists of reactions for each modulated experiment in as reaction SMILES strings. 
 
 ### SCRIPTS
 
-Python scripts used to analyse and plot the data.
+Python scripts used to analyse and plot the data. It is possible to run each script individually, priovided that the correct data files are present in the repository. Reading and writing of files is designed to work within the directory structure of this repository. The primary source of data with respect to the analysis in this repository are the data files in `DATA/DATA_REPORTS` and the reaction rules outlined in `REACTION_INFO/reaction_smarts_templates.csv`. All other data files are derived from these sources using the scripts in `SCRIPTS/DATA_PREP`. For more details on the dependencies of the data, please see the `Makefile`.
+
+The scripts in `SCRIPTS/DATA_PRESENT` are for data visualisation purposes (for example, for inclusion as figures in the main text and supplementary information). They convert the various data files into graphical formats.
 
 ## Installation
 
-The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx and pandas matplotlib and sklearn libraries (see `environment.yml`)
+The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx, pandas matplotlib and sklearn libraries (see `environment.yml`).
 
 This software should work on all systems capable of installing the dependencies described above. It has been run successfully on MacOS (10.15) and Windows (Windows 10) machines.
 
@@ -71,7 +73,7 @@ First, create a virtual environment:
 
 Create a virtual environment with conda:
 
-`conda create --name name-env`
+`conda create --name name-env python=3.9.2`
 
 Activate the virtual environment:
 
@@ -114,21 +116,26 @@ e.g. using conda:
 - `pip install networkx`
 - `conda install matplotlib`
 - `conda install pandas`
-- `conda install -c rdkit`
+- `conda install -c conda-forge rdkit rdkit`
+- `conda install -c anaconda scikit-learn `
+- `pip install graphviz`
+- `conda install --channel conda-forge pygraphviz`
 
 ### Install NorthNet
-In command line/terminal, navigate to the folder containing the NorthNet code, then type:
+
+First, download or clone a copy of the NorthNet code (please use [the v0.1 release](https://github.com/Will-Robin/NorthNet/releases/tag/v0.1)). In the command line/terminal, navigate to the repository directory and run:
 
 conda:
+
   - `conda develop NorthNet`
 
   (you may have to run `conda install conda-build` first)
 
 pip:
+
   - Install from the repository root using pip: `pip install .`,
   - Or in editable mode (so edits are immediately reflected): `pip install -e .`
 
-
 ## Expected run times
 
-Many of the programs should not take more than a few minutes to run on a modern laptop.
+Each of the programs should not take more than a few minutes to run on a modern laptop.
