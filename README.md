@@ -118,6 +118,8 @@ e.g. using conda:
 - `conda install pandas`
 - `conda install -c conda-forge rdkit rdkit`
 - `conda install -c anaconda scikit-learn `
+- `pip install graphviz`
+- `conda install --channel conda-forge pygraphviz`
 
 ### Install NorthNet
 
