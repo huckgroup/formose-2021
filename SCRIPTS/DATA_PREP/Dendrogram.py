@@ -1,7 +1,6 @@
 '''
 Generates a dendrogram based on average concentration and amplitude data.
 '''
-
 import sys
 import numpy as np
 import pandas as pd
@@ -30,7 +29,10 @@ experiment_names = list(exp_info.index)
 #############################################
 # Load and pre-process compound averages data
 #############################################
-average_data = pd.read_csv(derived_parameters_dir/'AverageData.csv', index_col = 0)
+average_data = pd.read_csv(
+                            derived_parameters_dir/'AverageData.csv',
+                            index_col = 0
+                            )
 # remove empty columns
 average_data = average_data.dropna(axis = 1)
 # remove columns containing only zeros
@@ -39,7 +41,10 @@ average_data = average_data.loc[:, (average_data != 0).any(axis=0)]
 ###############################################
 # Load and pre-process compound amplitudes data
 ###############################################
-amplitude_data = pd.read_csv(derived_parameters_dir/'AmplitudeData.csv', index_col = 0)
+amplitude_data = pd.read_csv(
+                            derived_parameters_dir/'AmplitudeData.csv',
+                            index_col = 0
+                            )
 # remove empty columns
 amplitude_data = amplitude_data.dropna(axis = 1)
 # remove columns containing only zeros
@@ -49,16 +54,26 @@ amplitude_data = amplitude_data.loc[:, (amplitude_data != 0).any(axis=0)]
 data = average_data.to_numpy()
 amplitudes = amplitude_data.to_numpy()
 
+################################################################
 # Combine the averages and amplitudes arrays into a single array
-# Clustering of the data is based on this array.
+################################################################
 augmented_amplitude_matrix = np.hstack((data, amplitudes))
 
+###################################################
 # Calculate pairwise distances between data entries
+###################################################
 augmented_amplitude_distances = pdist(augmented_amplitude_matrix, 'correlation')
 # the linkage function should detect that a distance matrix is being passed to it.
-augmented_amplitude_linkages = linkage(augmented_amplitude_distances, method='average',
-                                metric='', optimal_ordering=False)
+augmented_amplitude_linkages = linkage(
+                                        augmented_amplitude_distances,
+                                        method='average',
+                                        metric='',
+                                        optimal_ordering=False
+                                        )
 
+##################
+# Plot the results
+##################
 fig, ax = plt.subplots(figsize = (18/2.54,25/2.54))
 dendro = dendrogram(augmented_amplitude_linkages, ax = ax,
                     color_threshold = 0.0,
