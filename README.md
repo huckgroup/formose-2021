@@ -120,19 +120,19 @@ e.g. using conda:
 
 ### Install NorthNet
 
-A copy of the NorthNet code (similar to the release dated [03/12/2021](https://github.com/Will-Robin/NorthNet/releases/tag/v0.1)) used in the Python scripts given in the `SCRIPTS` folder is included in this reporsitory. Please note that it is included here so that the code in this repository is more easily in the future as the code in the NorthNet repository changes going forward.
-
-In the command line/terminal, navigate to the repository directory and run:
+First, download or clone a copy of the NorthNet code (please use [the v0.1 release](https://github.com/Will-Robin/NorthNet/releases/tag/v0.1)). In the command line/terminal, navigate to the repository directory and run:
 
 conda:
+
   - `conda develop NorthNet`
 
   (you may have to run `conda install conda-build` first)
 
 pip:
+
   - Install from the repository root using pip: `pip install .`,
   - Or in editable mode (so edits are immediately reflected): `pip install -e .`
 
 ## Expected run times
 
-Each of the programs should not take more than a few minutes to run on a modern laptop.nd 
+Each of the programs should not take more than a few minutes to run on a modern laptop.
