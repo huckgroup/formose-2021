@@ -13,8 +13,6 @@ from pathlib import Path
 # so that its contents can be imported
 script_dir = Path(__file__).parents[1].as_posix()
 sys.path.append(script_dir)
-# get the repository directory for file output
-repository_dir = Path(__file__).parents[2]
 
 from helpers import chem_info as info_params
 from helpers import pathway_helpers as path_hlp
@@ -26,6 +24,8 @@ from helpers.network_plotting import plot_network
 header = [x+'/ M' for x in info_params.smiles_to_names]
 
 # create Path objects for various information sources
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 data_dir = repository_dir/'DATA'
 report_directory = data_dir/'DATA_REPORTS'
 determined_params_dir = data_dir/'DERIVED_PARAMETERS'
@@ -61,10 +61,17 @@ experiment_amplitudes = {i:amplitude_data.loc[i].to_numpy()
 experiment_averages = {i:average_data.loc[i].to_numpy()
                                                 for i in average_data.index}
 
+######################################################################
+# Create a container which gives the carbon-containing inputs for each
+# experiment.
+######################################################################
 carbon_inputs = get_carbon_inputs(exp_info, average_data.columns)
 for c in carbon_inputs:
     carbon_inputs[c] = [x.strip('/ M') for x in carbon_inputs[c]]
 
+################
+# Set parameters
+################
 # Compounds below amplitude_filter will not be included in the search
 amplitude_filter = 0.0 # / M
 # define factor to scale nodes by for plotting
@@ -72,10 +79,13 @@ scale_factor = 2e5
 
 # enolates are the only species with C=C bonds
 # considered within the scope of this study.
+# This SMARTS pattern is used to identify enolates.
 enol_patt = Chem.MolFromSmarts('C=C')
 
-# read the formose reaction network to be used as a
+###################################################
+# Read the formose reaction network to be used as a
 # basis for searches.
+###################################################
 formose_reactions = load_reaction_list(network_file)
 formose_network = load_network_from_reaction_list(formose_reactions)
 
@@ -83,21 +93,26 @@ formose_network = load_network_from_reaction_list(formose_reactions)
 # DiGraph for further analysis
 network = convert_to_networkx(formose_network)
 
+##############################################
 # Define 'reagent' type nodes from the network
 # remove them for the network so they do not
 # cause 'short circuiting'
+##############################################
 remove_nodes = ['C=O', 'O', '[OH-]']
 [network.remove_node(n) for n in remove_nodes]
 
+#########################################################
 # define compounds which were not detected experimentally
-# (with consistency)
+# (with consistency).
+#########################################################
 undetected = ['O', '[OH-]','O=CCO','O=C[C@H](O)CO',
               'O=C[C@@H](O)CO','OC1COC(CO1)O']
 
-# find and append enolates to the list of undetected compounds
-# enolates are the only species with C=C bonds
-# considered within the scope of this study.
-enol_patt = Chem.MolFromSmarts('C=C')
+##############################################################
+# Find and append enolates to the list of undetected compounds
+# enolates are the only species with C=C bonds considered
+# within the scope of this study.
+##############################################################
 for c in formose_network.NetworkCompounds:
     compound = formose_network.NetworkCompounds[c]
     if compound.Mol.HasSubstructMatch(enol_patt):
@@ -106,7 +121,9 @@ for c in formose_network.NetworkCompounds:
 # create a container for the pathway search results
 network_results = {}
 
-# loop over amplitude data sets
+###################################################
+# Loop over data sets and perform pathway searches.
+###################################################
 for e in experiment_amplitudes:
     # if all amplitudes are equal to zero,
     # ingnore go to the next data set.
@@ -245,6 +262,9 @@ for e in experiment_amplitudes:
     # copy the network into the result container.
     network_results[e] = R.copy()
 
+##########################
+# Plot the network results
+##########################
 for n in network_results:
     if len(network_results[n].nodes) < 3:
         continue
@@ -256,7 +276,9 @@ for n in network_results:
         else:
             plot_network(network_results[n], fname, prog = 'neato')
 
-# writing the resulting reaction lists to files
+##########################################
+# Write the reaction list results to files
+##########################################
 for n in network_results:
     output_list = []
     for node in network_results[n].nodes:

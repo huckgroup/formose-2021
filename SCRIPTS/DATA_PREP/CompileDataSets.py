@@ -10,29 +10,37 @@ from pathlib import Path
 # so that its contents can be imported
 script_dir = Path(__file__).parents[1].as_posix()
 sys.path.append(script_dir)
-# get the repository directory for file output
-repository_dir = Path(__file__).parents[2]
 
 from helpers.loading_helper import load_data_files_from_folder
-    
-# set paths to files
+
+####################
+# Set paths to files
+####################
+# get the repository directory for file output
+repository_dir = Path(__file__).parents[2]
 data_folder = repository_dir/'DATA'
 report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
-
 output_directory = repository_dir/'ConvertedData'
 
-# load in experiment information.
+#################################
+# Load in experiment information.
+#################################
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 exp_list = list(exp_info.index)
 
-# load in data sets
+###################
+# Load in data sets
+###################
 data_sets = []
 for e in exp_info.index:
     path = report_directory/e
     reports = load_data_files_from_folder(path)
     data_sets.extend(reports)
 
+#########################################
+# Write data sets to files with new names
+#########################################
 output_lines = []
 for d in data_sets:
     d.filename = d.filename.replace(d.experiment_code,

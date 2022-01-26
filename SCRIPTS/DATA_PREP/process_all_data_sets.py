@@ -27,11 +27,15 @@ report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
-# load in experiment information.
+#################################
+# Load in experiment information.
+#################################
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 exp_list = list(exp_info.index)
 
-# load in data sets
+###################
+# Load in data sets
+###################
 data_sets = {}
 for e in exp_info.index:
     path = report_directory/e
@@ -40,11 +44,17 @@ for e in exp_info.index:
 
 compound_header = [x + '/ M' for x in info_params.smiles_to_names]
 
-# create storage arrays for the data
+#####################################
+# Create storage arrays for the data.
+#####################################
 exp_codes = []
 amps_out = np.zeros((len(exp_info),len(compound_header)))
 averages_out = np.zeros((len(exp_info),len(compound_header)))
 
+###############################################################################
+# Iterate over data sets and find averages of each signal and the amplitudes if
+# modulated inputs were applied to the experiment.
+###############################################################################
 for c1,d in enumerate(data_sets):
 
     exp_codes.append(d)
@@ -83,6 +93,9 @@ for c1,d in enumerate(data_sets):
             if len(idx) > 0:
                 amps_out[c1,comp_idx] = y_fourier_section[idx]
 
+############################
+# Write the results to files
+############################
 with open(derived_parameters_dir/'AverageData.csv', 'w') as f:
     f.write(',')
     [f.write('{},'.format(h)) for h in compound_header]
