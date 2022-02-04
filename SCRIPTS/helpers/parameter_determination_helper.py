@@ -5,7 +5,22 @@ from scipy import interpolate
 def fourier_transform(X,Y):
     '''
     Function for determining concentration amplitudes from data.
+
+    Parameters
+    ----------
+    X: 1darray
+        Time axis
+    Y: 1darray
+        Signal
+
+    Returns
+    -------
+    xf: 1darray
+        Frequency axis.
+    amplitudes: 1darray
+        Intensities of frequencies.
     '''
+
     # interpolate axes to get even time steps
     f = interpolate.interp1d(X, Y, kind = "linear")
 

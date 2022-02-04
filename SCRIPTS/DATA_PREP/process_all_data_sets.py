@@ -28,7 +28,7 @@ exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
 #################################
-# Load in experiment information.
+# load in experiment information.
 #################################
 exp_info = pd.read_csv(exp_info_dir, index_col = 0)
 exp_list = list(exp_info.index)
@@ -44,9 +44,9 @@ for e in exp_info.index:
 
 compound_header = [x + '/ M' for x in info_params.smiles_to_names]
 
-#####################################
-# Create storage arrays for the data.
-#####################################
+####################################
+# create storage arrays for the data
+####################################
 exp_codes = []
 amps_out = np.zeros((len(exp_info),len(compound_header)))
 averages_out = np.zeros((len(exp_info),len(compound_header)))

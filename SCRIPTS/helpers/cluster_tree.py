@@ -5,6 +5,19 @@ import networkx as nx
 from scipy.cluster import hierarchy
 
 def graph_from_linkage(linkage_mat, id_modifier = ''):
+    '''
+    Create a networkx DiGraph from a scipy linkage matrix.
+
+    linkage_mat: sparse array
+        See
+        https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html#scipy.cluster.hierarchy.linkage
+    id_modifier: str
+        Modifier which will be added to node names.
+
+    Returns
+    -------
+    G: networkx DiGraph
+    '''
     rootnode, nodelist = hierarchy.to_tree(linkage_mat, rd= True)
 
     G = nx.DiGraph()
@@ -46,8 +59,13 @@ def createNestedJSON(linkage_mat):
         }
       ]
     }
+
+    Parameters
+    ----------
     linkage_mat: scipy linkage matrix
 
+    Returns
+    -------
     json_string: str
         JSON string
     '''
