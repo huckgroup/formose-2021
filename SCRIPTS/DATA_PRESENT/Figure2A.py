@@ -47,7 +47,7 @@ axis_label_font_size = 8
 
 # create the plot
 fig, ax = plt.subplots(nrows = len(data_set_selections),
-                        figsize = (16.7/2.54,3.7/2.54))
+                        figsize = (17.5/2.54,3.7/2.54))
 
 for x in range(0,len(plot_stack)):
     ax[x].bar(comp_numbers, plot_stack[x],
