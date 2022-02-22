@@ -36,6 +36,18 @@ def convert_to_networkx(network):
     return G
 
 def load_network_from_reaction_list(reaction_list):
+    '''
+    Create a Network object from a list of reaction SMILES strings.
+
+    Parameters
+    ----------
+    reaction_list: list
+        List of reaction SMILES.
+
+    Returns
+    -------
+    network: NorthNet Network object.
+    '''
 
     reactions = []
     for r in reaction_list:
@@ -54,6 +66,19 @@ def load_network_from_reaction_list(reaction_list):
     return network
 
 def load_reaction_list(filename):
+    '''
+    Load a list of reactions from a file (newline delimited)
+
+    Parameters
+    ----------
+    filename: str
+        Path to the file.
+
+    Returns
+    -------
+    reaction_list: list
+        List of reaction SMILES.
+    '''
     from NorthNet import Classes
 
     reaction_list = []
@@ -65,6 +90,18 @@ def load_reaction_list(filename):
     return reaction_list
 
 def load_from_edge_list(fname):
+    '''
+    Create a networkx DiGraph from a list of edges in a file.
+
+    Parameters
+    ----------
+    fname: str
+        Path to file.
+
+    Returns
+    -------
+    G: networkx DiGraph
+    '''
     import networkx as nx
 
     edge_list = []
@@ -83,6 +120,20 @@ def load_from_edge_list(fname):
     return G
 
 def load_coordinates_list(fname):
+    '''
+    Load coordinates from a file.
+
+    Parameters
+    ----------
+    fname: str
+        Path to the file.
+
+    Returns
+    -------
+    pos: dict
+        Dictionary with nodes as keys and coordinates as values.
+    '''
+
     pos = {}
     with open(fname, 'r') as f:
         for c,line in enumerate(f):

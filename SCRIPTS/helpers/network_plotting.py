@@ -103,6 +103,23 @@ def draw_arrow_connectors(G,ax, color = '#000000',linew = 'edgewise', alpha = 1,
         ax.add_patch(arrow)
 
 def plot_network(G, filename, prog = 'neato'):
+    '''
+    Plot the network G.
+
+    Parameters
+    ----------
+    G: networkx DiGraph
+        Network to plot.
+    filename: str
+        Name for the file containing the graph.
+    prog: str
+        Assigment of the layout program to use.
+
+    Returns
+    -------
+    None
+    '''
+
     pos = graphviz_layout(G, prog = prog)
 
     c_ops.set_network_coords(G, pos)
@@ -131,6 +148,23 @@ def plot_network(G, filename, prog = 'neato'):
     plt.close()
 
 def plot_network_in_axis(G, ax, layout_provided = False, prog = 'neato'):
+    '''
+    Add a plot of G into ax
+
+    Parameters
+    ----------
+    G: networkx DiGraph
+        Graph.
+    ax: matplotlib axis
+    layout_provided: bool
+        If a layout for the graph has already been calculated.
+    prog: str
+        Assigment of the layout program to use.
+
+    Returns
+    -------
+    None
+    '''
 
     if not layout_provided:
         pos = graphviz_layout(G, prog = prog)
