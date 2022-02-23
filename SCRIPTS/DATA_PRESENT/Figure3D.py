@@ -26,6 +26,9 @@ report_directory = data_folder/'DATA_REPORTS'
 exp_info_dir = repository_dir/"EXPERIMENT_INFO/Experiment_parameters.csv"
 reaction_list_directory = Path(repository_dir/'REACTION_LISTS')
 
+exp_info = pd.read_csv(exp_info_dir, index_col = 0)
+experiment_numbers = {x:c+1 for c,x in enumerate(exp_info.index)}
+
 reaction_expression = pd.read_csv(
     repository_dir/'RESOURCES/reaction_expression_normalised.csv', index_col = 0
 )
@@ -47,6 +50,7 @@ series_of_interest = pd.concat(
     axis = 0
     )
 series_of_interest = series_of_interest.to_list()
+series_of_interest = list(set(series_of_interest))
 
 '''
 print(series_of_interest)
@@ -139,3 +143,28 @@ cbar.ax.tick_params(labelsize= 6, length = 1)
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
 plt.close()
+
+# write output file
+output_text = ""
+output_text += "Experiment number,"
+for c in reaction_expression.columns:
+    output_text += f"{c},"
+output_text += "\n"
+
+for c,branch in enumerate(branches):
+    for b in branch:
+        output_text += f"{experiment_numbers[b]},"
+
+        selected_region = reaction_expression.loc[b,:]
+        expression_array = selected_region.to_numpy()
+
+        print()
+        print(expression_array.shape)
+        for y in range(0,len(expression_array)):
+            output_text += f"{expression_array[y]},"
+        output_text += "\n"
+
+filename = repository_dir/"FIGURE_SOURCE_DATA/Figure3D_Source_Data.csv"
+with open(filename, 'w') as file:
+    file.write(output_text)
+    
