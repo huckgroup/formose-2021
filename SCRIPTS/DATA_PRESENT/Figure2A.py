@@ -90,3 +90,22 @@ fig.text(margins.left/3, 0.5, 'log$_{10}$(concentration/ M)',
 
 plt.savefig(plot_folder/'Figure2A.png', dpi = 600)
 plt.savefig(plot_folder/'Figure2A.svg')
+plt.close()
+
+# Output source data
+csv_stack = plot_stack.T
+output_text = 'compound,'
+for x in range(0,len(data_set_selections)):
+    output_text += f"concentration (subplot {x+1})/ M,"
+output_text += '\n'
+
+for x in range(0,len(csv_stack)):
+    output_text += f"{comp_ax[x]},"
+    for y in range(0, len(csv_stack[x])):
+        output_text += f"{csv_stack[x,y]},"
+    output_text += "\n"
+
+filename = repository_dir/"FIGURE_SOURCE_DATA/Figure2A_Source_Data.csv"
+with open(filename, 'w') as file:
+    file.write(output_text)
+

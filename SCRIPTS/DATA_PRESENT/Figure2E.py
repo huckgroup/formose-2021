@@ -115,3 +115,24 @@ for r in ratios:
 plt.savefig(repository_dir/'PLOTS/{}.png'.format(figname), dpi = 600)
 plt.savefig(repository_dir/'PLOTS/{}.svg'.format(figname))
 plt.close()
+
+# Output source data
+csv_stack = series_stack
+
+L = series_x_values[x] - subplot_width/2
+B = series_y_values[x] - subplot_height/2
+output_text = '[NaOH]_in/ M,[CaCl2]_in/ M,'
+for x in range(0,len(csv_stack[0])):
+    output_text += f"{compounds[x]}/ M,"
+output_text += '\n'
+
+for x in range(0,len(csv_stack)):
+    output_text += f"{series_x_values[x]},{series_y_values[x]},"
+    for y in range(0, len(csv_stack[x])):
+        output_text += f"{csv_stack[x,y]},"
+    output_text += "\n"
+
+filename = repository_dir/"FIGURE_SOURCE_DATA/Figure2E_Source_Data.csv"
+with open(filename, 'w') as file:
+    file.write(output_text)
+

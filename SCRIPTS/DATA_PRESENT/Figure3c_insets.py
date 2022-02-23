@@ -1,5 +1,5 @@
 '''
-Example compound concentration timecourses. Figure 3A.
+Example compound concentration timecourses.
 '''
 
 import os

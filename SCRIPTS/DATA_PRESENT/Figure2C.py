@@ -88,18 +88,19 @@ for x in range(0,len(series_progression)):
         clr = info_params.colour_assignments[species_name]
     else:
         clr = 'k'
+
     ax.plot(series_x_values,series_progression[x]*y_factor, '-o',
             c = clr, markersize = 5, zorder = 100-species_name.count('C'))
 
     max_idx = np.where(series_progression[x] ==series_progression[x].max())[0]
     trace_labels.append((compound_numbering[species_name], clr))
 
-
     x_pos = series_x_values[max_idx[0]]
     y_pos = y_factor*series_progression[x,max_idx]
     # ax.annotate(compound_numbering[species_name],
     #             xy = (x_pos, y_pos),
     #             zorder = 1000)
+
 ax.tick_params(which = 'both', axis = 'both', length = 2)
 ax.set_xlabel(x_name)
 ax.set_ylabel('Concentration/ mM')
@@ -126,3 +127,22 @@ for c,t in enumerate(trace_labels):
 plt.savefig(repository_dir/'PLOTS/{}_series_annotated.png'.format(figname), dpi = 600)
 plt.savefig(repository_dir/'PLOTS/{}_series_annotated.svg'.format(figname))
 plt.close()
+
+# Output source data
+csv_stack = series_progression.T
+
+output_text = '[C=O]_in/ M,'
+for x in range(0,len(csv_stack[0])):
+    output_text += f"{compounds[x]}/ M,"
+output_text += '\n'
+
+for x in range(0,len(csv_stack)):
+    output_text += f"{series_x_values[x]},"
+    for y in range(0, len(csv_stack[x])):
+        output_text += f"{csv_stack[x,y]},"
+    output_text += "\n"
+
+filename = repository_dir/"FIGURE_SOURCE_DATA/Figure2C_Source_Data.csv"
+with open(filename, 'w') as file:
+    file.write(output_text)
+

@@ -3,6 +3,7 @@ Example compound concentration timecourses. Figure 3A.
 '''
 import os
 import sys
+import numpy as np
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -83,3 +84,30 @@ fig.text(0.55, 0.02, "time/ s", ha='center', fontsize = 10)
 plt.savefig(repository_dir/'PLOTS/Figure_3A.png', dpi = 600)
 plt.savefig(repository_dir/'PLOTS/Figure_3A.svg')
 plt.close()
+
+# Output source data
+time_axis, _ = data.get_entry('O=C(CO)CO/ M')
+csv_stack = time_axis
+for c,n in enumerate(compound_number_sel):
+    name = compound_numbering[n]
+    x, y = data.get_entry(name + '/ M')
+
+    csv_stack = np.vstack((csv_stack, y))
+
+csv_stack = csv_stack.T
+
+output_text = 'time/ s,'
+for x in range(0,len(compound_number_sel)):
+    name = compound_numbering[n]
+    output_text += f"{name}/ M,"
+output_text += '\n'
+
+for x in range(0,len(csv_stack)):
+    for y in range(0, len(csv_stack[x])):
+        output_text += f"{csv_stack[x,y]},"
+    output_text += "\n"
+
+filename = repository_dir/"FIGURE_SOURCE_DATA/Figure3A_Source_Data.csv"
+with open(filename, 'w') as file:
+    file.write(output_text)
+
