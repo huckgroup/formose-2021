@@ -66,7 +66,7 @@ Clone the repository from GitHub. If you're having trouble with cloning, just do
 
 ### 2. Create a virtual environment
 
-[Anaconda/Miniconda](https://www.anaconda.com/products/individual-b#Downloads, 'Anaconda') (`conda`) or `pip` can be used to install the software dependencies.
+[Anaconda/Miniconda](https://www.anaconda.com/products/individual-b#Downloads, 'Anaconda') (`conda`) or `pip` can be used to install the software dependencies. We encourage the use of conda, as it is much easier to install The RDKit through this package manager.
 
 First, create a virtual environment:
 
