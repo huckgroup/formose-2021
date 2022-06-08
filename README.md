@@ -54,7 +54,7 @@ The scripts in `SCRIPTS/DATA_PRESENT` are for data visualisation purposes (for e
 
 ## Installation
 
-The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx, pandas matplotlib and sklearn libraries (see `environment.yml`).
+The programs contained in this repository require Python 3.9.2 and the rdkit, numpy, scipy, networkx, pandas matplotlib and sklearn libraries (see `environment.yaml`).
 
 This software should work on all systems capable of installing the dependencies described above. It has been run successfully on MacOS (10.15) and Windows (Windows 10) machines.
 
@@ -66,7 +66,7 @@ Clone the repository from GitHub. If you're having trouble with cloning, just do
 
 ### 2. Create a virtual environment
 
-[Anaconda/Miniconda](https://www.anaconda.com/products/individual-b#Downloads, 'Anaconda') (`conda`) or `pip` can be used to install the software dependencies. We encourage the use of conda, as it is much easier to install The RDKit through this package manager.
+[Anaconda/Miniconda](https://www.anaconda.com/products/individual-b#Downloads, 'Anaconda') (`conda`) or `pip` can be used to install the software dependencies. We encourage the use of conda, as it is much easier to install The RDKit through this package manager. A list of all of the packages installed in the environment used to run these scripts is given in `environment.yaml`. Manual installation instructions are given below (recommended).
 
 First, create a virtual environment:
 
