@@ -1,6 +1,8 @@
 # Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network
 
-Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, 2021).
+Data and analysis for the "Environmental conditions drive self-organization of reaction pathways in a prebiotic reaction network" (Robinson, Daines, van Duppen, de Jong, Huck, *Nature Chemistry*, 2022, **14**, 623–631).
+
+[Link to publication](https://www.nature.com/articles/s41557-022-00956-7)
 
 ## Abstract
 
